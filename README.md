@@ -1,4 +1,4 @@
-# AI Money Manager
+# AI Money Manager (Pro Money Manager)
 
 Native SwiftUI personal finance app for replacing SMS-based Money Manager tracking with review-first ADCB PDF statement imports.
 
@@ -9,6 +9,23 @@ Native SwiftUI personal finance app for replacing SMS-based Money Manager tracki
 - ADCB credit-card PDF import with PDFKit parsing.
 - Import review screen with duplicate detection, review-only defaults for payments/cashback/fees, category editing, and bulk save.
 - Transaction list/editor, dashboard, accounts, category/rule browser, and CSV/JSON export.
+
+## App Store Submission
+
+Comprehensive documentation has been prepared for App Store submission:
+
+- `AppStore/PrivacyPolicy.md` - Complete privacy policy for the app
+- `AppStore/SubmissionChecklist.md` - Detailed checklist of submission requirements
+- `AppStore/Marketing/AppStoreListing.md` - Drafted App Store metadata and descriptions
+- `AppStore/CompleteSubmissionGuide.md` - Step-by-step guide for the entire submission process
+- `AppStore/Marketing/Screenshots/` - Prepared screenshots for iPhone 6.7" and 6.9" displays
+
+The app is ready for App Store submission with:
+- Local-first privacy compliance
+- No data collection or tracking
+- Sign in with Apple integration
+- Complete privacy manifest
+- Comprehensive review notes
 
 ## Regenerate seed data
 

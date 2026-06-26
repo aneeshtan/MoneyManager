@@ -347,9 +347,10 @@ struct TransactionRow: View {
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(transaction.merchant.isEmpty ? transaction.rawDescription : transaction.merchant)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.caption.weight(.semibold))
                     .foregroundStyle(AppTheme.ink)
-                    .lineLimit(1)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
 
                 HStack(spacing: 5) {
                     Text(transaction.accountName)

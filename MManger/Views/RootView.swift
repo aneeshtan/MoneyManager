@@ -387,7 +387,7 @@ struct ProfileView: View {
                                             Text("Email support")
                                                 .font(.subheadline.weight(.bold))
                                                 .foregroundStyle(AppTheme.ink)
-                                            Text("app@hafatalghad.com")
+                                            Text("aneeshtan@gmail.com")
                                                 .font(.caption.weight(.medium))
                                                 .foregroundStyle(AppTheme.muted)
                                         }
@@ -431,7 +431,7 @@ struct ProfileView: View {
     private func openFeedbackEmail() {
         var components = URLComponents()
         components.scheme = "mailto"
-        components.path = "app@hafatalghad.com"
+        components.path = "aneeshtan@gmail.com"
         components.queryItems = [
             URLQueryItem(name: "subject", value: "AI Money Manager Feedback"),
             URLQueryItem(name: "body", value: "\n\nApp: AI Money Manager\nVersion: 1.0")

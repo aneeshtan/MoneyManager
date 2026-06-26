@@ -28,4 +28,4 @@ Pro Money Manager does not track you across apps or websites.
 
 For privacy questions or support, contact the developer at:
 
-app@hafatalghad.com
+aneeshtan@gmail.com

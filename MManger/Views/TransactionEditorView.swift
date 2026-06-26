@@ -23,6 +23,7 @@ struct TransactionEditorView: View {
     @State private var selectedReceiptPhoto: PhotosPickerItem?
     @State private var showingReceiptFileImporter = false
     @State private var attachmentError: String?
+    @State private var showingDeleteConfirmation = false
 
     init(transaction: FinanceTransaction? = nil, accounts: [Account], categories: [FinanceCategory]) {
         self.transaction = transaction
@@ -143,6 +144,22 @@ struct TransactionEditorView: View {
                             Text(attachmentError)
                                 .font(.caption)
                                 .foregroundStyle(AppTheme.coral)
+                        }
+                    }
+                }
+                
+                if transaction != nil {
+                    Section {
+                        Button("Delete Transaction", role: .destructive) {
+                            showingDeleteConfirmation = true
+                        }
+                        .frame(maxWidth: .infinity)
+                        .alert("Delete Transaction?", isPresented: $showingDeleteConfirmation) {
+                            Button("Delete Transaction", role: .destructive) {
+                                deleteTransaction()
+                            }
+                        } message: {
+                            Text("Are you sure you want to delete this transaction? This action cannot be undone.")
                         }
                     }
                 }
@@ -394,5 +411,22 @@ struct TransactionEditorView: View {
             try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         }
         return folder
+    }
+
+    private func deleteTransaction() {
+        guard let transaction else { return }
+        
+        // Delete any attachments associated with this transaction
+        for attachment in transactionAttachments {
+            try? FileManager.default.removeItem(at: receiptsURL(for: attachment))
+            modelContext.delete(attachment)
+        }
+        
+        // Delete the transaction itself
+        modelContext.delete(transaction)
+        
+        // Save changes and dismiss the view
+        try? modelContext.save()
+        dismiss()
     }
 }
