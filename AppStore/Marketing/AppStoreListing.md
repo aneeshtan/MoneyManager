@@ -1,4 +1,4 @@
-# AI Money Manager App Store Listing Draft
+# Pro Money Manager App Store Listing Draft
 
 ## Subtitle
 Private budget and import tracker
@@ -7,7 +7,7 @@ Private budget and import tracker
 Import bank PDFs, CSV, Excel, or pasted SMS messages, review every transaction, and manage your monthly budget locally on your iPhone.
 
 ## Short Description
-AI Money Manager is a local-first personal finance app for people who want control without bank-sync tracking. Import statements or copied bank messages, review suggested categories, manage accounts and budgets, and export your own backup when needed.
+Pro Money Manager is a local-first personal finance app for people who want control without bank-sync tracking. Import statements or copied bank messages, review suggested categories, manage accounts and budgets, and export your own backup when needed.
 
 ## Keywords
 budget,expense,spending,finance,money,tracker,pdf,csv,statement,private

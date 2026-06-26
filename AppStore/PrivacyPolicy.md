@@ -1,12 +1,12 @@
-# AI Money Manager Privacy Policy
+# Pro Money Manager Privacy Policy
 
 Effective date: June 12, 2026
 
-AI Money Manager is designed as a private, local-first personal finance app.
+Pro Money Manager is designed as a private, local-first personal finance app.
 
 ## Data Collection
 
-AI Money Manager does not collect, transmit, sell, rent, or share personal data.
+Pro Money Manager does not collect, transmit, sell, rent, or share personal data.
 
 The app does not use analytics SDKs, advertising SDKs, tracking SDKs, third-party account aggregation, or cloud sync.
 
@@ -22,7 +22,7 @@ You may choose to export CSV or JSON backup files. Exported files are created on
 
 ## Tracking
 
-AI Money Manager does not track you across apps or websites.
+Pro Money Manager does not track you across apps or websites.
 
 ## Contact
 

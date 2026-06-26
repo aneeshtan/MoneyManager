@@ -1,4 +1,4 @@
-# AI Money Manager App Store Submission Checklist
+# Pro Money Manager App Store Submission Checklist
 
 ## App Privacy
 
@@ -44,4 +44,4 @@
 
 ## Suggested Review Notes
 
-AI Money Manager is a local-first personal finance app. It imports user-selected PDF/CSV files or pasted bank notification text, parses the content on device, and stores the resulting records locally using SwiftData. The app requires sign-in to open the local workspace, does not use analytics, does not use advertising, does not track users, and does not transmit financial data to any server. Export and backup files are only created when the user explicitly chooses to export.
+Pro Money Manager is a local-first personal finance app. It imports user-selected PDF/CSV files or pasted bank notification text, parses the content on device, and stores the resulting records locally using SwiftData. The app requires sign-in to open the local workspace, does not use analytics, does not use advertising, does not track users, and does not transmit financial data to any server. Export and backup files are only created when the user explicitly chooses to export.

@@ -1,6 +1,6 @@
 # Marketing Asset Pack
 
-Generated App Store materials for AI Money Manager.
+Generated App Store materials for Pro Money Manager.
 
 ## Included
 
