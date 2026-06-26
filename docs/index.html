@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Money Manager — Local Privacy-First Finance</title>
+    <style>
+        /* ── Reset & base ──────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            background: #f5f6fa;
+            color: #1c1d24;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Layout ─────────────────────────────────────────── */
+        .container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+        /* ── Header ─────────────────────────────────────────── */
+        header {
+            background: linear-gradient(135deg, #7a5dc7 0%, #4f8c8a 100%);
+            color: #fff;
+            padding: 60px 0 50px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+        header p.tagline {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.85;
+            margin-bottom: 24px;
+        }
+        .app-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.15);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            margin-bottom: 18px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ── Badge ──────────────────────────────────────────── */
+        .badge {
+            display: inline-block;
+            background: #fff;
+            color: #1c1d24;
+            padding: 10px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .badge:hover { transform: scale(1.03); }
+        .badge svg { vertical-align: -3px; margin-right: 6px; }
+
+        /* ── Sections ───────────────────────────────────────── */
+        section { padding: 48px 0; }
+        section + section { border-top: 1px solid #e0e2e8; }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 8px;
+        }
+
+        p, li { color: #3a3c48; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 6px; }
+
+        /* ── Features grid ──────────────────────────────────── */
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .feature-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .feature-card .icon { font-size: 1.6rem; margin-bottom: 8px; }
+        .feature-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+        .feature-card p { font-size: 0.88rem; }
+
+        @media (max-width: 520px) {
+            .features { grid-template-columns: 1fr; }
+            header h1 { font-size: 1.6rem; }
+            header { padding: 40px 0 32px; }
+        }
+
+        /* ── Privacy policy ─────────────────────────────────── */
+        .privacy h2 { margin-top: 32px; }
+        .privacy p, .privacy li { font-size: 0.95rem; }
+
+        /* ── Footer ─────────────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 32px 0;
+            font-size: 0.85rem;
+            color: #8a8c98;
+        }
+        footer a { color: #7a5dc7; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════ HEADER ════════════════ -->
+<header>
+    <div class="app-icon">💰</div>
+    <h1>AI Money Manager</h1>
+    <p class="tagline">Private budget and import tracker — all on your iPhone.</p>
+    <a class="badge" href="#privacy">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        Privacy Policy
+    </a>
+</header>
+
+<!-- ════════════════ ABOUT ════════════════ -->
+<section>
+    <div class="container">
+        <h2>About the App</h2>
+        <p>AI Money Manager is a local-first personal finance app for people who want control without bank-sync tracking or cloud services. Import bank PDFs, CSV files, Excel spreadsheets, or pasted SMS messages — everything is parsed and stored securely on your device.</p>
+        <p>Review AI-suggested categories, manage accounts and budgets, and export your own backup when needed. No accounts are linked, no data leaves your phone, and no third party has access to your finances.</p>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">📄</div>
+                <h4>Import Anything</h4>
+                <p>PDF, CSV, Excel, or pasted bank SMS messages. Parsed on-device with smart category suggestions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔒</div>
+                <h4>100% Private</h4>
+                <p>All data stays on your iPhone. No cloud, no analytics, no tracking, no bank sync.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h4>Budgeting</h4>
+                <p>Set monthly limits by category. Track spending, detect recurring bills, and see safe-to-spend in real time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📤</div>
+                <h4>Export & Backup</h4>
+                <p>Export CSV or JSON backup files on your terms. Only when you choose.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════ CONTACT ════════════════ -->
+<section>
+    <div class="container">
+        <h2>Support</h2>
+        <p>For questions, feedback, or support requests, reach out to the developer at:</p>
+        <p style="margin-top:8px"><a href="mailto:app@hafatalghad.com" style="color:#7a5dc7;font-weight:600;text-decoration:none;font-size:1.1rem;">app@hafatalghad.com</a></p>
+    </div>
+</section>
+
+<!-- ════════════════ PRIVACY POLICY ════════════════ -->
+<section class="privacy" id="privacy">
+    <div class="container">
+        <h2>Privacy Policy</h2>
+        <p><strong>Effective date:</strong> June 12, 2026</p>
+
+        <p>AI Money Manager is designed as a private, local-first personal finance app.</p>
+
+        <h3>Data Collection</h3>
+        <p>AI Money Manager does not collect, transmit, sell, rent, or share personal data. The app does not use analytics SDKs, advertising SDKs, tracking SDKs, third-party account aggregation, or cloud sync.</p>
+
+        <h3>Data Stored on Device</h3>
+        <p>The app stores finance records you create or import, including accounts, categories, budgets, merchant rules, imported transaction text, and backup/export history. This data is stored locally on your device using SwiftData.</p>
+        <p>Imported PDF, CSV, and pasted message content is processed on device. The app does not upload these files or their contents to a server.</p>
+
+        <h3>Exports and Backups</h3>
+        <p>You may choose to export CSV or JSON backup files. Exported files are created only after you request them and are controlled by you through iOS sharing and file storage features.</p>
+
+        <h3>Tracking</h3>
+        <p>AI Money Manager does not track you across apps or websites.</p>
+
+        <h3>Contact</h3>
+        <p>For privacy questions or support, contact the developer at:<br>
+        <a href="mailto:app@hafatalghad.com">app@hafatalghad.com</a></p>
+    </div>
+</section>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer>
+    <div class="container">
+        <p>&copy; 2026 AI Money Manager. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

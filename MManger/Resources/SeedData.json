@@ -1,0 +1,606 @@
+{
+  "version": 2,
+  "user": {
+    "id": "primary-user",
+    "displayName": "User",
+    "baseCurrency": "AED"
+  },
+  "defaultCurrency": "AED",
+  "defaultImportAccount": "Credit Card",
+  "accounts": [
+    {
+      "id": "cash",
+      "name": "Cash",
+      "currency": "AED",
+      "sortOrder": 1
+    },
+    {
+      "id": "bank-account",
+      "name": "Bank Account",
+      "currency": "AED",
+      "sortOrder": 2
+    },
+    {
+      "id": "credit-card",
+      "name": "Credit Card",
+      "currency": "AED",
+      "sortOrder": 3
+    },
+    {
+      "id": "savings",
+      "name": "Savings",
+      "currency": "AED",
+      "sortOrder": 4
+    }
+  ],
+  "categories": [
+    {
+      "id": "income",
+      "name": "Income",
+      "kind": "income",
+      "parentId": null,
+      "sortOrder": 1
+    },
+    {
+      "id": "salary",
+      "name": "Salary",
+      "kind": "income",
+      "parentId": "income",
+      "sortOrder": 2
+    },
+    {
+      "id": "bonus",
+      "name": "Bonus",
+      "kind": "income",
+      "parentId": "income",
+      "sortOrder": 3
+    },
+    {
+      "id": "refunds",
+      "name": "Refunds",
+      "kind": "income",
+      "parentId": "income",
+      "sortOrder": 4
+    },
+    {
+      "id": "cashback",
+      "name": "Cashback",
+      "kind": "income",
+      "parentId": "income",
+      "sortOrder": 5
+    },
+    {
+      "id": "other-income",
+      "name": "Other Income",
+      "kind": "income",
+      "parentId": "income",
+      "sortOrder": 6
+    },
+    {
+      "id": "food",
+      "name": "Food",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 7
+    },
+    {
+      "id": "groceries",
+      "name": "Groceries",
+      "kind": "expense",
+      "parentId": "food",
+      "sortOrder": 8
+    },
+    {
+      "id": "restaurants",
+      "name": "Restaurants",
+      "kind": "expense",
+      "parentId": "food",
+      "sortOrder": 9
+    },
+    {
+      "id": "coffee",
+      "name": "Coffee",
+      "kind": "expense",
+      "parentId": "food",
+      "sortOrder": 10
+    },
+    {
+      "id": "delivery",
+      "name": "Delivery",
+      "kind": "expense",
+      "parentId": "food",
+      "sortOrder": 11
+    },
+    {
+      "id": "transportation",
+      "name": "Transportation",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 12
+    },
+    {
+      "id": "taxi",
+      "name": "Taxi",
+      "kind": "expense",
+      "parentId": "transportation",
+      "sortOrder": 13
+    },
+    {
+      "id": "metro",
+      "name": "Metro",
+      "kind": "expense",
+      "parentId": "transportation",
+      "sortOrder": 14
+    },
+    {
+      "id": "fuel",
+      "name": "Fuel",
+      "kind": "expense",
+      "parentId": "transportation",
+      "sortOrder": 15
+    },
+    {
+      "id": "parking",
+      "name": "Parking",
+      "kind": "expense",
+      "parentId": "transportation",
+      "sortOrder": 16
+    },
+    {
+      "id": "housing",
+      "name": "Housing",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 17
+    },
+    {
+      "id": "rent",
+      "name": "Rent",
+      "kind": "expense",
+      "parentId": "housing",
+      "sortOrder": 18
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities",
+      "kind": "expense",
+      "parentId": "housing",
+      "sortOrder": 19
+    },
+    {
+      "id": "maintenance",
+      "name": "Maintenance",
+      "kind": "expense",
+      "parentId": "housing",
+      "sortOrder": 20
+    },
+    {
+      "id": "internet",
+      "name": "Internet",
+      "kind": "expense",
+      "parentId": "housing",
+      "sortOrder": 21
+    },
+    {
+      "id": "shopping",
+      "name": "Shopping",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 22
+    },
+    {
+      "id": "clothing",
+      "name": "Clothing",
+      "kind": "expense",
+      "parentId": "shopping",
+      "sortOrder": 23
+    },
+    {
+      "id": "electronics",
+      "name": "Electronics",
+      "kind": "expense",
+      "parentId": "shopping",
+      "sortOrder": 24
+    },
+    {
+      "id": "household",
+      "name": "Household",
+      "kind": "expense",
+      "parentId": "shopping",
+      "sortOrder": 25
+    },
+    {
+      "id": "laundry",
+      "name": "Laundry",
+      "kind": "expense",
+      "parentId": "shopping",
+      "sortOrder": 26
+    },
+    {
+      "id": "travel",
+      "name": "Travel",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 27
+    },
+    {
+      "id": "hotel",
+      "name": "Hotel",
+      "kind": "expense",
+      "parentId": "travel",
+      "sortOrder": 28
+    },
+    {
+      "id": "flights",
+      "name": "Flights",
+      "kind": "expense",
+      "parentId": "travel",
+      "sortOrder": 29
+    },
+    {
+      "id": "visa",
+      "name": "Visa",
+      "kind": "expense",
+      "parentId": "travel",
+      "sortOrder": 30
+    },
+    {
+      "id": "transport",
+      "name": "Travel Transport",
+      "kind": "expense",
+      "parentId": "travel",
+      "sortOrder": 31
+    },
+    {
+      "id": "health",
+      "name": "Health",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 32
+    },
+    {
+      "id": "pharmacy",
+      "name": "Pharmacy",
+      "kind": "expense",
+      "parentId": "health",
+      "sortOrder": 33
+    },
+    {
+      "id": "doctor",
+      "name": "Doctor",
+      "kind": "expense",
+      "parentId": "health",
+      "sortOrder": 34
+    },
+    {
+      "id": "insurance",
+      "name": "Insurance",
+      "kind": "expense",
+      "parentId": "health",
+      "sortOrder": 35
+    },
+    {
+      "id": "fitness",
+      "name": "Fitness",
+      "kind": "expense",
+      "parentId": "health",
+      "sortOrder": 36
+    },
+    {
+      "id": "family",
+      "name": "Family",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 37
+    },
+    {
+      "id": "gifts",
+      "name": "Gifts",
+      "kind": "expense",
+      "parentId": "family",
+      "sortOrder": 38
+    },
+    {
+      "id": "education",
+      "name": "Education",
+      "kind": "expense",
+      "parentId": "family",
+      "sortOrder": 39
+    },
+    {
+      "id": "kids",
+      "name": "Kids",
+      "kind": "expense",
+      "parentId": "family",
+      "sortOrder": 40
+    },
+    {
+      "id": "support",
+      "name": "Support",
+      "kind": "expense",
+      "parentId": "family",
+      "sortOrder": 41
+    },
+    {
+      "id": "entertainment",
+      "name": "Entertainment",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 42
+    },
+    {
+      "id": "movies",
+      "name": "Movies",
+      "kind": "expense",
+      "parentId": "entertainment",
+      "sortOrder": 43
+    },
+    {
+      "id": "subscriptions",
+      "name": "Subscriptions",
+      "kind": "expense",
+      "parentId": "entertainment",
+      "sortOrder": 44
+    },
+    {
+      "id": "events",
+      "name": "Events",
+      "kind": "expense",
+      "parentId": "entertainment",
+      "sortOrder": 45
+    },
+    {
+      "id": "games",
+      "name": "Games",
+      "kind": "expense",
+      "parentId": "entertainment",
+      "sortOrder": 46
+    },
+    {
+      "id": "finance",
+      "name": "Finance",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 47
+    },
+    {
+      "id": "bank-fees",
+      "name": "Bank Fees",
+      "kind": "expense",
+      "parentId": "finance",
+      "sortOrder": 48
+    },
+    {
+      "id": "card-payment",
+      "name": "Card Payment",
+      "kind": "expense",
+      "parentId": "finance",
+      "sortOrder": 49
+    },
+    {
+      "id": "transfer",
+      "name": "Transfer",
+      "kind": "expense",
+      "parentId": "finance",
+      "sortOrder": 50
+    },
+    {
+      "id": "tax",
+      "name": "Tax",
+      "kind": "expense",
+      "parentId": "finance",
+      "sortOrder": 51
+    },
+    {
+      "id": "savings",
+      "name": "Savings",
+      "kind": "expense",
+      "parentId": null,
+      "sortOrder": 52
+    },
+    {
+      "id": "emergency-fund",
+      "name": "Emergency Fund",
+      "kind": "expense",
+      "parentId": "savings",
+      "sortOrder": 53
+    },
+    {
+      "id": "investment",
+      "name": "Investment",
+      "kind": "expense",
+      "parentId": "savings",
+      "sortOrder": 54
+    },
+    {
+      "id": "debt-payment",
+      "name": "Debt Payment",
+      "kind": "expense",
+      "parentId": "savings",
+      "sortOrder": 55
+    }
+  ],
+  "merchantRules": [
+    {
+      "pattern": "CAREEM HALA",
+      "matchType": "contains",
+      "category": "Transportation",
+      "subcategory": "Taxi",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "CAREEM RIDE",
+      "matchType": "contains",
+      "category": "Transportation",
+      "subcategory": "Taxi",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "DUBAI TAXI",
+      "matchType": "contains",
+      "category": "Transportation",
+      "subcategory": "Taxi",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "NATIONAL TAXI",
+      "matchType": "contains",
+      "category": "Transportation",
+      "subcategory": "Taxi",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "RTA",
+      "matchType": "contains",
+      "category": "Transportation",
+      "subcategory": "Metro",
+      "kind": "expense",
+      "confidence": 0.7,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "AMAZON GROCERY",
+      "matchType": "contains",
+      "category": "Food",
+      "subcategory": "Groceries",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "UNION COOP",
+      "matchType": "contains",
+      "category": "Food",
+      "subcategory": "Groceries",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "CARREFOUR",
+      "matchType": "contains",
+      "category": "Food",
+      "subcategory": "Groceries",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "SPINNEYS",
+      "matchType": "contains",
+      "category": "Food",
+      "subcategory": "Groceries",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "NOON FOOD",
+      "matchType": "contains",
+      "category": "Food",
+      "subcategory": "Delivery",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "TALABAT",
+      "matchType": "contains",
+      "category": "Food",
+      "subcategory": "Delivery",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "DELIVEROO",
+      "matchType": "contains",
+      "category": "Food",
+      "subcategory": "Delivery",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "AGODA",
+      "matchType": "contains",
+      "category": "Travel",
+      "subcategory": "Hotel",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "BOOKING",
+      "matchType": "contains",
+      "category": "Travel",
+      "subcategory": "Hotel",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "ADNOC",
+      "matchType": "contains",
+      "category": "Transportation",
+      "subcategory": "Fuel",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "EMARAT",
+      "matchType": "contains",
+      "category": "Transportation",
+      "subcategory": "Fuel",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "LAUNDRY",
+      "matchType": "contains",
+      "category": "Shopping",
+      "subcategory": "Laundry",
+      "kind": "expense",
+      "confidence": 0.7,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "NETFLIX",
+      "matchType": "contains",
+      "category": "Entertainment",
+      "subcategory": "Subscriptions",
+      "kind": "expense",
+      "confidence": 0.8,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "APPLE.COM/BILL",
+      "matchType": "contains",
+      "category": "Entertainment",
+      "subcategory": "Subscriptions",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    },
+    {
+      "pattern": "AMAZON PRIME",
+      "matchType": "contains",
+      "category": "Entertainment",
+      "subcategory": "Subscriptions",
+      "kind": "expense",
+      "confidence": 0.75,
+      "sampleCount": 0
+    }
+  ],
+  "initialTransactions": []
+}
