@@ -76,7 +76,7 @@ struct TrendsView: View {
                         summaryCards
                         categoryTrendSection
                     }
-                    .padding(.horizontal, 18)
+                    .adaptiveScreenContent()
                     .padding(.top, 10)
                     .padding(.bottom, 28)
                 }
@@ -380,4 +380,3 @@ private enum ChartMode: String, CaseIterable, Identifiable {
         }
     }
 }
-

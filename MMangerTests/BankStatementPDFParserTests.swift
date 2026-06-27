@@ -133,6 +133,24 @@ final class BankStatementPDFParserTests: XCTestCase {
         XCTAssertEqual(rows.first?.amount, Decimal(58))
     }
 
+    func testPlainTextPDFImportUsesFallbackCurrencyWhenStatementOmitsCurrency() throws {
+        let text = """
+        10/06/2026 CAREEM HALA RIDE DUBAI ARE DR 58.00
+        """
+
+        let rows = try UniversalImportParser().parseText(
+            text,
+            format: .pdf,
+            ruleSnapshots: [],
+            existingSnapshots: [],
+            accountName: SeedStore.defaultImportAccountName,
+            fallbackCurrency: "AED"
+        )
+
+        XCTAssertEqual(rows.count, 1)
+        XCTAssertEqual(rows.first?.currency, "AED")
+    }
+
     func testPastedMessagesAllowDatelessRows() throws {
         let text = "AED 58.00 spent at CAREEM HALA RIDE"
 

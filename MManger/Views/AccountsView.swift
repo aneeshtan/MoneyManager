@@ -123,7 +123,7 @@ struct AccountsView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 18)
+                    .adaptiveScreenContent()
                     .padding(.top, 10)
                     .padding(.bottom, 28)
                 }

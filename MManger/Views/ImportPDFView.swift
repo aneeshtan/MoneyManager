@@ -29,6 +29,12 @@ struct ImportPDFView: View {
     private var duplicateCount: Int { parsedRows.filter(\.isDuplicate).count }
     private var reviewCount: Int { parsedRows.filter(\.isReviewOnly).count }
     private var activeAccounts: [Account] { accounts.filter { !$0.isArchived } }
+    private var selectedAccountCurrency: String {
+        AppFormatters.resolvedCurrency(
+            activeAccounts.first(where: { $0.name == selectedAccountName })?.currency,
+            fallback: currency
+        )
+    }
     private var selectedAccountTransactions: [FinanceTransaction] {
         transactions.filter { $0.accountName == selectedAccountName }
     }
@@ -93,6 +99,7 @@ struct ImportPDFView: View {
                                     let rowBinding = binding(for: row)
                                     ImportReviewRow(
                                         row: rowBinding,
+                                        fallbackCurrency: selectedAccountCurrency,
                                         categories: categories,
                                         createRuleAction: { createRule(from: rowBinding.wrappedValue, existingRules: rules) },
                                         mergeDuplicateAction: { mergeDuplicate(rowBinding.wrappedValue) }
@@ -115,7 +122,7 @@ struct ImportPDFView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 18)
+                    .adaptiveScreenContent(maxWidth: 1120)
                     .padding(.top, 10)
                     .padding(.bottom, 28)
                 }
@@ -184,6 +191,7 @@ struct ImportPDFView: View {
             }
 
             let accountName = selectedAccountName
+            let fallbackCurrency = selectedAccountCurrency
             let ruleSnapshots = rules.map(MerchantRuleSnapshot.init)
             let existingSnapshots = selectedAccountTransactions.map(TransactionSnapshot.init)
             let format: ImportFormat = ext == "pdf" ? .pdf : (ext == "csv" ? .csv : .plainText)
@@ -199,7 +207,8 @@ struct ImportPDFView: View {
                             format: format,
                             ruleSnapshots: ruleSnapshots,
                             existingSnapshots: existingSnapshots,
-                            accountName: accountName
+                            accountName: accountName,
+                            fallbackCurrency: fallbackCurrency
                         )
                         // Stream in chunks of 30 so the UI renders progressively
                         let chunkSize = 30
@@ -239,6 +248,7 @@ struct ImportPDFView: View {
         parsedRows = []
 
         let accountName = selectedAccountName
+        let fallbackCurrency = selectedAccountCurrency
         let ruleSnapshots = rules.map(MerchantRuleSnapshot.init)
         let existingSnapshots = selectedAccountTransactions.map(TransactionSnapshot.init)
         let text = pastedText
@@ -246,12 +256,13 @@ struct ImportPDFView: View {
         importTask?.cancel()
         importTask = Task {
             do {
-                let rows = try await Task.detached(priority: .userInitiated) { [text, ruleSnapshots, existingSnapshots, accountName] in
+                let rows = try await Task.detached(priority: .userInitiated) { [text, ruleSnapshots, existingSnapshots, accountName, fallbackCurrency] in
                     try UniversalImportParser().parsePastedMessages(
                         text,
                         ruleSnapshots: ruleSnapshots,
                         existingSnapshots: existingSnapshots,
-                        accountName: accountName
+                        accountName: accountName,
+                        fallbackCurrency: fallbackCurrency
                     )
                 }.value
                 parsedRows = rows
@@ -269,9 +280,10 @@ struct ImportPDFView: View {
         guard selectedCount > 0 else { return }
         isSaving = true
         let accountName = selectedAccountName
+        let fallbackCurrency = selectedAccountCurrency
         let rowsToSave = parsedRows.filter(\.isSelected)
         let draftsToSave = rowsToSave.map {
-            ImportSaveDraft(row: $0, accountName: accountName, fallbackCurrency: currency)
+            ImportSaveDraft(row: $0, accountName: accountName, fallbackCurrency: fallbackCurrency)
         }
         let existingIdentity = existingTransactionsByIdentity()
         let allRules = rules
@@ -655,8 +667,8 @@ private struct ImportMetric: View {
 }
 
 private struct ImportReviewRow: View {
-    @Environment(\.appCurrency) private var currency
     @Binding var row: ParsedBankTransaction
+    var fallbackCurrency: String
     var categories: [FinanceCategory]
     var createRuleAction: () -> Void
     var mergeDuplicateAction: () -> Void
@@ -694,7 +706,7 @@ private struct ImportReviewRow: View {
 
                     Spacer(minLength: 8)
 
-                    Text(AppFormatters.money(row.amount, currency: AppFormatters.resolvedCurrency(row.currency, fallback: currency)))
+                    Text(AppFormatters.money(row.amount, currency: AppFormatters.resolvedCurrency(row.currency, fallback: fallbackCurrency)))
                         .font(.system(.subheadline, design: .rounded).weight(.bold))
                         .foregroundStyle(row.kind == .income ? AppTheme.teal : AppTheme.ink)
                         .multilineTextAlignment(.trailing)

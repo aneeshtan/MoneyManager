@@ -106,7 +106,7 @@ struct DashboardView: View {
                         }
                     }
                     .environment(\.appCurrency, currency)
-                    .padding(.horizontal, 18)
+                    .adaptiveScreenContent()
                     .padding(.top, 10)
                     .padding(.bottom, 28)
                 }

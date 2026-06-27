@@ -101,6 +101,25 @@ struct AppBackground: View {
     }
 }
 
+private struct AdaptiveScreenContentModifier: ViewModifier {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
+    var maxWidth: CGFloat
+    var compactHorizontalPadding: CGFloat
+    var regularHorizontalPadding: CGFloat
+
+    private var isRegularWidth: Bool {
+        horizontalSizeClass == .regular
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: isRegularWidth ? maxWidth : .infinity, alignment: .top)
+            .frame(maxWidth: .infinity, alignment: .top)
+            .padding(.horizontal, isRegularWidth ? regularHorizontalPadding : compactHorizontalPadding)
+    }
+}
+
 struct GlassSurface<Content: View>: View {
     var padding: CGFloat = 16
     @ViewBuilder var content: Content
@@ -223,5 +242,19 @@ private struct AppCurrencyModifier: ViewModifier {
 extension View {
     func withAppCurrency() -> some View {
         modifier(AppCurrencyModifier())
+    }
+
+    func adaptiveScreenContent(
+        maxWidth: CGFloat = 1040,
+        compactHorizontalPadding: CGFloat = 18,
+        regularHorizontalPadding: CGFloat = 28
+    ) -> some View {
+        modifier(
+            AdaptiveScreenContentModifier(
+                maxWidth: maxWidth,
+                compactHorizontalPadding: compactHorizontalPadding,
+                regularHorizontalPadding: regularHorizontalPadding
+            )
+        )
     }
 }

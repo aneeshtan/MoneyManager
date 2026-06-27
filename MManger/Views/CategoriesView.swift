@@ -34,7 +34,7 @@ struct CategoriesView: View {
                             ruleList
                         }
                     }
-                    .padding(.horizontal, 18)
+                    .adaptiveScreenContent()
                     .padding(.top, 10)
                     .padding(.bottom, 28)
                 }

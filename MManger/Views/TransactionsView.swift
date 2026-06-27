@@ -120,7 +120,7 @@ struct TransactionsView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 18)
+                    .adaptiveScreenContent()
                     .padding(.top, 10)
                     .padding(.bottom, 28)
                 }
@@ -489,11 +489,12 @@ struct SwipeableTransactionRow: View {
 
     @State private var offset: CGFloat = 0
     @State private var isSwiped = false
+    @State private var showingDeleteConfirmation = false
     private let deleteButtonWidth: CGFloat = 72
 
     var body: some View {
         ZStack(alignment: .trailing) {
-            Button(role: .destructive, action: deleteAction) {
+            Button(role: .destructive, action: requestDelete) {
                 Image(systemName: "trash")
                     .font(.headline.weight(.bold))
                     .foregroundStyle(.white)
@@ -531,10 +532,18 @@ struct SwipeableTransactionRow: View {
                 .onTapGesture { if isSwiped { snap(to: 0) } else { openAction() } }
                 .contextMenu {
                     Button(action: openAction) { Label("Edit", systemImage: "square.and.pencil") }
-                    Button(role: .destructive, action: deleteAction) { Label("Delete", systemImage: "trash") }
+                    Button(role: .destructive, action: requestDelete) { Label("Delete", systemImage: "trash") }
                 }
         }
         .clipped()
+        .alert("Delete Transaction?", isPresented: $showingDeleteConfirmation) {
+            Button("Delete Transaction", role: .destructive) {
+                deleteAction()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Are you sure you want to delete this transaction? This action cannot be undone.")
+        }
     }
 
     private func snap(to target: CGFloat) {
@@ -542,6 +551,10 @@ struct SwipeableTransactionRow: View {
             offset = target
             isSwiped = target != 0
         }
+    }
+
+    private func requestDelete() {
+        showingDeleteConfirmation = true
     }
 }
 

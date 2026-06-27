@@ -9,8 +9,8 @@ protocol BankAdapter {
     var supportedFormats: [ImportFormat] { get }
     
     func parsePDF(at url: URL, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String) throws -> [ParsedBankTransaction]
-    func parseCSV(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String) -> [ParsedBankTransaction]
-    func parsePlainText(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, requireDate: Bool) -> [ParsedBankTransaction]
+    func parseCSV(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, fallbackCurrency: String) -> [ParsedBankTransaction]
+    func parsePlainText(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, requireDate: Bool, fallbackCurrency: String) -> [ParsedBankTransaction]
 }
 
 /// Universal format detector for automatic bank statement recognition
@@ -168,13 +168,15 @@ struct UniversalImportParser {
         _ text: String,
         rules: [MerchantRule],
         existingTransactions: [FinanceTransaction],
-        accountName: String
+        accountName: String,
+        fallbackCurrency: String = "USD"
     ) throws -> [ParsedBankTransaction] {
         try parsePastedMessages(
             text,
             ruleSnapshots: rules.map(MerchantRuleSnapshot.init),
             existingSnapshots: existingTransactions.map(TransactionSnapshot.init),
-            accountName: accountName
+            accountName: accountName,
+            fallbackCurrency: fallbackCurrency
         )
     }
     
@@ -183,9 +185,10 @@ struct UniversalImportParser {
         _ text: String,
         ruleSnapshots: [MerchantRuleSnapshot],
         existingSnapshots: [TransactionSnapshot],
-        accountName: String
+        accountName: String,
+        fallbackCurrency: String = "USD"
     ) throws -> [ParsedBankTransaction] {
-        let rows = parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: false)
+        let rows = parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: false, fallbackCurrency: fallbackCurrency)
         guard !rows.isEmpty else { throw UniversalImportParserError.noTransactionsFound }
         return rows
     }
@@ -195,7 +198,8 @@ struct UniversalImportParser {
         format: ImportFormat,
         ruleSnapshots: [MerchantRuleSnapshot],
         existingSnapshots: [TransactionSnapshot],
-        accountName: String
+        accountName: String,
+        fallbackCurrency: String = "USD"
     ) throws -> [ParsedBankTransaction] {
         // Detect bank format from the already-extracted text
         let bankFormat = FormatDetector.detectBankFormat(from: text, format: format)
@@ -206,18 +210,19 @@ struct UniversalImportParser {
                 text,
                 ruleSnapshots: ruleSnapshots,
                 existingSnapshots: existingSnapshots,
-                accountName: accountName
+                accountName: accountName,
+                fallbackCurrency: fallbackCurrency
             )
             if !strictRows.isEmpty {
                 return strictRows
             }
-            let rows = parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: true)
+            let rows = parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: true, fallbackCurrency: fallbackCurrency)
             guard !rows.isEmpty else { throw UniversalImportParserError.noTransactionsFound }
             return rows
         }
 
         guard let detectedFormat = bankFormat else {
-            return try parseWithGenericAdapter(text, format: format, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName)
+            return try parseWithGenericAdapter(text, format: format, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, fallbackCurrency: fallbackCurrency)
         }
 
         if let adapter = bankAdapters[detectedFormat] {
@@ -226,13 +231,13 @@ struct UniversalImportParser {
                 // Already handled above
                 break
             case .csv:
-                return adapter.parseCSV(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName)
+                return adapter.parseCSV(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, fallbackCurrency: fallbackCurrency)
             case .plainText:
-                return adapter.parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: true)
+                return adapter.parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: true, fallbackCurrency: fallbackCurrency)
             }
         }
 
-        return try parseWithGenericAdapter(text, format: format, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName)
+        return try parseWithGenericAdapter(text, format: format, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, fallbackCurrency: fallbackCurrency)
     }
     
     private func parseWithGenericAdapter(
@@ -240,20 +245,21 @@ struct UniversalImportParser {
         format: ImportFormat,
         ruleSnapshots: [MerchantRuleSnapshot],
         existingSnapshots: [TransactionSnapshot],
-        accountName: String
+        accountName: String,
+        fallbackCurrency: String
     ) throws -> [ParsedBankTransaction] {
         switch format {
         case .pdf:
             // Try generic PDF parsing
-            let rows = parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: true)
+            let rows = parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: true, fallbackCurrency: fallbackCurrency)
             guard !rows.isEmpty else { throw UniversalImportParserError.noTransactionsFound }
             return rows
         case .csv:
-            let rows = parseCSV(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName)
+            let rows = parseCSV(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, fallbackCurrency: fallbackCurrency)
             guard !rows.isEmpty else { throw UniversalImportParserError.noTransactionsFound }
             return rows
         case .plainText:
-            let rows = parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: true)
+            let rows = parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: true, fallbackCurrency: fallbackCurrency)
             guard !rows.isEmpty else { throw UniversalImportParserError.noTransactionsFound }
             return rows
         }
@@ -263,7 +269,8 @@ struct UniversalImportParser {
         _ text: String,
         ruleSnapshots: [MerchantRuleSnapshot],
         existingSnapshots: [TransactionSnapshot],
-        accountName: String
+        accountName: String,
+        fallbackCurrency: String = "USD"
     ) -> [ParsedBankTransaction] {
         let duplicateLookup = DuplicateTransactionLookup(snapshots: existingSnapshots)
         let rows = text
@@ -286,7 +293,7 @@ struct UniversalImportParser {
                 continue
             }
             let merchant = firstValue(in: fields, keys: ["merchant", "description", "details", "narration", "note", "payee"]) ?? "Imported transaction"
-            let currency = firstValue(in: fields, keys: ["currency", "ccy"]) ?? detectCurrencyFromContext(text: text, fields: fields)
+            let currency = firstValue(in: fields, keys: ["currency", "ccy"]) ?? detectCurrencyFromContext(text: text, fields: fields, fallbackCurrency: fallbackCurrency)
             let amountInfo = amountAndKind(from: fields)
             guard let amountInfo else { continue }
             parsed.append(
@@ -296,6 +303,7 @@ struct UniversalImportParser {
                     kind: amountInfo.kind,
                     amount: amountInfo.amount,
                     currency: currency,
+                    fallbackCurrency: fallbackCurrency,
                     accountName: accountName,
                     rules: ruleSnapshots,
                     duplicateLookup: duplicateLookup
@@ -310,7 +318,8 @@ struct UniversalImportParser {
         ruleSnapshots: [MerchantRuleSnapshot],
         existingSnapshots: [TransactionSnapshot],
         accountName: String,
-        requireDate: Bool
+        requireDate: Bool,
+        fallbackCurrency: String = "USD"
     ) -> [ParsedBankTransaction] {
         let duplicateLookup = DuplicateTransactionLookup(snapshots: existingSnapshots)
         let chunks = text
@@ -322,7 +331,7 @@ struct UniversalImportParser {
         var rows: [ParsedBankTransaction] = []
         rows.reserveCapacity(chunks.count)
         for line in chunks {
-            if let parsed = parsePlainTextLine(line, rules: ruleSnapshots, duplicateLookup: duplicateLookup, accountName: accountName, requireDate: requireDate) {
+            if let parsed = parsePlainTextLine(line, rules: ruleSnapshots, duplicateLookup: duplicateLookup, accountName: accountName, requireDate: requireDate, fallbackCurrency: fallbackCurrency) {
                 rows.append(parsed)
             }
         }
@@ -334,7 +343,8 @@ struct UniversalImportParser {
         rules: [MerchantRuleSnapshot],
         duplicateLookup: DuplicateTransactionLookup,
         accountName: String,
-        requireDate: Bool
+        requireDate: Bool,
+        fallbackCurrency: String
     ) -> ParsedBankTransaction? {
         let cleaned = Self.whitespaceRegex.stringByReplacingMatches(
             in: line,
@@ -351,7 +361,7 @@ struct UniversalImportParser {
         let kind: TransactionKind = lower.contains("credit") || lower.contains("credited") || lower.contains("refund") || lower.contains("received") || lower.contains("deposit")
             ? .income
             : .expense
-        let currency = normalizedCurrency(amountMatch.currency)
+        let currency = normalizedCurrency(amountMatch.currency, fallbackCurrency: fallbackCurrency)
         
         // For file imports, require a real date so standalone page numbers / footers don't become transactions.
         guard let date = parseDate(cleaned) else {
@@ -363,6 +373,7 @@ struct UniversalImportParser {
                 kind: kind,
                 amount: amount,
                 currency: currency,
+                fallbackCurrency: fallbackCurrency,
                 accountName: accountName,
                 rules: rules,
                 duplicateLookup: duplicateLookup
@@ -383,6 +394,7 @@ struct UniversalImportParser {
             kind: kind,
             amount: amount,
             currency: currency,
+            fallbackCurrency: fallbackCurrency,
             accountName: accountName,
             rules: rules,
             duplicateLookup: duplicateLookup
@@ -395,6 +407,7 @@ struct UniversalImportParser {
         kind: TransactionKind,
         amount: Decimal,
         currency: String,
+        fallbackCurrency: String,
         accountName: String,
         rules: [MerchantRuleSnapshot],
         duplicateLookup: DuplicateTransactionLookup
@@ -413,7 +426,7 @@ struct UniversalImportParser {
             normalizedMerchant: normalized,
             kind: suggestion?.kind ?? kind,
             amount: amount,
-            currency: normalizedCurrency(currency),
+            currency: normalizedCurrency(currency, fallbackCurrency: fallbackCurrency),
             suggestedCategory: suggestion?.category,
             suggestedSubcategory: suggestion?.subcategory,
             confidence: suggestion?.confidence ?? 0,
@@ -617,15 +630,16 @@ struct UniversalImportParser {
         return Decimal(string: cleaned, locale: Locale(identifier: "en_US_POSIX"))
     }
     
-    private func normalizedCurrency(_ value: String) -> String {
-        let upper = value.uppercased()
+    private func normalizedCurrency(_ value: String, fallbackCurrency: String = "USD") -> String {
+        let upper = value.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         if upper.isEmpty {
-            return "USD" // Default to USD instead of AED
+            let fallback = fallbackCurrency.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+            return fallback.isEmpty ? "USD" : fallback
         }
         return upper
     }
     
-    private func detectCurrencyFromContext(text: String, fields: [String: String]) -> String {
+    private func detectCurrencyFromContext(text: String, fields: [String: String], fallbackCurrency: String = "USD") -> String {
         // Try to detect currency from the text context
         let upperText = text.uppercased()
         
@@ -648,7 +662,7 @@ struct UniversalImportParser {
             }
         }
         
-        return "USD" // Default fallback
+        return normalizedCurrency("", fallbackCurrency: fallbackCurrency)
     }
     
     func firstMatch(_ pattern: String, in text: String) -> RegexMatch? {
@@ -688,12 +702,12 @@ class StrictStatementBankAdapter: BankAdapter {
         throw UniversalImportParserError.unsupportedBankFormat
     }
 
-    func parseCSV(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String) -> [ParsedBankTransaction] {
-        UniversalImportParser().parseCSV(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName)
+    func parseCSV(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, fallbackCurrency: String) -> [ParsedBankTransaction] {
+        UniversalImportParser().parseCSV(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, fallbackCurrency: fallbackCurrency)
     }
 
-    func parsePlainText(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, requireDate: Bool) -> [ParsedBankTransaction] {
-        UniversalImportParser().parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: requireDate)
+    func parsePlainText(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, requireDate: Bool, fallbackCurrency: String) -> [ParsedBankTransaction] {
+        UniversalImportParser().parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: requireDate, fallbackCurrency: fallbackCurrency)
     }
 }
 
@@ -705,11 +719,11 @@ class GenericCSVAdapter: BankAdapter {
         throw UniversalImportParserError.unsupportedBankFormat
     }
     
-    func parseCSV(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String) -> [ParsedBankTransaction] {
-        return UniversalImportParser().parseCSV(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName)
+    func parseCSV(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, fallbackCurrency: String) -> [ParsedBankTransaction] {
+        return UniversalImportParser().parseCSV(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, fallbackCurrency: fallbackCurrency)
     }
     
-    func parsePlainText(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, requireDate: Bool) -> [ParsedBankTransaction] {
+    func parsePlainText(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, requireDate: Bool, fallbackCurrency: String) -> [ParsedBankTransaction] {
         return []
     }
 }
@@ -722,12 +736,12 @@ class GenericPlainTextAdapter: BankAdapter {
         throw UniversalImportParserError.unsupportedBankFormat
     }
     
-    func parseCSV(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String) -> [ParsedBankTransaction] {
+    func parseCSV(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, fallbackCurrency: String) -> [ParsedBankTransaction] {
         return []
     }
     
-    func parsePlainText(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, requireDate: Bool) -> [ParsedBankTransaction] {
-        return UniversalImportParser().parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: requireDate)
+    func parsePlainText(_ text: String, ruleSnapshots: [MerchantRuleSnapshot], existingSnapshots: [TransactionSnapshot], accountName: String, requireDate: Bool, fallbackCurrency: String) -> [ParsedBankTransaction] {
+        return UniversalImportParser().parsePlainText(text, ruleSnapshots: ruleSnapshots, existingSnapshots: existingSnapshots, accountName: accountName, requireDate: requireDate, fallbackCurrency: fallbackCurrency)
     }
 }
 

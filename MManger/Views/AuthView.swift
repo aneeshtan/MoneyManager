@@ -112,6 +112,7 @@ struct AuthView: View {
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 28)
+            .adaptiveScreenContent(maxWidth: 520, compactHorizontalPadding: 0, regularHorizontalPadding: 32)
         }
         .alert("Sign in failed", isPresented: Binding(
             get: { authError != nil },

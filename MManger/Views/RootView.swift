@@ -2,13 +2,19 @@ import SwiftUI
 import SwiftData
 
 struct RootView: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("isAuthenticated") private var isAuthenticated = false
     @AppStorage("didCompleteOnboarding") private var didCompleteOnboarding = false
     @Query private var transactions: [FinanceTransaction]
     @State private var isPreloading = true
+    @State private var selectedSidebarDestination: AppDestination? = .dashboard
 
     private var shouldShowIntroExperience: Bool {
         transactions.isEmpty && !didCompleteOnboarding
+    }
+
+    private var usesSidebarNavigation: Bool {
+        horizontalSizeClass == .regular
     }
 
     var body: some View {
@@ -23,24 +29,19 @@ struct RootView: View {
 
     private var authenticatedBody: some View {
         ZStack {
-            TabView {
-                DashboardView()
-                    .tabItem { Label("Stats", systemImage: "chart.bar") }
-
-                TransactionsView()
-                    .tabItem { Label("Transactions", systemImage: "list.bullet.rectangle") }
-
-                ImportPDFView()
-                    .tabItem { Label("Import", systemImage: "doc.badge.plus") }
-
-                // More tab — shows a sheet with remaining screens
-                Color.clear
-                    .tabItem { Label("More", systemImage: "ellipsis") }
-                    .onAppear { showingMore = true }
-            }
-            .tint(AppTheme.violet)
-            .sheet(isPresented: $showingMore) {
-                MoreMenuView()
+            if usesSidebarNavigation {
+                NavigationSplitView {
+                    ProMoneySidebar(selection: $selectedSidebarDestination)
+                } detail: {
+                    if let selectedSidebarDestination {
+                        selectedSidebarDestination.content
+                    } else {
+                        DashboardView()
+                    }
+                }
+                .tint(AppTheme.violet)
+            } else {
+                CompactTabRoot(showingMore: $showingMore)
             }
 
             if shouldShowIntroExperience && isPreloading {
@@ -66,6 +67,256 @@ struct RootView: View {
             OnboardingView {
                 didCompleteOnboarding = true
             }
+        }
+    }
+}
+
+private struct ProMoneySidebar: View {
+    @Binding var selection: AppDestination?
+
+    var body: some View {
+        ZStack {
+            LinearGradient(
+                colors: [
+                    Color(red: 0.995, green: 0.970, blue: 0.985),
+                    Color(red: 0.965, green: 0.955, blue: 0.995),
+                    Color(red: 0.950, green: 0.985, blue: 0.980)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 18) {
+                SidebarHeader()
+
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Workspace")
+                        .font(.caption.weight(.bold))
+                        .textCase(.uppercase)
+                        .foregroundStyle(AppTheme.ink.opacity(0.58))
+                        .padding(.horizontal, 12)
+
+                    VStack(spacing: 6) {
+                        ForEach(AppDestination.allCases) { destination in
+                            Button {
+                                withAnimation(.spring(response: 0.28, dampingFraction: 0.84)) {
+                                    selection = destination
+                                }
+                            } label: {
+                                SidebarDestinationRow(
+                                    title: destination.title,
+                                    systemImage: destination.systemImage,
+                                    isSelected: selection == destination
+                                )
+                            }
+                            .buttonStyle(PrimaryPressStyle())
+                        }
+                    }
+                }
+
+                Spacer(minLength: 0)
+
+                SidebarFooter()
+            }
+            .padding(.horizontal, 14)
+            .padding(.top, 18)
+            .padding(.bottom, 16)
+        }
+        .navigationSplitViewColumnWidth(min: 250, ideal: 280, max: 320)
+    }
+}
+
+private struct SidebarHeader: View {
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "chart.pie.fill")
+                .font(.title3.weight(.bold))
+                .foregroundStyle(.white)
+                .frame(width: 42, height: 42)
+                .background(
+                    LinearGradient(
+                        colors: [AppTheme.violet, AppTheme.rose],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    in: RoundedRectangle(cornerRadius: 14, style: .continuous)
+                )
+                .shadow(color: AppTheme.violet.opacity(0.18), radius: 12, x: 0, y: 7)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Pro Money")
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(AppTheme.ink)
+                Text("Manager")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink.opacity(0.64))
+            }
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+    }
+}
+
+private struct SidebarDestinationRow: View {
+    var title: String
+    var systemImage: String
+    var isSelected: Bool
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: systemImage)
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(isSelected ? .white : AppTheme.violet)
+                .frame(width: 34, height: 34)
+                .background(
+                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                        .fill(isSelected ? .white.opacity(0.18) : .white.opacity(0.76))
+                )
+
+            Text(title)
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(isSelected ? .white : AppTheme.ink)
+
+            Spacer(minLength: 0)
+
+            if isSelected {
+                Circle()
+                    .fill(.white)
+                    .frame(width: 6, height: 6)
+            }
+        }
+        .padding(.vertical, 9)
+        .padding(.horizontal, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(isSelected ? AppTheme.violet : .white.opacity(0.62))
+                .shadow(color: isSelected ? AppTheme.violet.opacity(0.22) : .clear, radius: 12, x: 0, y: 7)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(isSelected ? .white.opacity(0.28) : AppTheme.line.opacity(0.58), lineWidth: 1)
+        )
+        .contentShape(Rectangle())
+    }
+}
+
+private struct SidebarFooter: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "lock.shield.fill")
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(AppTheme.teal)
+                .frame(width: 32, height: 32)
+                .background(.white.opacity(0.78), in: Circle())
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Local data")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(AppTheme.ink)
+                Text("Private on device")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink.opacity(0.58))
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(12)
+        .background(.white.opacity(0.56), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(.white.opacity(0.72), lineWidth: 1)
+        )
+    }
+}
+
+private enum AppDestination: String, CaseIterable, Identifiable {
+    case dashboard
+    case transactions
+    case importPDF
+    case search
+    case trends
+    case accounts
+    case categories
+    case backup
+    case profile
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .dashboard: "Stats"
+        case .transactions: "Transactions"
+        case .importPDF: "Import"
+        case .search: "Search"
+        case .trends: "Trends"
+        case .accounts: "Accounts"
+        case .categories: "Categories"
+        case .backup: "Backup"
+        case .profile: "Profile"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .dashboard: "chart.bar"
+        case .transactions: "list.bullet.rectangle"
+        case .importPDF: "doc.badge.plus"
+        case .search: "magnifyingglass"
+        case .trends: "chart.line.uptrend.xyaxis"
+        case .accounts: "creditcard"
+        case .categories: "tag"
+        case .backup: "square.and.arrow.up"
+        case .profile: "person.crop.circle"
+        }
+    }
+
+    @MainActor
+    @ViewBuilder var content: some View {
+        switch self {
+        case .dashboard:
+            DashboardView()
+        case .transactions:
+            TransactionsView()
+        case .importPDF:
+            ImportPDFView()
+        case .search:
+            GlobalSearchView()
+        case .trends:
+            TrendsView()
+        case .accounts:
+            AccountsView()
+        case .categories:
+            CategoriesView()
+        case .backup:
+            ExportView()
+        case .profile:
+            ProfileView()
+        }
+    }
+}
+
+private struct CompactTabRoot: View {
+    @Binding var showingMore: Bool
+
+    var body: some View {
+        TabView {
+            DashboardView()
+                .tabItem { Label("Stats", systemImage: "chart.bar") }
+
+            TransactionsView()
+                .tabItem { Label("Transactions", systemImage: "list.bullet.rectangle") }
+
+            ImportPDFView()
+                .tabItem { Label("Import", systemImage: "doc.badge.plus") }
+
+            Color.clear
+                .tabItem { Label("More", systemImage: "ellipsis") }
+                .onAppear { showingMore = true }
+        }
+        .tint(AppTheme.violet)
+        .sheet(isPresented: $showingMore) {
+            MoreMenuView()
         }
     }
 }
@@ -125,6 +376,7 @@ private struct OnboardingView: View {
             }
             .padding(.horizontal, 24)
             .padding(.vertical, 28)
+            .adaptiveScreenContent(maxWidth: 560, compactHorizontalPadding: 0, regularHorizontalPadding: 32)
         }
     }
 }
@@ -396,7 +648,7 @@ struct ProfileView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 18)
+                    .adaptiveScreenContent(maxWidth: 760)
                     .padding(.top, 10)
                     .padding(.bottom, 28)
                 }
@@ -512,7 +764,7 @@ private struct MoreMenuView: View {
                             ProfileView()
                         }
                     }
-                    .padding(.horizontal, 18)
+                    .adaptiveScreenContent(maxWidth: 760)
                     .padding(.top, 10)
                     .padding(.bottom, 28)
                 }

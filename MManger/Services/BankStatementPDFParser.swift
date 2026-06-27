@@ -50,11 +50,12 @@ struct BankStatementPDFParser {
         _ text: String,
         ruleSnapshots: [MerchantRuleSnapshot],
         existingSnapshots: [TransactionSnapshot],
-        accountName: String = SeedStore.defaultImportAccountName
+        accountName: String = SeedStore.defaultImportAccountName,
+        fallbackCurrency: String = "USD"
     ) -> [ParsedBankTransaction] {
         guard let regex = Self.statementRegex else { return [] }
         let duplicateLookup = DuplicateTransactionLookup(snapshots: existingSnapshots)
-        let currency = detectedCurrency(in: text)
+        let currency = detectedCurrency(in: text, fallbackCurrency: fallbackCurrency)
         let lines = text.components(separatedBy: .newlines)
         var rows: [ParsedBankTransaction] = []
         rows.reserveCapacity(min(lines.count / 4, 2000))
@@ -96,10 +97,10 @@ struct BankStatementPDFParser {
         return rows
     }
 
-    private func detectedCurrency(in text: String) -> String {
-        guard let regex = Self.currencyHeaderRegex else { return "USD" }
+    private func detectedCurrency(in text: String, fallbackCurrency: String) -> String {
+        guard let regex = Self.currencyHeaderRegex else { return fallbackCurrency.uppercased() }
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
-        guard let match = regex.firstMatch(in: text, range: range) else { return "USD" }
+        guard let match = regex.firstMatch(in: text, range: range) else { return fallbackCurrency.uppercased() }
         return capture(1, in: text, match: match).uppercased()
     }
 
