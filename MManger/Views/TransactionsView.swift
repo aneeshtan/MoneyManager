@@ -501,10 +501,14 @@ struct SwipeableTransactionRow: View {
                     .frame(maxHeight: .infinity)
                     .background(AppTheme.coral)
             }
+            .buttonStyle(.plain)
+            .contentShape(Rectangle())
             .opacity(isSwiped ? 1 : 0)
+            .zIndex(1)
 
             TransactionRow(transaction: transaction)
                 .offset(x: offset)
+                .zIndex(0)
                 .gesture(
                     DragGesture(minimumDistance: 20)
                         .onChanged { value in

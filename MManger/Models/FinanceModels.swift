@@ -568,3 +568,70 @@ struct ParsedBankTransaction: Identifiable, Hashable {
             || normalizedMerchant.contains("VAT ON FOREIGN")
     }
 }
+
+struct ImportSaveDraft: Hashable {
+    var date: Date
+    var kind: TransactionKind
+    var amount: Decimal
+    var currency: String
+    var merchant: String
+    var normalizedMerchant: String
+    var rawDescription: String
+    var accountName: String
+    var categoryName: String?
+    var subcategoryName: String?
+    var isDuplicate: Bool
+
+    init(row: ParsedBankTransaction, accountName: String, fallbackCurrency: String = "USD") {
+        let merchant = row.description.trimmingCharacters(in: .whitespacesAndNewlines)
+        let normalized = row.normalizedMerchant.trimmingCharacters(in: .whitespacesAndNewlines)
+        self.date = row.date
+        self.kind = row.kind
+        self.amount = row.amount
+        self.currency = Self.resolvedCurrency(row.currency, fallback: fallbackCurrency)
+        self.merchant = merchant.isEmpty ? "Imported transaction" : merchant
+        self.normalizedMerchant = normalized.isEmpty ? MerchantNormalizer.normalize(self.merchant) : normalized
+        self.rawDescription = row.description
+        self.accountName = accountName
+        self.categoryName = row.suggestedCategory?.nilIfBlank
+        self.subcategoryName = row.suggestedSubcategory?.nilIfBlank
+        self.isDuplicate = row.isDuplicate
+    }
+
+    func identityKey() -> String {
+        TransactionIdentityKey.make(
+            accountName: accountName,
+            date: date,
+            amount: amount,
+            normalizedMerchant: normalizedMerchant
+        )
+    }
+
+    func transaction(importBatchId: UUID) -> FinanceTransaction {
+        FinanceTransaction(
+            date: date,
+            kind: kind,
+            amount: amount,
+            currency: currency,
+            merchant: merchant,
+            normalizedMerchant: normalizedMerchant,
+            rawDescription: rawDescription,
+            accountName: accountName,
+            categoryName: categoryName,
+            subcategoryName: subcategoryName,
+            importBatchId: importBatchId
+        )
+    }
+
+    private static func resolvedCurrency(_ value: String, fallback: String) -> String {
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? fallback.uppercased() : trimmed.uppercased()
+    }
+}
+
+private extension String {
+    var nilIfBlank: String? {
+        let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
+}

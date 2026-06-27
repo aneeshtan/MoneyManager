@@ -89,8 +89,8 @@ struct ImportPDFView: View {
                             }
 
                             LazyVStack(spacing: 12) {
-                                ForEach(parsedRows.indices.prefix(maxDisplayedRows), id: \.self) { index in
-                                    let rowBinding = $parsedRows[index]
+                                ForEach(Array(parsedRows.prefix(maxDisplayedRows)), id: \.id) { row in
+                                    let rowBinding = binding(for: row)
                                     ImportReviewRow(
                                         row: rowBinding,
                                         categories: categories,
@@ -268,66 +268,79 @@ struct ImportPDFView: View {
     private func saveSelected() {
         guard selectedCount > 0 else { return }
         isSaving = true
-        let rowsToSave = parsedRows.filter(\.isSelected)
         let accountName = selectedAccountName
+        let rowsToSave = parsedRows.filter(\.isSelected)
+        let draftsToSave = rowsToSave.map {
+            ImportSaveDraft(row: $0, accountName: accountName, fallbackCurrency: currency)
+        }
         let existingIdentity = existingTransactionsByIdentity()
         let allRules = rules
         let sourceName = sourceFileName.isEmpty ? selectedSource.defaultSourceName : sourceFileName
         let parsedCount = parsedRows.count
-        let savedCount = selectedCount
+        let savedCount = draftsToSave.count
 
         saveTask?.cancel()
         saveTask = Task { @MainActor in
-            let batch = ImportBatch(
-                sourceFileName: sourceName,
-                parsedCount: parsedCount,
-                savedCount: savedCount,
-                ignoredCount: parsedCount - savedCount
-            )
-            modelContext.insert(batch)
-
-            var existingByIdentity = existingIdentity
-            var saved = 0
-            let batchSize = 50  // small batches keep memory low and UI responsive
-
-            for row in rowsToSave {
-                guard !Task.isCancelled else { break }
-
-                let key = transactionIdentityKey(for: row, accountName: accountName)
-                if row.isDuplicate {
-                    for duplicate in existingByIdentity[key] ?? [] {
-                        modelContext.delete(duplicate)
-                    }
-                    existingByIdentity[key] = []
-                }
-                modelContext.insert(FinanceTransaction(
-                    date: row.date,
-                    kind: row.kind,
-                    amount: row.amount,
-                    currency: row.currency,
-                    merchant: row.description,
-                    normalizedMerchant: row.normalizedMerchant,
-                    rawDescription: row.description,
-                    accountName: accountName,
-                    categoryName: row.suggestedCategory,
-                    subcategoryName: row.suggestedSubcategory,
-                    importBatchId: batch.id
-                ))
-                createRule(from: row, existingRules: allRules, saveImmediately: false)
-                saved += 1
-
-                if saved % batchSize == 0 {
-                    try? modelContext.save()
-                    parsingLabel = "Saved \(saved) of \(savedCount)…"
-                    await Task.yield()  // hand control back to the main run loop
-                }
+            defer {
+                isSaving = false
             }
 
-            try? modelContext.save()
-            parsedRows.removeAll()
-            pastedText = ""
-            isSaving = false
+            do {
+                let batch = ImportBatch(
+                    sourceFileName: sourceName,
+                    parsedCount: parsedCount,
+                    savedCount: savedCount,
+                    ignoredCount: parsedCount - savedCount
+                )
+                modelContext.insert(batch)
+
+                var existingByIdentity = existingIdentity
+                var saved = 0
+                let batchSize = 50  // small batches keep memory low and UI responsive
+
+                for pair in zip(rowsToSave, draftsToSave) {
+                    guard !Task.isCancelled else { return }
+
+                    let row = pair.0
+                    let draft = pair.1
+                    let key = draft.identityKey()
+                    if draft.isDuplicate {
+                        for duplicate in existingByIdentity[key] ?? [] {
+                            modelContext.delete(duplicate)
+                        }
+                        existingByIdentity[key] = []
+                    }
+                    modelContext.insert(draft.transaction(importBatchId: batch.id))
+                    createRule(from: row, existingRules: allRules, saveImmediately: false)
+                    saved += 1
+
+                    if saved % batchSize == 0 {
+                        try modelContext.save()
+                        parsingLabel = "Saved \(saved) of \(savedCount)…"
+                        await Task.yield()  // hand control back to the main run loop
+                    }
+                }
+
+                try modelContext.save()
+                parsedRows.removeAll()
+                pastedText = ""
+                parsingLabel = ""
+            } catch {
+                errorMessage = "Could not save imported transactions: \(error.localizedDescription)"
+            }
         }
+    }
+
+    private func binding(for row: ParsedBankTransaction) -> Binding<ParsedBankTransaction> {
+        Binding(
+            get: {
+                parsedRows.first(where: { $0.id == row.id }) ?? row
+            },
+            set: { updatedRow in
+                guard let index = parsedRows.firstIndex(where: { $0.id == updatedRow.id }) else { return }
+                parsedRows[index] = updatedRow
+            }
+        )
     }
 
     private func createRule(from row: ParsedBankTransaction, existingRules: [MerchantRule], saveImmediately: Bool = true) {

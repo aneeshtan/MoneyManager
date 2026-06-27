@@ -200,7 +200,7 @@ struct MetricCapsule: View {
         .padding(14)
         .background(tint.opacity(0.11), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(tint.opacity(0.18), lineWidth: 1)
         )
     }

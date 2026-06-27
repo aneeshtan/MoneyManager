@@ -153,6 +153,30 @@ final class BankStatementPDFParserTests: XCTestCase {
         XCTAssertEqual(AppFormatters.resolvedCurrency(" usd "), "USD")
     }
 
+    func testImportSaveDraftUsesStableValueSnapshot() throws {
+        let date = try XCTUnwrap(statementDate("10/06/2026"))
+        let row = ParsedBankTransaction(
+            date: date,
+            description: "  Grocery Market  ",
+            normalizedMerchant: "GROCERY MARKET",
+            kind: .expense,
+            amount: Decimal(186.40),
+            currency: "  ",
+            suggestedCategory: "Food",
+            suggestedSubcategory: "Groceries",
+            confidence: 0.92,
+            isSelected: true,
+            isDuplicate: false
+        )
+
+        let draft = ImportSaveDraft(row: row, accountName: "Daily Card", fallbackCurrency: "AED")
+
+        XCTAssertEqual(draft.merchant, "Grocery Market")
+        XCTAssertEqual(draft.currency, "AED")
+        XCTAssertEqual(draft.accountName, "Daily Card")
+        XCTAssertEqual(draft.normalizedMerchant, "GROCERY MARKET")
+    }
+
     private func statementDate(_ value: String) -> Date? {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
