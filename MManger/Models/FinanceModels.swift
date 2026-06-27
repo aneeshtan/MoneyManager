@@ -47,7 +47,7 @@ enum AccountType: String, Codable, CaseIterable, Identifiable {
         let name = accountName.lowercased()
         if name.contains("cash") { return .cash }
         if name.contains("saving") || name.contains("current") || name.contains("bank") || name.contains("adib") { return .bank }
-        if name.contains("credit") || name.contains("card") || name.contains("adcb") { return .creditCard }
+        if name.contains("credit") || name.contains("card") { return .creditCard }
         if name.contains("tabby") || name.contains("loan") || name.contains("debt") { return .liability }
         if name.contains("invest") || name.contains("crypto") || name.contains("stock") { return .investment }
         return .other
@@ -264,12 +264,14 @@ final class UserProfile {
     var displayName: String
     var baseCurrency: String
     var createdAt: Date
-
-    init(id: String, displayName: String, baseCurrency: String = "AED", createdAt: Date = .now) {
+    var preferredCurrencies: [String] = ["USD", "EUR", "GBP"] // Default popular currencies
+    
+    init(id: String, displayName: String, baseCurrency: String = "USD", createdAt: Date = .now, preferredCurrencies: [String] = ["USD", "EUR", "GBP"]) {
         self.id = id
         self.displayName = displayName
         self.baseCurrency = baseCurrency
         self.createdAt = createdAt
+        self.preferredCurrencies = preferredCurrencies
     }
 }
 
@@ -290,7 +292,7 @@ final class Account {
         set { typeRaw = newValue.rawValue }
     }
 
-    init(id: UUID = UUID(), userId: String = SeedStore.defaultUserId, name: String, currency: String = "AED", openingBalance: Decimal = 0, type: AccountType? = nil, isArchived: Bool = false, sortOrder: Int = 0, createdAt: Date = .now) {
+    init(id: UUID = UUID(), userId: String = SeedStore.defaultUserId, name: String, currency: String = "USD", openingBalance: Decimal = 0, type: AccountType? = nil, isArchived: Bool = false, sortOrder: Int = 0, createdAt: Date = .now) {
         self.id = id
         self.userId = userId
         self.name = name
@@ -374,7 +376,7 @@ final class FinanceTransaction {
         date: Date,
         kind: TransactionKind,
         amount: Decimal,
-        currency: String = "AED",
+        currency: String = "USD",
         merchant: String,
         normalizedMerchant: String,
         note: String = "",
@@ -534,7 +536,7 @@ final class Budget {
     var amount: Decimal
     var currency: String
 
-    init(id: UUID = UUID(), userId: String = SeedStore.defaultUserId, categoryName: String, subcategoryName: String? = nil, monthStart: Date, amount: Decimal, currency: String = "AED") {
+    init(id: UUID = UUID(), userId: String = SeedStore.defaultUserId, categoryName: String, subcategoryName: String? = nil, monthStart: Date, amount: Decimal, currency: String = "USD") {
         self.id = id
         self.userId = userId
         self.categoryName = categoryName

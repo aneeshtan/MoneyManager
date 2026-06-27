@@ -413,7 +413,7 @@ private struct AccountEditorView: View {
     var transactions: [FinanceTransaction]
 
     @State private var name = ""
-    @State private var currency = "AED"
+    @State private var currency = "USD"
     @State private var currentValue = ""
     @State private var type: AccountType = .other
     @State private var sortOrder = ""
@@ -492,7 +492,7 @@ private struct AccountEditorView: View {
                 transactions: transactions
             )
             account.name = cleanName
-            account.currency = cleanCurrency.isEmpty ? "AED" : cleanCurrency
+            account.currency = cleanCurrency.isEmpty ? "USD" : cleanCurrency
             account.type = type
             account.openingBalance = openingBalance
             account.sortOrder = intSortOrder
@@ -507,7 +507,7 @@ private struct AccountEditorView: View {
             modelContext.insert(
                 Account(
                     name: cleanName,
-                    currency: cleanCurrency.isEmpty ? "AED" : cleanCurrency,
+                    currency: cleanCurrency.isEmpty ? "USD" : cleanCurrency,
                     openingBalance: targetCurrentValue,
                     type: type,
                     sortOrder: intSortOrder

@@ -280,7 +280,7 @@ private enum SavedSearchFilter: CaseIterable, Identifiable {
             return transaction.accountName.localizedCaseInsensitiveContains("cash")
         case .card:
             let name = transaction.accountName.lowercased()
-            return name.contains("card") || name.contains("adcb") || name.contains("tabby")
+            return name.contains("card") || name.contains("tabby")
         }
     }
 }
@@ -348,6 +348,7 @@ private struct UncategorizedSuggestionCard: View {
 // MARK: - Transaction Suggestion Summary
 
 private struct TransactionSuggestionSummary: View {
+    @Environment(\.appCurrency) private var currency
     var transaction: FinanceTransaction
 
     var body: some View {
@@ -375,7 +376,7 @@ private struct TransactionSuggestionSummary: View {
 
             Spacer(minLength: 10)
 
-            Text(AppFormatters.money(transaction.amount, currency: transaction.currency))
+            Text(AppFormatters.money(transaction.amount, currency: AppFormatters.resolvedCurrency(transaction.currency, fallback: currency)))
                 .font(.system(.subheadline, design: .rounded).weight(.bold))
                 .foregroundStyle(transaction.kind == .income ? AppTheme.teal : AppTheme.ink)
                 .multilineTextAlignment(.trailing)

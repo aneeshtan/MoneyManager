@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 
 struct ImportPDFView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appCurrency) private var currency
     @Query(sort: \FinanceTransaction.date, order: .reverse) private var transactions: [FinanceTransaction]
     @Query(sort: \MerchantRule.sampleCount, order: .reverse) private var rules: [MerchantRule]
     @Query(sort: \Account.sortOrder) private var accounts: [Account]
@@ -161,47 +162,71 @@ struct ImportPDFView: View {
             return
         }
 
-        // Capture snapshot data on the main actor before moving to background.
-        let accountName = selectedAccountName
-        let ruleSnapshots = rules.map(MerchantRuleSnapshot.init)
-        let existingSnapshots = selectedAccountTransactions.map(TransactionSnapshot.init)
-
-        // Extract text on the main actor. PDFKit is not thread-safe, so reading the PDF must stay here.
-        let rawText: String
-        do {
-            if ext == "pdf" {
-                rawText = try ADCBPDFParser.extractText(from: url)
-            } else {
-                guard let text = try? String(contentsOf: url, encoding: .utf8) else {
-                    throw UniversalImportParserError.unreadableFile
-                }
-                rawText = text
-            }
-        } catch {
-            errorMessage = error.localizedDescription
-            isParsing = false
-            return
-        }
-
-        // Parse the text off the main actor so the UI stays responsive.
-        let format: ImportFormat = ext == "pdf" ? .pdf : (ext == "csv" ? .csv : .plainText)
         importTask?.cancel()
-        importTask = Task {
+        importTask = Task { @MainActor in
+            // 1. Extract text on the main actor (PDFKit is not thread-safe)
+            let rawText: String
             do {
-                let rows = try await Task.detached(priority: .userInitiated) { [rawText, format, ruleSnapshots, existingSnapshots, accountName] in
-                    try UniversalImportParser().parseText(
-                        rawText,
-                        format: format,
-                        ruleSnapshots: ruleSnapshots,
-                        existingSnapshots: existingSnapshots,
-                        accountName: accountName
-                    )
-                }.value
-                parsedRows = rows
+                if ext == "pdf" {
+                    rawText = try BankStatementPDFParser.extractText(from: url)
+                } else {
+                    guard let text = try? String(contentsOf: url, encoding: .utf8) else {
+                        errorMessage = UniversalImportParserError.unreadableFile.localizedDescription
+                        isParsing = false
+                        return
+                    }
+                    rawText = text
+                }
             } catch {
-                parsedRows = []
                 errorMessage = error.localizedDescription
+                isParsing = false
+                return
             }
+
+            let accountName = selectedAccountName
+            let ruleSnapshots = rules.map(MerchantRuleSnapshot.init)
+            let existingSnapshots = selectedAccountTransactions.map(TransactionSnapshot.init)
+            let format: ImportFormat = ext == "pdf" ? .pdf : (ext == "csv" ? .csv : .plainText)
+
+            parsingLabel = "Parsing transactions…"
+
+            // 2. Parse off the main actor in a detached task, streaming results back in chunks
+            let stream = AsyncStream<[ParsedBankTransaction]> { continuation in
+                Task.detached(priority: .userInitiated) {
+                    do {
+                        let all = try UniversalImportParser().parseText(
+                            rawText,
+                            format: format,
+                            ruleSnapshots: ruleSnapshots,
+                            existingSnapshots: existingSnapshots,
+                            accountName: accountName
+                        )
+                        // Stream in chunks of 30 so the UI renders progressively
+                        let chunkSize = 30
+                        var index = 0
+                        while index < all.count {
+                            let end = min(index + chunkSize, all.count)
+                            continuation.yield(Array(all[index..<end]))
+                            index = end
+                            // Small sleep lets the main actor breathe between chunks
+                            try? await Task.sleep(nanoseconds: 8_000_000) // 8ms
+                        }
+                    } catch {
+                        continuation.yield(with: .success([]))
+                        await MainActor.run { errorMessage = error.localizedDescription }
+                    }
+                    continuation.finish()
+                }
+            }
+
+            var totalCount = 0
+            for await chunk in stream {
+                guard !Task.isCancelled else { break }
+                parsedRows.append(contentsOf: chunk)
+                totalCount += chunk.count
+                parsingLabel = "Loaded \(totalCount) transactions…"
+            }
+
             isParsing = false
         }
     }
@@ -262,10 +287,12 @@ struct ImportPDFView: View {
             modelContext.insert(batch)
 
             var existingByIdentity = existingIdentity
-            let saveBatchSize = 200
-            var insertedSinceLastSave = 0
+            var saved = 0
+            let batchSize = 50  // small batches keep memory low and UI responsive
 
             for row in rowsToSave {
+                guard !Task.isCancelled else { break }
+
                 let key = transactionIdentityKey(for: row, accountName: accountName)
                 if row.isDuplicate {
                     for duplicate in existingByIdentity[key] ?? [] {
@@ -273,7 +300,7 @@ struct ImportPDFView: View {
                     }
                     existingByIdentity[key] = []
                 }
-                let transaction = FinanceTransaction(
+                modelContext.insert(FinanceTransaction(
                     date: row.date,
                     kind: row.kind,
                     amount: row.amount,
@@ -285,17 +312,14 @@ struct ImportPDFView: View {
                     categoryName: row.suggestedCategory,
                     subcategoryName: row.suggestedSubcategory,
                     importBatchId: batch.id
-                )
-                modelContext.insert(transaction)
-                existingByIdentity[key, default: []].append(transaction)
+                ))
                 createRule(from: row, existingRules: allRules, saveImmediately: false)
-                insertedSinceLastSave += 1
+                saved += 1
 
-                // Periodically flush to keep memory and the pending-changes set bounded.
-                if insertedSinceLastSave >= saveBatchSize {
+                if saved % batchSize == 0 {
                     try? modelContext.save()
-                    insertedSinceLastSave = 0
-                    await Task.yield()
+                    parsingLabel = "Saved \(saved) of \(savedCount)…"
+                    await Task.yield()  // hand control back to the main run loop
                 }
             }
 
@@ -618,6 +642,7 @@ private struct ImportMetric: View {
 }
 
 private struct ImportReviewRow: View {
+    @Environment(\.appCurrency) private var currency
     @Binding var row: ParsedBankTransaction
     var categories: [FinanceCategory]
     var createRuleAction: () -> Void
@@ -646,7 +671,7 @@ private struct ImportReviewRow: View {
 
                     VStack(alignment: .leading, spacing: 5) {
                         Text(row.description)
-                            .font(.headline.weight(.semibold))
+                            .font(.caption2.weight(.semibold))
                             .foregroundStyle(AppTheme.ink)
                             .lineLimit(2)
                         Text("\(AppFormatters.day.string(from: row.date)) • \(row.suggestedCategory ?? "Uncategorized")\(subcategorySuffix)")
@@ -656,7 +681,7 @@ private struct ImportReviewRow: View {
 
                     Spacer(minLength: 8)
 
-                    Text(AppFormatters.money(row.amount, currency: row.currency))
+                    Text(AppFormatters.money(row.amount, currency: AppFormatters.resolvedCurrency(row.currency, fallback: currency)))
                         .font(.system(.subheadline, design: .rounded).weight(.bold))
                         .foregroundStyle(row.kind == .income ? AppTheme.teal : AppTheme.ink)
                         .multilineTextAlignment(.trailing)
@@ -675,7 +700,6 @@ private struct ImportReviewRow: View {
                     } else if row.isReviewOnly {
                         StatusPill(title: "Review", systemImage: "eye", tint: AppTheme.lavender)
                     }
-                    ConfidencePill(confidence: row.confidence)
                 }
 
                 HStack(spacing: 10) {
@@ -727,27 +751,6 @@ private struct ImportReviewRow: View {
             return ""
         }
         return " / \(subcategory)"
-    }
-}
-
-private struct ConfidencePill: View {
-    var confidence: Double
-
-    private var title: String {
-        if confidence >= 0.9 { return "AI high" }
-        if confidence >= 0.65 { return "AI medium" }
-        if confidence > 0 { return "AI low" }
-        return "AI unknown"
-    }
-
-    private var tint: Color {
-        if confidence >= 0.9 { return AppTheme.teal }
-        if confidence >= 0.65 { return AppTheme.gold }
-        return AppTheme.muted
-    }
-
-    var body: some View {
-        StatusPill(title: title, systemImage: "sparkles", tint: tint)
     }
 }
 

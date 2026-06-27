@@ -6,6 +6,7 @@ import UniformTypeIdentifiers
 struct TransactionEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appCurrency) private var appCurrency
     @Query(sort: \MerchantRule.sampleCount, order: .reverse) private var merchantRules: [MerchantRule]
     @Query(sort: \TransactionAttachment.createdAt, order: .reverse) private var attachments: [TransactionAttachment]
     var transaction: FinanceTransaction?
@@ -15,6 +16,7 @@ struct TransactionEditorView: View {
     @State private var date = Date()
     @State private var kind: TransactionKind = .expense
     @State private var amountText = ""
+    @State private var currency = ""
     @State private var accountName = ""
     @State private var categoryName = ""
     @State private var subcategoryName = ""
@@ -49,6 +51,9 @@ struct TransactionEditorView: View {
                     DatePicker("Date", selection: $date, displayedComponents: .date)
                     TextField("Amount", text: $amountText)
                         .keyboardType(.decimalPad)
+                    TextField("Currency", text: $currency)
+                        .textInputAutocapitalization(.characters)
+                        .autocorrectionDisabled()
                     TextField("Merchant", text: $merchant)
                     TextField("Note", text: $note, axis: .vertical)
                 }
@@ -93,7 +98,7 @@ struct TransactionEditorView: View {
                         sourceRow("Category", transaction.sourceCategoryColumn)
                         sourceRow("Subcategory", transaction.sourceSubcategoryColumn)
                         sourceRow("Note", transaction.sourceNoteColumn)
-                        sourceRow("AED", transaction.sourceAEDColumn)
+                        sourceRow("Source amount column", transaction.sourceAEDColumn)
                         sourceRow("Income/Expense", transaction.sourceIncomeExpenseColumn)
                         sourceRow("Description", transaction.sourceDescriptionColumn)
                         sourceRow("Amount", transaction.sourceAmountColumn)
@@ -230,12 +235,14 @@ struct TransactionEditorView: View {
     private func load() {
         guard let transaction else {
             accountName = activeAccounts.first?.name ?? SeedStore.defaultImportAccountName
+            currency = appCurrency
             sanitizeClassification()
             return
         }
         date = transaction.date
         kind = transaction.kind
         amountText = NSDecimalNumber(decimal: transaction.amount).stringValue
+        currency = AppFormatters.resolvedCurrency(transaction.currency, fallback: appCurrency)
         accountName = transaction.accountName
         categoryName = transaction.categoryName ?? ""
         subcategoryName = transaction.subcategoryName ?? ""
@@ -267,6 +274,7 @@ struct TransactionEditorView: View {
 
     private func save() {
         guard let amount = decimalAmount else { return }
+        let resolvedCurrency = AppFormatters.resolvedCurrency(currency, fallback: appCurrency)
         let normalized = MerchantNormalizer.normalize(merchant)
         if let transaction {
             let oldCategory = transaction.categoryName
@@ -275,6 +283,7 @@ struct TransactionEditorView: View {
             transaction.date = date
             transaction.kind = kind
             transaction.amount = amount
+            transaction.currency = resolvedCurrency
             transaction.accountName = accountName
             transaction.categoryName = categoryName.isEmpty ? nil : categoryName
             transaction.subcategoryName = subcategoryName.isEmpty ? nil : subcategoryName
@@ -291,6 +300,7 @@ struct TransactionEditorView: View {
                     date: date,
                     kind: kind,
                     amount: amount,
+                    currency: resolvedCurrency,
                     merchant: merchant,
                     normalizedMerchant: normalized,
                     note: note,

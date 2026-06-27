@@ -19,6 +19,8 @@ struct RootView: View {
         }
     }
 
+    @State private var showingMore = false
+
     private var authenticatedBody: some View {
         ZStack {
             TabView {
@@ -28,25 +30,18 @@ struct RootView: View {
                 TransactionsView()
                     .tabItem { Label("Transactions", systemImage: "list.bullet.rectangle") }
 
-                GlobalSearchView()
-                    .tabItem { Label("Search", systemImage: "magnifyingglass") }
-
                 ImportPDFView()
                     .tabItem { Label("Import", systemImage: "doc.badge.plus") }
 
-                AccountsView()
-                    .tabItem { Label("Accounts", systemImage: "creditcard") }
-
-                CategoriesView()
-                    .tabItem { Label("Categories", systemImage: "tag") }
-
-                ExportView()
-                    .tabItem { Label("Backup", systemImage: "square.and.arrow.up") }
-
-                ProfileView()
-                    .tabItem { Label("Profile", systemImage: "person.crop.circle") }
+                // More tab — shows a sheet with remaining screens
+                Color.clear
+                    .tabItem { Label("More", systemImage: "ellipsis") }
+                    .onAppear { showingMore = true }
             }
             .tint(AppTheme.violet)
+            .sheet(isPresented: $showingMore) {
+                MoreMenuView()
+            }
 
             if shouldShowIntroExperience && isPreloading {
                 PastelPreloader()
@@ -98,7 +93,7 @@ private struct OnboardingView: View {
                     .overlay(RoundedRectangle(cornerRadius: 30, style: .continuous).stroke(.white.opacity(0.9), lineWidth: 1))
 
                 VStack(spacing: 8) {
-                    Text("AI Money Manager")
+                    Text("Pro Money Manager")
                         .font(.system(.largeTitle, design: .rounded).weight(.bold))
                         .foregroundStyle(AppTheme.ink)
                         .multilineTextAlignment(.center)
@@ -199,7 +194,7 @@ private struct PastelPreloader: View {
                 .frame(width: 190, height: 190)
 
                 VStack(spacing: 9) {
-                    Text("AI Money Manager")
+                    Text("Pro Money Manager")
                         .font(.system(.title2, design: .rounded).weight(.bold))
                         .foregroundStyle(AppTheme.ink)
                     Text("Preparing your money view")
@@ -433,8 +428,8 @@ struct ProfileView: View {
         components.scheme = "mailto"
         components.path = "aneeshtan@gmail.com"
         components.queryItems = [
-            URLQueryItem(name: "subject", value: "AI Money Manager Feedback"),
-            URLQueryItem(name: "body", value: "\n\nApp: AI Money Manager\nVersion: 1.0")
+            URLQueryItem(name: "subject", value: "Pro Money Manager Feedback"),
+            URLQueryItem(name: "body", value: "\n\nApp: Pro Money Manager\nVersion: 1.0")
         ]
         if let url = components.url {
             openURL(url)
@@ -484,5 +479,86 @@ private struct ProfileLine: View {
                 .multilineTextAlignment(.trailing)
         }
         .padding(.vertical, 2)
+    }
+}
+
+// MARK: - More Menu
+
+private struct MoreMenuView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                AppBackground()
+                ScrollView {
+                    VStack(spacing: 12) {
+                        MoreMenuRow(title: "Search", subtitle: "Find any transaction", systemImage: "magnifyingglass", tint: AppTheme.violet) {
+                            GlobalSearchView()
+                        }
+                        MoreMenuRow(title: "Trends", subtitle: "Spending charts over time", systemImage: "chart.line.uptrend.xyaxis", tint: AppTheme.teal) {
+                            TrendsView()
+                        }
+                        MoreMenuRow(title: "Accounts", subtitle: "Balances and account details", systemImage: "creditcard", tint: AppTheme.mint) {
+                            AccountsView()
+                        }
+                        MoreMenuRow(title: "Categories", subtitle: "Rules and spending groups", systemImage: "tag", tint: AppTheme.gold) {
+                            CategoriesView()
+                        }
+                        MoreMenuRow(title: "Backup", subtitle: "Export and restore data", systemImage: "square.and.arrow.up", tint: AppTheme.coral) {
+                            ExportView()
+                        }
+                        MoreMenuRow(title: "Profile", subtitle: "Settings and privacy", systemImage: "person.crop.circle", tint: AppTheme.lavender) {
+                            ProfileView()
+                        }
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.top, 10)
+                    .padding(.bottom, 28)
+                }
+            }
+            .navigationTitle("More")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+        }
+    }
+}
+
+private struct MoreMenuRow<Destination: View>: View {
+    var title: String
+    var subtitle: String
+    var systemImage: String
+    var tint: Color
+    @ViewBuilder var destination: () -> Destination
+
+    var body: some View {
+        NavigationLink(destination: destination()) {
+            GlassSurface {
+                HStack(spacing: 14) {
+                    Image(systemName: systemImage)
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(tint)
+                        .frame(width: 44, height: 44)
+                        .background(tint.opacity(0.13), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(title)
+                            .font(.headline.weight(.semibold))
+                            .foregroundStyle(AppTheme.ink)
+                        Text(subtitle)
+                            .font(.caption.weight(.medium))
+                            .foregroundStyle(AppTheme.muted)
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(AppTheme.muted.opacity(0.6))
+                }
+            }
+        }
+        .buttonStyle(PrimaryPressStyle())
     }
 }

@@ -54,7 +54,7 @@ struct ExportView: View {
 
                             ExportActionCard(
                                 title: "Restore Backup JSON",
-                                subtitle: "Import a previous AI Money Manager backup",
+                                subtitle: "Import a previous Pro Money Manager backup",
                                 systemImage: "arrow.clockwise.icloud",
                                 tint: AppTheme.gold,
                                 action: { showingRestorePicker = true }

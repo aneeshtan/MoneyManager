@@ -27,6 +27,7 @@ struct MMangerApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .withAppCurrency()
         }
         .modelContainer(container)
     }

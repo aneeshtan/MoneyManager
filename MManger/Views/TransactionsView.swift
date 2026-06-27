@@ -9,6 +9,7 @@ private enum ScrollCoordinateSpace {
 
 struct TransactionsView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appCurrency) private var currency
     @Query(sort: \FinanceTransaction.date, order: .reverse) private var transactions: [FinanceTransaction]
     @Query(sort: \Account.sortOrder) private var accounts: [Account]
     @Query(sort: \FinanceCategory.sortOrder) private var categories: [FinanceCategory]
@@ -16,6 +17,8 @@ struct TransactionsView: View {
     @State private var showingEditor = false
     @State private var editingTransaction: FinanceTransaction?
     @State private var showingDuplicateReview = false
+    @State private var showingFilter = false
+    @State private var activeFilter = TransactionFilter()
     /// Cached duplicate candidates; regenerated when `transactions` changes.
     @State private var duplicateCache: [DuplicateReviewCandidate] = []
 
@@ -39,15 +42,47 @@ struct TransactionsView: View {
         return MonthSnapshot(count: count, expense: expense, income: income)
     }
 
+    struct DayGroup {
+        var day: Date
+        var transactions: [FinanceTransaction]
+        var dayTotal: Decimal
+    }
+
+    private var groupedByDay: [DayGroup] {
+        let calendar = Calendar.current
+        let grouped = Dictionary(grouping: filtered) { calendar.startOfDay(for: $0.date) }
+        return grouped
+            .map { day, txns in
+                let sorted = txns.sorted { $0.date > $1.date }
+                let total = txns.filter { $0.kind == .expense }.reduce(Decimal(0)) { $0 + $1.amount }
+                return DayGroup(day: day, transactions: sorted, dayTotal: total)
+            }
+            .sorted { $0.day > $1.day }
+    }
+
     private var filtered: [FinanceTransaction] {
-        guard !searchText.isEmpty else { return transactions }
-        let query = searchText.lowercased()
-        return transactions.filter {
-            $0.merchant.localizedCaseInsensitiveContains(query)
-                || $0.note.localizedCaseInsensitiveContains(query)
-                || ($0.categoryName ?? "").localizedCaseInsensitiveContains(query)
-                || $0.accountName.localizedCaseInsensitiveContains(query)
+        var result = transactions
+        if !searchText.isEmpty {
+            let query = searchText.lowercased()
+            result = result.filter {
+                $0.merchant.localizedCaseInsensitiveContains(query)
+                    || $0.note.localizedCaseInsensitiveContains(query)
+                    || ($0.categoryName ?? "").localizedCaseInsensitiveContains(query)
+                    || $0.accountName.localizedCaseInsensitiveContains(query)
+            }
         }
+        if activeFilter.isActive {
+            result = result.filter { t in
+                // handle uncategorized sentinel
+                if activeFilter.categoryName == "__uncategorized__" {
+                    var f = activeFilter
+                    f.categoryName = ""
+                    return f.matches(t) && (t.categoryName == nil || t.categoryName!.isEmpty)
+                }
+                return activeFilter.matches(t)
+            }
+        }
+        return result
     }
 
     var body: some View {
@@ -74,31 +109,14 @@ struct TransactionsView: View {
                         if filtered.isEmpty {
                             EmptyStateView(
                                 systemImage: "magnifyingglass",
-                                title: searchText.isEmpty ? "No transactions" : "No matches",
-                                message: searchText.isEmpty
+                                title: searchText.isEmpty && !activeFilter.isActive ? "No transactions" : "No matches",
+                                message: searchText.isEmpty && !activeFilter.isActive
                                     ? "Import a bank PDF or add a transaction manually."
-                                    : "Try a merchant, account, or category name."
+                                    : "Try adjusting your search or filters."
                             )
                         } else {
-                            ForEach(filtered) { transaction in
-                                TransactionRow(transaction: transaction)
-                                    .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                                    .onTapGesture {
-                                        editingTransaction = transaction
-                                    }
-                                    .contextMenu {
-                                        Button {
-                                            editingTransaction = transaction
-                                        } label: {
-                                            Label("Edit", systemImage: "square.and.pencil")
-                                        }
-                                        Button(role: .destructive) {
-                                            delete(transaction)
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
-                                        }
-                                    }
-                                    .id(transaction.id)
+                            ForEach(groupedByDay, id: \.day) { group in
+                                DaySection(group: group, editAction: { editingTransaction = $0 }, deleteAction: { delete($0) })
                             }
                         }
                     }
@@ -113,18 +131,33 @@ struct TransactionsView: View {
             .searchable(text: $searchText, prompt: "Search merchant, note, category")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        showingEditor = true
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.headline.weight(.bold))
-                            .foregroundStyle(.white)
-                            .frame(width: 34, height: 34)
-                            .background(AppTheme.violet, in: Circle())
+                    HStack(spacing: 8) {
+                        Button {
+                            showingFilter = true
+                        } label: {
+                            Image(systemName: activeFilter.isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                                .font(.headline.weight(.bold))
+                                .foregroundStyle(activeFilter.isActive ? AppTheme.violet : AppTheme.ink)
+                                .frame(width: 34, height: 34)
+                        }
+                        .accessibilityLabel("Filter transactions")
+
+                        Button {
+                            showingEditor = true
+                        } label: {
+                            Image(systemName: "plus")
+                                .font(.headline.weight(.bold))
+                                .foregroundStyle(.white)
+                                .frame(width: 34, height: 34)
+                                .background(AppTheme.violet, in: Circle())
+                        }
+                        .buttonStyle(PrimaryPressStyle())
+                        .accessibilityLabel("Add transaction")
                     }
-                    .buttonStyle(PrimaryPressStyle())
-                    .accessibilityLabel("Add transaction")
                 }
+            }
+            .sheet(isPresented: $showingFilter) {
+                TransactionFilterSheet(filter: $activeFilter, accounts: accounts, categories: categories)
             }
             .sheet(isPresented: $showingEditor) {
                 TransactionEditorView(accounts: accounts, categories: categories)
@@ -228,6 +261,7 @@ private struct DuplicateReviewCallout: View {
 
 private struct DuplicateReviewView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.appCurrency) private var currency
     var candidates: [DuplicateReviewCandidate]
     var openAction: (FinanceTransaction) -> Void
     var keepNewestAction: (DuplicateReviewCandidate) -> Void
@@ -273,7 +307,7 @@ private struct DuplicateReviewView: View {
                                                         .foregroundStyle(AppTheme.muted)
                                                 }
                                                 Spacer()
-                                                Text(AppFormatters.money(transaction.amount, currency: transaction.currency))
+                                                Text(AppFormatters.money(transaction.amount, currency: AppFormatters.resolvedCurrency(transaction.currency, fallback: currency)))
                                                     .font(.caption.weight(.bold))
                                                     .foregroundStyle(AppTheme.ink)
                                             }
@@ -303,6 +337,7 @@ private struct DuplicateReviewView: View {
 // MARK: - Summary Header
 
 private struct TransactionSummaryHeader: View {
+    @Environment(\.appCurrency) private var currency
     var income: Decimal
     var expense: Decimal
     var count: Int
@@ -328,81 +363,120 @@ private struct TransactionSummaryHeader: View {
                 }
 
                 HStack(spacing: 10) {
-                    MetricCapsule(title: "Income", value: AppFormatters.statMoney(income), tint: AppTheme.teal)
-                    MetricCapsule(title: "Expense", value: AppFormatters.statMoney(expense), tint: AppTheme.coral)
+                    MetricCapsule(title: "Income", value: AppFormatters.statMoney(income, currency: currency), tint: AppTheme.teal)
+                    MetricCapsule(title: "Expense", value: AppFormatters.statMoney(expense, currency: currency), tint: AppTheme.coral)
                 }
             }
         }
     }
 }
 
+// MARK: - Day Section
+
+private struct DaySection: View {
+    @Environment(\.appCurrency) private var currency
+    var group: TransactionsView.DayGroup
+    var editAction: (FinanceTransaction) -> Void
+    var deleteAction: (FinanceTransaction) -> Void
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Date header
+            HStack {
+                Text(dayLabel)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(AppTheme.muted)
+                    .textCase(.uppercase)
+                    .tracking(0.5)
+                Spacer()
+                if group.dayTotal > 0 {
+                    Text(AppFormatters.statMoney(group.dayTotal, currency: currency))
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(AppTheme.muted)
+                }
+            }
+            .padding(.horizontal, 4)
+            .padding(.bottom, 8)
+            .padding(.top, 4)
+
+            // Rows grouped inside one card
+            GlassSurface(padding: 0) {
+                VStack(spacing: 0) {
+                    ForEach(group.transactions) { transaction in
+                        SwipeableTransactionRow(
+                            transaction: transaction,
+                            openAction: { editAction(transaction) },
+                            deleteAction: { deleteAction(transaction) }
+                        )
+                        .id(transaction.id)
+                        if transaction.id != group.transactions.last?.id {
+                            Divider()
+                                .overlay(AppTheme.line.opacity(0.5))
+                                .padding(.horizontal, 14)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private var dayLabel: String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(group.day) { return "Today" }
+        if calendar.isDateInYesterday(group.day) { return "Yesterday" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = calendar.isDate(group.day, equalTo: .now, toGranularity: .year)
+            ? "EEEE, MMM d"
+            : "EEEE, MMM d, yyyy"
+        return formatter.string(from: group.day)
+    }
+}
+
 // MARK: - Transaction Row
 
 struct TransactionRow: View {
+    @Environment(\.appCurrency) private var currency
     var transaction: FinanceTransaction
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             TransactionIcon(kind: transaction.kind)
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(transaction.merchant.isEmpty ? transaction.rawDescription : transaction.merchant)
-                    .font(.caption.weight(.semibold))
+                    .font(.subheadline.weight(.semibold))
                     .foregroundStyle(AppTheme.ink)
-                    .lineLimit(2)
+                    .lineLimit(1)
                     .truncationMode(.tail)
 
-                HStack(spacing: 5) {
+                HStack(spacing: 4) {
                     Text(transaction.accountName)
                         .lineLimit(1)
-                    Circle()
-                        .fill(AppTheme.muted.opacity(0.55))
-                        .frame(width: 3, height: 3)
+                        .truncationMode(.tail)
+                    Text("·")
                     Text(categoryText)
                         .lineLimit(1)
+                        .truncationMode(.tail)
                 }
                 .font(.caption.weight(.medium))
                 .foregroundStyle(AppTheme.muted)
-
-                Text(AppFormatters.day.string(from: transaction.date))
-                    .font(.caption2.weight(.medium))
-                    .foregroundStyle(AppTheme.muted.opacity(0.68))
-                    .lineLimit(1)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
 
-            Spacer(minLength: 8)
-
-            Text(amountString)
-                .font(.system(.callout, design: .rounded).weight(.bold))
+            Text(AppFormatters.money(transaction.amount, currency: AppFormatters.resolvedCurrency(transaction.currency, fallback: currency)))
+                .font(.system(.subheadline, design: .rounded).weight(.bold))
                 .foregroundStyle(transaction.kind == .income ? AppTheme.teal : AppTheme.ink)
-                .multilineTextAlignment(.trailing)
                 .lineLimit(1)
                 .minimumScaleFactor(0.72)
-                .frame(maxWidth: 126, alignment: .trailing)
+                .layoutPriority(1)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color.white.opacity(0.96))
-                .shadow(color: AppTheme.violet.opacity(0.045), radius: 14, x: 0, y: 8)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .stroke(AppTheme.line.opacity(0.62), lineWidth: 1)
-        )
     }
 
     private var categoryText: String {
-        if let category = transaction.categoryName, let subcategory = transaction.subcategoryName {
-            return "\(category) / \(subcategory)"
-        }
+        if let sub = transaction.subcategoryName, !sub.isEmpty { return sub }
         return transaction.categoryName ?? "Uncategorized"
-    }
-
-    private var amountString: String {
-        AppFormatters.money(transaction.amount, currency: transaction.currency)
     }
 }
 
@@ -413,20 +487,57 @@ struct SwipeableTransactionRow: View {
     var openAction: () -> Void
     var deleteAction: () -> Void
 
+    @State private var offset: CGFloat = 0
+    @State private var isSwiped = false
+    private let deleteButtonWidth: CGFloat = 72
+
     var body: some View {
-        TransactionRow(transaction: transaction)
-            .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .onTapGesture {
-                openAction()
+        ZStack(alignment: .trailing) {
+            Button(role: .destructive, action: deleteAction) {
+                Image(systemName: "trash")
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(.white)
+                    .frame(width: deleteButtonWidth)
+                    .frame(maxHeight: .infinity)
+                    .background(AppTheme.coral)
             }
-            .contextMenu {
-                Button(action: openAction) {
-                    Label("Edit", systemImage: "square.and.pencil")
+            .opacity(isSwiped ? 1 : 0)
+
+            TransactionRow(transaction: transaction)
+                .offset(x: offset)
+                .gesture(
+                    DragGesture(minimumDistance: 20)
+                        .onChanged { value in
+                            guard value.translation.width < 0 else {
+                                if isSwiped { snap(to: 0) }
+                                return
+                            }
+                            let drag = max(value.translation.width, -deleteButtonWidth - 12)
+                            offset = isSwiped ? drag - deleteButtonWidth : drag
+                        }
+                        .onEnded { value in
+                            if value.translation.width < -(deleteButtonWidth / 2) {
+                                snap(to: -deleteButtonWidth)
+                            } else {
+                                snap(to: 0)
+                            }
+                        }
+                )
+                .contentShape(Rectangle())
+                .onTapGesture { if isSwiped { snap(to: 0) } else { openAction() } }
+                .contextMenu {
+                    Button(action: openAction) { Label("Edit", systemImage: "square.and.pencil") }
+                    Button(role: .destructive, action: deleteAction) { Label("Delete", systemImage: "trash") }
                 }
-                Button(role: .destructive, action: deleteAction) {
-                    Label("Delete", systemImage: "trash")
-                }
-            }
+        }
+        .clipped()
+    }
+
+    private func snap(to target: CGFloat) {
+        withAnimation(.spring(response: 0.32, dampingFraction: 0.78)) {
+            offset = target
+            isSwiped = target != 0
+        }
     }
 }
 

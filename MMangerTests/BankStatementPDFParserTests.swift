@@ -1,7 +1,7 @@
 import XCTest
 @testable import MManger
 
-final class ADCBPDFParserTests: XCTestCase {
+final class BankStatementPDFParserTests: XCTestCase {
     func testParsesStatementLinesAndClassifiesKnownMerchants() {
         let text = """
         Transaction Date Description Cr/Dr Amount in AED
@@ -15,7 +15,11 @@ final class ADCBPDFParserTests: XCTestCase {
             MerchantRule(pattern: "AGODA", categoryName: "Travel", sampleCount: 3)
         ]
 
-        let rows = ADCBPDFParser().parseText(text, rules: rules, existingTransactions: [])
+        let rows = BankStatementPDFParser().parseText(
+            text,
+            ruleSnapshots: rules.map(MerchantRuleSnapshot.init),
+            existingSnapshots: []
+        )
 
         XCTAssertEqual(rows.count, 4)
         XCTAssertEqual(rows[0].suggestedCategory, "Transportation")
@@ -25,6 +29,22 @@ final class ADCBPDFParserTests: XCTestCase {
         XCTAssertFalse(rows[2].isSelected)
         XCTAssertEqual(rows[3].amount, Decimal(1161))
         XCTAssertEqual(rows[3].suggestedCategory, "Travel")
+    }
+
+    func testStrictStatementParserInfersCurrencyFromHeader() {
+        let text = """
+        Transaction Date Description Cr/Dr Amount in USD
+        10/06/2026 Coffee Shop DR 12.50
+        """
+
+        let rows = BankStatementPDFParser().parseText(
+            text,
+            ruleSnapshots: [],
+            existingSnapshots: []
+        )
+
+        XCTAssertEqual(rows.count, 1)
+        XCTAssertEqual(rows[0].currency, "USD")
     }
 
     func testDuplicateDetectionUsesAccountDateAmountAndMerchant() throws {
@@ -58,11 +78,13 @@ final class ADCBPDFParserTests: XCTestCase {
         )
     }
 
-    func testProvidedADCBPDFWhenPathIsAvailable() throws {
-        guard let path = ProcessInfo.processInfo.environment["ADCB_PDF_PATH"], !path.isEmpty else {
-            throw XCTSkip("Set ADCB_PDF_PATH to validate the full bank PDF fixture.")
+    @MainActor
+    func testProvidedStatementPDFWhenPathIsAvailable() throws {
+        guard let path = ProcessInfo.processInfo.environment["BANK_STATEMENT_PDF_PATH"], !path.isEmpty else {
+            throw XCTSkip("Set BANK_STATEMENT_PDF_PATH to validate the full bank PDF fixture.")
         }
-        let rows = try ADCBPDFParser().parsePDF(at: URL(fileURLWithPath: path), rules: [], existingTransactions: [])
+        let text = try BankStatementPDFParser.extractText(from: URL(fileURLWithPath: path))
+        let rows = BankStatementPDFParser().parseText(text, ruleSnapshots: [], existingSnapshots: [])
         XCTAssertEqual(rows.count, 1333)
         XCTAssertEqual(rows.first?.description, "Amazon.ae")
     }
@@ -89,6 +111,28 @@ final class ADCBPDFParserTests: XCTestCase {
         XCTAssertEqual(rows[1].description, "AGODA.COM")
     }
 
+    func testPlainTextImportRejectsStatementMetadataAndPaginationRows() throws {
+        let text = """
+        Statement Date 10/06/2026
+        Statement Period 01/06/2026 - 10/06/2026
+        Page 1 of 12
+        Page 2 / 12
+        10/06/2026 CAREEM HALA RIDE DUBAI ARE DR 58.00
+        """
+
+        let rows = try UniversalImportParser().parseText(
+            text,
+            format: .pdf,
+            ruleSnapshots: [],
+            existingSnapshots: [],
+            accountName: SeedStore.defaultImportAccountName
+        )
+
+        XCTAssertEqual(rows.count, 1)
+        XCTAssertEqual(rows.first?.description, "CAREEM HALA RIDE DUBAI ARE")
+        XCTAssertEqual(rows.first?.amount, Decimal(58))
+    }
+
     func testPastedMessagesAllowDatelessRows() throws {
         let text = "AED 58.00 spent at CAREEM HALA RIDE"
 
@@ -102,6 +146,11 @@ final class ADCBPDFParserTests: XCTestCase {
         XCTAssertEqual(rows.count, 1)
         XCTAssertEqual(rows[0].amount, Decimal(58))
         XCTAssertEqual(rows[0].normalizedMerchant, "CAREEM HALA RIDE")
+    }
+
+    func testResolvedCurrencyFallsBackWhenBlank() {
+        XCTAssertEqual(AppFormatters.resolvedCurrency("", fallback: "EUR"), "EUR")
+        XCTAssertEqual(AppFormatters.resolvedCurrency(" usd "), "USD")
     }
 
     private func statementDate(_ value: String) -> Date? {

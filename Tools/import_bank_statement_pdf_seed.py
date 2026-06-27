@@ -11,6 +11,7 @@ from typing import Optional
 
 
 TRANSACTION_RE = re.compile(r"^(\d{2}/\d{2}/\d{4})\s+(.+?)\s+(CR|DR)\s+([\d,]+(?:\.\d+)?)$")
+CURRENCY_HEADER_RE = re.compile(r"\bAmount\s+in\s+([A-Z]{3})\b", re.IGNORECASE)
 PDF_SOURCE_NAME = "PDF Import"
 DEFAULT_ACCOUNT = "Credit Card"
 
@@ -110,13 +111,13 @@ for i in 0..<doc.pageCount {{
 
 def normalize_merchant(value: str) -> str:
     text = re.sub(r"\s+", " ", str(value or "")).strip().upper()
-    text = re.sub(r"CR\.?CARD\s*XXX\d+\s*USED\s*FOR\s*AED[\d,.]+\s*AT\s*", "", text)
-    text = re.sub(r"CARD\s*XXX\d+\s*USED\s*FOR\s*AED[\d,.]+\s*AT\s*", "", text)
+    text = re.sub(r"CR\.?CARD\s*XXX\d+\s*USED\s*FOR\s*[A-Z]{3}[\d,.]+\s*AT\s*", "", text)
+    text = re.sub(r"CARD\s*XXX\d+\s*USED\s*FOR\s*[A-Z]{3}[\d,.]+\s*AT\s*", "", text)
     text = re.sub(r"CRCARDXXX\d+USED", "", text)
     text = re.sub(r"CARDXXX\d+USED", "", text)
     text = re.sub(r"\(\+\d+(?:\.\d+)?%[^)]*\)", "", text)
-    text = re.sub(r"AVL\.?\s*CR\.?\s*LIMIT(?:\s*IS)?\s*AED[\d,.]+", "", text)
-    text = re.sub(r"AVLCRLIMIT(?:IS)?AED[\d,.]+", "", text)
+    text = re.sub(r"AVL\.?\s*CR\.?\s*LIMIT(?:\s*IS)?\s*[A-Z]{3}[\d,.]+", "", text)
+    text = re.sub(r"AVLCRLIMIT(?:IS)?[A-Z]{3}[\d,.]+", "", text)
     text = re.sub(r"[^A-Z0-9&%+./ -]", " ", text)
     text = re.sub(r"\s+", " ", text).strip(" -,.")
     changed = True
@@ -161,6 +162,8 @@ def is_review_only(normalized: str) -> bool:
 
 
 def parse_pdf_transactions(text: str, rules: list[dict]) -> list[dict]:
+    currency_match = CURRENCY_HEADER_RE.search(text)
+    currency = currency_match.group(1).upper() if currency_match else "USD"
     rows = []
     for line_number, raw_line in enumerate(text.splitlines(), start=1):
         line = raw_line.strip()
@@ -189,7 +192,7 @@ def parse_pdf_transactions(text: str, rules: list[dict]) -> list[dict]:
                 "incomeExpense": "Income" if matched_kind == "income" else "Exp.",
                 "description": description,
                 "amount": str(amount),
-                "currency": "AED",
+                "currency": currency,
                 "accountsTrailing": "",
                 "kind": matched_kind,
                 "merchant": description,

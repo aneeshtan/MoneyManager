@@ -129,7 +129,7 @@ struct SeedMerchantRule: Codable {
 }
 
 struct SeedInitialTransaction: Codable {
-    static let pdfImportSourceName = "ADCB PDF Import"
+    static let pdfImportSourceName = "Bank Statement Import"
 
     var sourceName: String?
     var sourceRow: Int
@@ -158,7 +158,7 @@ struct SeedInitialTransaction: Codable {
             date: Self.dateFormatter.date(from: date) ?? .now,
             kind: TransactionKind(rawValue: kind) ?? .expense,
             amount: parsedAmount,
-            currency: currency.isEmpty ? "AED" : currency,
+            currency: currency.isEmpty ? "USD" : currency,
             merchant: merchant,
             normalizedMerchant: normalizedMerchant.isEmpty ? MerchantNormalizer.normalize(merchant) : normalizedMerchant,
             note: note,

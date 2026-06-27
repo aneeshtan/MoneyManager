@@ -15,7 +15,7 @@ Pro Money Manager
 ## 2. SUBTITLE (30 characters max)
 
 ```
-Private budget & import tracker
+Secure Money Manager
 ```
 
 ---
@@ -51,18 +51,16 @@ Free
 
 ## 7. DESCRIPTION
 
-> Pro Money Manager is a local-first personal finance app for people who want control without bank-sync tracking. Import bank PDFs, CSV files, Excel spreadsheets, or pasted SMS messages — everything is parsed and stored securely on your device.
->
-> Review AI-suggested categories, manage accounts and budgets, and export your own backup when needed. No accounts are linked, no data leaves your phone, and no third party has access to your finances.
+> Pro Money Manager is a secure, local-first personal finance app. Your data stays on your iPhone — no cloud, no sync, no tracking. Import bank PDFs, CSV files, Excel spreadsheets, or pasted SMS messages, review AI-suggested categories, and manage your accounts with full control.
 >
 > **Why Pro Money Manager is different:**
 > • **Totally free** — no subscriptions, no in-app purchases, no paywalls
-> • **100% private** — all data stays on your iPhone, nothing is ever sent to a server
+> • **100% secure** — all data stored locally on your device using SwiftData, nothing ever leaves your phone
 > • **No ads** — no interruptions, no tracking, no data collection of any kind
 > • **No cloud sync** — you own your data completely
 > • **Smart import** — PDF, CSV, Excel, or pasted bank SMS messages
 > • **AI suggestions** — learns from your history to categorize transactions
-> • **Budgeting** — set monthly limits, track safe-to-spend, detect recurring bills
+> • **Accounts & insights** — track balances, spending trends, and recurring charges
 > • **Export & backup** — CSV or JSON backup whenever you choose
 
 ---

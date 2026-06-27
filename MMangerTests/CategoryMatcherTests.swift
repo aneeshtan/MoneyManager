@@ -22,7 +22,7 @@ final class CategoryMatcherTests: XCTestCase {
         XCTAssertEqual(suggestion?.confidence, 0.95)
     }
 
-    func testFallbacksCoverCoreADCBMerchants() {
+    func testFallbacksCoverCoreStatementMerchants() {
         XCTAssertEqual(CategoryMatcher.match(merchant: "DUBAI TAXI", rules: [], fallbackKind: .expense)?.subcategory, "Taxi")
         XCTAssertEqual(CategoryMatcher.match(merchant: "Amazon Grocery Dubai", rules: [], fallbackKind: .expense)?.category, "Food")
         XCTAssertEqual(CategoryMatcher.match(merchant: "Hotel at Booking.com Amsterdam", rules: [], fallbackKind: .expense)?.category, "Travel")

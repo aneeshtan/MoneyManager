@@ -200,7 +200,7 @@ def card(draw, box, title=None):
         text(draw, (box[0] + 24, box[1] + 18), title, 24, INK, "bold")
 
 
-def draw_header(draw, title="AI Money Manager", sub="June 2026"):
+def draw_header(draw, title="Pro Money Manager", sub="June 2026"):
     text(draw, (36, 42), title, 34, INK, "bold")
     text(draw, (36, 84), sub, 21, MUTED, "regular")
     rounded(draw, (436, 44, 518, 84), 20, (239, 234, 255), None)
@@ -403,7 +403,7 @@ def make_social():
     canvas = gradient((1600, 900)).convert("RGBA")
     draw = ImageDraw.Draw(canvas)
     paste_icon(canvas, 190, (210, 185))
-    text(draw, (340, 112), "AI Money Manager", 72, INK, "bold")
+    text(draw, (340, 112), "Pro Money Manager", 72, INK, "bold")
     text(draw, (342, 202), "Private budgeting, smart imports, and local AI-style money insights.", 34, MUTED)
     draw_phone(canvas, (990, 90, 1340, 855), "dashboard")
     rounded(draw, (342, 308, 766, 386), 26, VIOLET, None)
@@ -417,7 +417,7 @@ def make_social():
 def write_copy():
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "AppStoreListing.md").write_text(
-        """# AI Money Manager App Store Listing Draft
+        """# Pro Money Manager App Store Listing Draft
 
 ## Subtitle
 Private budget and import tracker
@@ -426,7 +426,7 @@ Private budget and import tracker
 Import bank PDFs, CSV, Excel, or pasted SMS messages, review every transaction, and manage your monthly budget locally on your iPhone.
 
 ## Short Description
-AI Money Manager is a local-first personal finance app for people who want control without bank-sync tracking. Import statements or copied bank messages, review suggested categories, manage accounts and budgets, and export your own backup when needed.
+Pro Money Manager is a local-first personal finance app for people who want control without bank-sync tracking. Import statements or copied bank messages, review suggested categories, manage accounts and budgets, and export your own backup when needed.
 
 ## Keywords
 budget,expense,spending,finance,money,tracker,pdf,csv,statement,private
@@ -447,7 +447,7 @@ The app stores finance data locally using SwiftData. It does not include analyti
     (OUT / "README.md").write_text(
         """# Marketing Asset Pack
 
-Generated App Store materials for AI Money Manager.
+Generated App Store materials for Pro Money Manager.
 
 ## Included
 

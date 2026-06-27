@@ -10,13 +10,13 @@ enum MerchantNormalizer {
 
     static func normalize(_ value: String) -> String {
         var text = value.uppercased()
-        text = text.replacingOccurrences(of: #"CR\.?CARD\s*XXX\d+\s*USED\s*FOR\s*AED[\d,.]+\s*AT\s*"#, with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: #"CARD\s*XXX\d+\s*USED\s*FOR\s*AED[\d,.]+\s*AT\s*"#, with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: #"CR\.?CARD\s*XXX\d+\s*USED\s*FOR\s*[A-Z]{3}[\d,.]+\s*AT\s*"#, with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: #"CARD\s*XXX\d+\s*USED\s*FOR\s*[A-Z]{3}[\d,.]+\s*AT\s*"#, with: "", options: .regularExpression)
         text = text.replacingOccurrences(of: #"CR\.?CARDXXX\d+USED"#, with: "", options: .regularExpression)
         text = text.replacingOccurrences(of: #"CARDXXX\d+USED"#, with: "", options: .regularExpression)
         text = text.replacingOccurrences(of: #"\(\+\d+(?:\.\d+)?%[^)]*\)"#, with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: #"AVL\.?\s*CR\.?\s*LIMIT(?:\s*IS)?\s*AED[\d,.]+"#, with: "", options: .regularExpression)
-        text = text.replacingOccurrences(of: #"AVLCRLIMIT(?:IS)?AED[\d,.]+"#, with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: #"AVL\.?\s*CR\.?\s*LIMIT(?:\s*IS)?\s*[A-Z]{3}[\d,.]+"#, with: "", options: .regularExpression)
+        text = text.replacingOccurrences(of: #"AVLCRLIMIT(?:IS)?[A-Z]{3}[\d,.]+"#, with: "", options: .regularExpression)
         text = text.replacingOccurrences(of: #"[^A-Z0-9&%+./ -]"#, with: " ", options: .regularExpression)
         text = text.replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
         text = text.trimmingCharacters(in: CharacterSet(charactersIn: " -,."))

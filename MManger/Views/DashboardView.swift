@@ -6,6 +6,7 @@ struct DashboardView: View {
     @Query(sort: \FinanceTransaction.date, order: .reverse) private var transactions: [FinanceTransaction]
     @Query(sort: \Budget.monthStart, order: .reverse) private var budgets: [Budget]
     @Query(sort: \FinanceCategory.sortOrder) private var categories: [FinanceCategory]
+    @Environment(\.appCurrency) private var currency
 
     @State private var selectedMode: StatsMode = .stats
     @State private var visibleMonth: Date = .now
@@ -52,7 +53,8 @@ struct DashboardView: View {
             monthTransactions: monthTransactions,
             previousMonthTransactions: previousMonthTransactions,
             categoryShares: categoryShares,
-            monthlyExpense: monthlyExpense
+            monthlyExpense: monthlyExpense,
+            currency: currency
         )
     }
 
@@ -103,6 +105,7 @@ struct DashboardView: View {
                             NoteStatsSection(monthTransactions: monthTransactions)
                         }
                     }
+                    .environment(\.appCurrency, currency)
                     .padding(.horizontal, 18)
                     .padding(.top, 10)
                     .padding(.bottom, 28)
@@ -152,7 +155,8 @@ private enum SmartInsightEngine {
         monthTransactions: [FinanceTransaction],
         previousMonthTransactions: [FinanceTransaction],
         categoryShares: [CategoryShare],
-        monthlyExpense: Decimal
+        monthlyExpense: Decimal,
+        currency: String
     ) -> [SmartInsight] {
         var insights: [SmartInsight] = []
         let expenseTransactions = monthTransactions.filter { $0.kind == .expense }
@@ -183,7 +187,7 @@ private enum SmartInsightEngine {
                 insights.append(
                     SmartInsight(
                         title: "Spending \(direction) \(Int(abs(delta * 100).rounded()))%",
-                        message: "Compared with the previous month, expenses moved from \(AppFormatters.statMoney(previousExpense)) to \(AppFormatters.statMoney(monthlyExpense)).",
+                        message: "Compared with the previous month, expenses moved from \(AppFormatters.statMoney(previousExpense, currency: currency)) to \(AppFormatters.statMoney(monthlyExpense, currency: currency)).",
                         systemImage: delta > 0 ? "chart.line.uptrend.xyaxis" : "chart.line.downtrend.xyaxis",
                         tint: delta > 0 ? AppTheme.coral : AppTheme.teal
                     )
@@ -285,6 +289,7 @@ private struct SmartInsightCard: View {
 }
 
 private struct MonthlySummarySection: View {
+    @Environment(\.appCurrency) private var currency
     var monthTitle: String
     var income: Decimal
     var expense: Decimal
@@ -301,7 +306,7 @@ private struct MonthlySummarySection: View {
 
     private var summaryText: String {
         let topCategory = categoryShares.first
-        var parts = ["In \(monthTitle), \(transactionCount) transactions produced \(AppFormatters.statMoney(income)) income and \(AppFormatters.statMoney(expense)) spending."]
+        var parts = ["In \(monthTitle), \(transactionCount) transactions produced \(AppFormatters.statMoney(income, currency: currency)) income and \(AppFormatters.statMoney(expense, currency: currency)) spending."]
         if let topCategory {
             parts.append("\(topCategory.name) is the biggest category at \(AppFormatters.percent(topCategory.percent)) of spending.")
         }
@@ -342,6 +347,7 @@ private struct MonthlySummarySection: View {
 }
 
 private struct StatsHero: View {
+    @Environment(\.appCurrency) private var currency
     @Binding var mode: StatsMode
     var monthTitle: String
     var income: Decimal
@@ -355,7 +361,7 @@ private struct StatsHero: View {
             VStack(alignment: .leading, spacing: 20) {
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("AI Money Manager")
+                        Text("Pro Money Manager")
                             .font(.caption.weight(.semibold))
                             .textCase(.uppercase)
                             .tracking(0.8)
@@ -381,8 +387,8 @@ private struct StatsHero: View {
                 .pickerStyle(.segmented)
 
                 HStack(spacing: 10) {
-                    MetricCapsule(title: "Income", value: AppFormatters.statMoney(income), tint: AppTheme.teal)
-                    MetricCapsule(title: "Expense", value: AppFormatters.statMoney(expense), tint: AppTheme.coral)
+                    MetricCapsule(title: "Income", value: AppFormatters.statMoney(income, currency: currency), tint: AppTheme.teal)
+                    MetricCapsule(title: "Expense", value: AppFormatters.statMoney(expense, currency: currency), tint: AppTheme.coral)
                 }
 
                 HStack {
@@ -390,7 +396,7 @@ private struct StatsHero: View {
                         .font(.subheadline.weight(.medium))
                         .foregroundStyle(AppTheme.muted)
                     Spacer()
-                    Text(AppFormatters.statMoney(net))
+                    Text(AppFormatters.statMoney(net, currency: currency))
                         .font(.system(.title3, design: .rounded).weight(.bold))
                         .foregroundStyle(net >= 0 ? AppTheme.teal : AppTheme.coral)
                         .lineLimit(1)
@@ -427,6 +433,7 @@ private struct StatsHero: View {
 }
 
 private struct CategoryStatsSection: View {
+    @Environment(\.appCurrency) private var currency
     var categoryShares: [CategoryShare]
     var totalExpense: Decimal
     var visibleMonth: Date
@@ -463,7 +470,7 @@ private struct CategoryStatsSection: View {
                                     Text("Expense")
                                         .font(.caption.weight(.semibold))
                                         .foregroundStyle(AppTheme.muted)
-                                    Text(AppFormatters.statMoney(totalExpense))
+                                    Text(AppFormatters.statMoney(totalExpense, currency: currency))
                                         .font(.system(.headline, design: .rounded).weight(.bold))
                                         .foregroundStyle(AppTheme.ink)
                                         .lineLimit(1)
@@ -502,6 +509,7 @@ private struct CategoryStatsSection: View {
 }
 
 private struct CategoryShareRow: View {
+    @Environment(\.appCurrency) private var currency
     var share: CategoryShare
     var color: Color
     var showDivider: Bool
@@ -520,26 +528,21 @@ private struct CategoryShareRow: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(AppTheme.ink)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.72)
                     ProgressView(value: min(max(share.percent, 0), 1))
                         .tint(color)
                         .scaleEffect(x: 1, y: 0.7, anchor: .center)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                Text(AppFormatters.statMoney(share.amount))
+                Text(AppFormatters.statMoney(share.amount, currency: currency))
                     .font(.system(.subheadline, design: .rounded).weight(.bold))
                     .foregroundStyle(AppTheme.ink.opacity(0.78))
                     .lineLimit(1)
                     .minimumScaleFactor(0.65)
                     .layoutPriority(1)
-
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(AppTheme.muted.opacity(0.68))
             }
             .padding(.horizontal, 18)
-            .padding(.vertical, 15)
+            .padding(.vertical, 14)
 
             if showDivider {
                 Divider()
@@ -552,6 +555,7 @@ private struct CategoryShareRow: View {
 
 private struct StatsCategoryDetailView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appCurrency) private var currency
     @Query(sort: \Account.sortOrder) private var accounts: [Account]
     @Query(sort: \FinanceCategory.sortOrder) private var categories: [FinanceCategory]
 
@@ -686,12 +690,12 @@ private struct StatsCategoryDetailView: View {
                 }
 
                 HStack(spacing: 10) {
-                    MetricCapsule(title: "Expense", value: AppFormatters.statMoney(expense), tint: AppTheme.coral)
-                    MetricCapsule(title: "Income", value: AppFormatters.statMoney(income), tint: AppTheme.teal)
+                    MetricCapsule(title: "Expense", value: AppFormatters.statMoney(expense, currency: currency), tint: AppTheme.coral)
+                    MetricCapsule(title: "Income", value: AppFormatters.statMoney(income, currency: currency), tint: AppTheme.teal)
                 }
 
                 HStack(spacing: 10) {
-                    MetricCapsule(title: "Net", value: AppFormatters.statMoney(net), tint: net >= 0 ? AppTheme.teal : AppTheme.coral)
+                    MetricCapsule(title: "Net", value: AppFormatters.statMoney(net, currency: currency), tint: net >= 0 ? AppTheme.teal : AppTheme.coral)
                     MetricCapsule(title: "Count", value: "\(monthTransactions.count)", tint: AppTheme.violet)
                 }
             }
@@ -729,7 +733,7 @@ private struct StatsCategoryDetailView: View {
 
                             Spacer()
 
-                            Text(AppFormatters.statMoney(item.amount))
+                            Text(AppFormatters.statMoney(item.amount, currency: currency))
                                 .font(.system(.subheadline, design: .rounded).weight(.bold))
                                 .foregroundStyle(AppTheme.ink.opacity(0.78))
                                 .lineLimit(1)
@@ -775,6 +779,7 @@ private struct StatsCategoryDetailView: View {
 
 private struct BudgetStatsSection: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appCurrency) private var currency
     var budgets: [Budget]
     var categories: [FinanceCategory]
     var monthTransactions: [FinanceTransaction]
@@ -819,12 +824,12 @@ private struct BudgetStatsSection: View {
                 VStack(alignment: .leading, spacing: 14) {
                     SectionTitle("Budget plan", subtitle: "Monthly limits, remaining spend, and detected recurring charges")
                     HStack(spacing: 10) {
-                        MetricCapsule(title: "Safe to spend", value: AppFormatters.statMoney(safeToSpend), tint: safeToSpend >= 0 ? AppTheme.teal : AppTheme.coral)
-                        MetricCapsule(title: "Budget left", value: AppFormatters.statMoney(budgetRemaining), tint: budgetRemaining >= 0 ? AppTheme.mint : AppTheme.coral)
+                        MetricCapsule(title: "Safe to spend", value: AppFormatters.statMoney(safeToSpend, currency: currency), tint: safeToSpend >= 0 ? AppTheme.teal : AppTheme.coral)
+                        MetricCapsule(title: "Budget left", value: AppFormatters.statMoney(budgetRemaining, currency: currency), tint: budgetRemaining >= 0 ? AppTheme.mint : AppTheme.coral)
                     }
                     HStack(spacing: 10) {
-                        MetricCapsule(title: "Budgeted", value: AppFormatters.statMoney(totalBudgeted), tint: AppTheme.lavender)
-                        MetricCapsule(title: "Upcoming bills", value: AppFormatters.statMoney(remainingUpcomingRecurring), tint: AppTheme.gold)
+                        MetricCapsule(title: "Budgeted", value: AppFormatters.statMoney(totalBudgeted, currency: currency), tint: AppTheme.lavender)
+                        MetricCapsule(title: "Upcoming bills", value: AppFormatters.statMoney(remainingUpcomingRecurring, currency: currency), tint: AppTheme.gold)
                     }
                     Button {
                         showingBudgetEditor = true
@@ -837,6 +842,18 @@ private struct BudgetStatsSection: View {
                             .background(AppTheme.violet, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                     }
                     .buttonStyle(PrimaryPressStyle())
+
+                    if !monthBudgets.isEmpty {
+                        Button(action: rolloverBudgets) {
+                            Label("Copy to next month", systemImage: "arrow.right.circle")
+                                .font(.subheadline.weight(.bold))
+                                .foregroundStyle(AppTheme.violet)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .background(AppTheme.lavender.opacity(0.15), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        }
+                        .buttonStyle(PrimaryPressStyle())
+                    }
                 }
             }
 
@@ -868,10 +885,10 @@ private struct BudgetStatsSection: View {
                                         }
                                         Spacer()
                                         VStack(alignment: .trailing, spacing: 4) {
-                                            Text("\(AppFormatters.statMoney(spent)) / \(AppFormatters.statMoney(budget.amount))")
+                                            Text("\(AppFormatters.statMoney(spent, currency: currency)) / \(AppFormatters.statMoney(budget.amount, currency: currency))")
                                                 .font(.caption.weight(.semibold))
                                                 .foregroundStyle(AppTheme.muted)
-                                            Text(AppFormatters.statMoney(budget.amount - spent))
+                                            Text(AppFormatters.statMoney(budget.amount - spent, currency: currency))
                                                 .font(.subheadline.weight(.bold))
                                                 .foregroundStyle(spent > budget.amount ? AppTheme.coral : AppTheme.teal)
                                         }
@@ -894,6 +911,29 @@ private struct BudgetStatsSection: View {
         .sheet(item: $editingBudget) { budget in
             BudgetEditorView(budget: budget, categories: categories, visibleMonth: visibleMonth)
         }
+    }
+
+    private func rolloverBudgets() {
+        guard let nextMonth = Calendar.current.date(byAdding: .month, value: 1, to: visibleMonth) else { return }
+        let components = Calendar.current.dateComponents([.year, .month], from: nextMonth)
+        let nextMonthStart = Calendar.current.date(from: components) ?? nextMonth
+        let existingNextMonth = budgets.filter {
+            Calendar.current.isDate($0.monthStart, equalTo: nextMonthStart, toGranularity: .month)
+        }
+        for budget in monthBudgets {
+            let alreadyExists = existingNextMonth.contains {
+                $0.categoryName == budget.categoryName && $0.subcategoryName == budget.subcategoryName
+            }
+            guard !alreadyExists else { continue }
+            modelContext.insert(Budget(
+                categoryName: budget.categoryName,
+                subcategoryName: budget.subcategoryName,
+                monthStart: nextMonthStart,
+                amount: budget.amount,
+                currency: budget.currency
+            ))
+        }
+        try? modelContext.save()
     }
 
     private func spentAmount(for budget: Budget) -> Decimal {
@@ -920,7 +960,7 @@ private struct BudgetEditorView: View {
     @State private var categoryName = ""
     @State private var subcategoryName = ""
     @State private var amountText = ""
-    @State private var currency = "AED"
+    @State private var currency = "USD"
 
     private var parentCategories: [FinanceCategory] {
         categories.filter { $0.parentName == nil && $0.kind == .expense && !$0.isArchived }.sorted { $0.sortOrder < $1.sortOrder }
@@ -998,7 +1038,7 @@ private struct BudgetEditorView: View {
             budget.categoryName = categoryName
             budget.subcategoryName = subcategoryName.isEmpty ? nil : subcategoryName
             budget.amount = amount
-            budget.currency = currency.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().isEmpty ? "AED" : currency.uppercased()
+            budget.currency = currency.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().isEmpty ? "USD" : currency.uppercased()
         } else {
             modelContext.insert(
                 Budget(
@@ -1006,7 +1046,7 @@ private struct BudgetEditorView: View {
                     subcategoryName: subcategoryName.isEmpty ? nil : subcategoryName,
                     monthStart: monthStart,
                     amount: amount,
-                    currency: currency.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().isEmpty ? "AED" : currency.uppercased()
+                    currency: currency.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().isEmpty ? "USD" : currency.uppercased()
                 )
             )
         }
@@ -1061,6 +1101,7 @@ private enum RecurringChargeDetector {
 }
 
 private struct RecurringBillsSection: View {
+    @Environment(\.appCurrency) private var currency
     var charges: [RecurringCharge]
     var visibleMonth: Date
 
@@ -1097,7 +1138,7 @@ private struct RecurringBillsSection: View {
                                         .foregroundStyle(AppTheme.muted)
                                 }
                                 Spacer()
-                                Text(AppFormatters.statMoney(charge.amount))
+                                Text(AppFormatters.statMoney(charge.amount, currency: currency))
                                     .font(.subheadline.weight(.bold))
                                     .foregroundStyle(AppTheme.ink)
                             }
@@ -1112,6 +1153,7 @@ private struct RecurringBillsSection: View {
 }
 
 private struct NoteStatsSection: View {
+    @Environment(\.appCurrency) private var currency
     var monthTransactions: [FinanceTransaction]
 
     private var notes: [FinanceTransaction] {
@@ -1141,7 +1183,7 @@ private struct NoteStatsSection: View {
                                         .foregroundStyle(AppTheme.ink)
                                         .lineLimit(1)
                                     Spacer()
-                                    Text(AppFormatters.statMoney(transaction.amount))
+                                    Text(AppFormatters.statMoney(transaction.amount, currency: currency))
                                         .font(.subheadline.weight(.semibold))
                                         .foregroundStyle(transaction.kind == .income ? AppTheme.teal : AppTheme.coral)
                                 }
@@ -1159,20 +1201,5 @@ private struct NoteStatsSection: View {
                 }
             }
         }
-    }
-}
-
-extension AppFormatters {
-    static func statMoney(_ amount: Decimal) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        let value = formatter.string(from: NSDecimalNumber(decimal: amount)) ?? "\(amount)"
-        return "DH \(value)"
-    }
-
-    static func percent(_ value: Double) -> String {
-        "\(Int((value * 100).rounded()))%"
     }
 }

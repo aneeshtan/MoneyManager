@@ -1,4 +1,5 @@
 import AuthenticationServices
+import UIKit
 import SwiftUI
 
 struct AuthView: View {
@@ -7,7 +8,7 @@ struct AuthView: View {
     @AppStorage("authDisplayName") private var authDisplayName = ""
     @AppStorage("authEmail") private var authEmail = ""
     @State private var authError: String?
-    @State private var showingGoogleConfiguration = false
+    @StateObject private var appleSignInHandler = AppleSignInHandler()
 
     var body: some View {
         ZStack {
@@ -31,7 +32,7 @@ struct AuthView: View {
                         .overlay(RoundedRectangle(cornerRadius: 28, style: .continuous).stroke(.white.opacity(0.9), lineWidth: 1))
 
                     VStack(spacing: 8) {
-                        Text("AI Money Manager")
+                        Text("Pro Money Manager")
                             .font(.system(.largeTitle, design: .rounded).weight(.bold))
                             .foregroundStyle(AppTheme.ink)
                             .multilineTextAlignment(.center)
@@ -81,12 +82,14 @@ struct AuthView: View {
                         #endif
 
                         Button {
-                            showingGoogleConfiguration = true
+                            appleSignInHandler.start { result in
+                                handleAppleSignIn(result)
+                            }
                         } label: {
                             HStack(spacing: 10) {
-                                Image(systemName: "g.circle.fill")
+                                Image(systemName: "apple.logo")
                                     .font(.title3.weight(.semibold))
-                                Text("Continue with Google")
+                                Text("Continue with Apple")
                                     .font(.headline.weight(.semibold))
                             }
                             .foregroundStyle(AppTheme.ink)
@@ -118,11 +121,6 @@ struct AuthView: View {
         } message: {
             Text(authError ?? "")
         }
-        .alert("Google sign-in setup required", isPresented: $showingGoogleConfiguration) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text("Add the GoogleSignIn SDK, an iOS OAuth client ID, and the reversed client ID URL scheme before enabling Google sign-in for App Store builds.")
-        }
     }
 
     private func handleAppleSignIn(_ result: Result<ASAuthorization, Error>) {
@@ -140,5 +138,36 @@ struct AuthView: View {
         case .failure(let error):
             authError = error.localizedDescription
         }
+    }
+}
+
+final class AppleSignInHandler: NSObject, ObservableObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    private var completion: ((Result<ASAuthorization, Error>) -> Void)?
+
+    func start(completion: @escaping (Result<ASAuthorization, Error>) -> Void) {
+        self.completion = completion
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        controller.performRequests()
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        completion?(.success(authorization))
+        completion = nil
+    }
+
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        completion?(.failure(error))
+        completion = nil
+    }
+
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first { $0.isKeyWindow } ?? ASPresentationAnchor()
     }
 }

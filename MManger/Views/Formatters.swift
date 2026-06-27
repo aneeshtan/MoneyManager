@@ -1,9 +1,10 @@
 import Foundation
 import SwiftUI
+import SwiftData
 
 // MARK: - Number Caching
 private final class CurrencyFormatterCache: @unchecked Sendable {
-    nonisolated(unsafe) static let shared = CurrencyFormatterCache()
+    static let shared = CurrencyFormatterCache()
     private var cache: [String: NumberFormatter] = [:]
     private let lock = NSLock()
 
@@ -30,16 +31,38 @@ private let dayFormatter: DateFormatter = {
 }()
 
 enum AppFormatters {
-    static func money(_ amount: Decimal, currency: String = "AED") -> String {
+    static func money(_ amount: Decimal, currency: String = "USD") -> String {
         let formatter = CurrencyFormatterCache.shared.formatter(for: currency)
         return formatter.string(from: NSDecimalNumber(decimal: amount)) ?? "\(amount)"
     }
 
-    static func statMoney(_ amount: Decimal, currency: String = "AED") -> String {
+    static func statMoney(_ amount: Decimal, currency: String = "USD") -> String {
         money(amount, currency: currency)
     }
 
+    static func resolvedCurrency(_ currency: String?, fallback: String = "USD") -> String {
+        let trimmed = (currency ?? "").trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        return trimmed.isEmpty ? fallback : trimmed
+    }
+
+    static func percent(_ value: Double) -> String {
+        "\(Int((value * 100).rounded()))%"
+    }
+
     static let day: DateFormatter = dayFormatter
+}
+
+// MARK: - App Currency Environment
+
+private struct AppCurrencyKey: EnvironmentKey {
+    static let defaultValue = "USD"
+}
+
+extension EnvironmentValues {
+    var appCurrency: String {
+        get { self[AppCurrencyKey.self] }
+        set { self[AppCurrencyKey.self] = newValue }
+    }
 }
 
 enum AppTheme {
@@ -180,5 +203,25 @@ struct MetricCapsule: View {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
                 .stroke(tint.opacity(0.18), lineWidth: 1)
         )
+    }
+}
+
+// MARK: - App Currency Injector
+
+private struct AppCurrencyModifier: ViewModifier {
+    @Query private var users: [UserProfile]
+
+    private var currency: String {
+        users.first?.baseCurrency ?? "USD"
+    }
+
+    func body(content: Content) -> some View {
+        content.environment(\.appCurrency, currency)
+    }
+}
+
+extension View {
+    func withAppCurrency() -> some View {
+        modifier(AppCurrencyModifier())
     }
 }

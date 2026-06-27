@@ -3,217 +3,1166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Money Manager — Local Privacy-First Finance</title>
+    <meta name="description" content="Pro Money Manager is a private, local-first finance app for importing statements, reviewing transactions, planning budgets, and keeping control of personal money data.">
+    <title>Pro Money Manager - Private Finance App</title>
     <style>
-        /* ── Reset & base ──────────────────────────────────── */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ink: #171a1f;
+            --soft-ink: #424852;
+            --muted: #747c89;
+            --line: #dce3e1;
+            --paper: #f7f7f2;
+            --panel: #ffffff;
+            --panel-soft: #eef3ee;
+            --accent: #2f6f5f;
+            --accent-dark: #1f4d43;
+            --accent-wash: #dcebe5;
+            --warning: #a95f38;
+            --shadow: 0 22px 70px rgba(47, 57, 49, 0.12);
+            --radius: 8px;
+            --font-display: "Aptos Display", "Satoshi", "Outfit", "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: "Aptos", "Satoshi", "SF Pro Text", -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: "SFMono-Regular", "Cascadia Mono", "Roboto Mono", monospace;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
-            background: #f5f6fa;
-            color: #1c1d24;
-            line-height: 1.6;
+            margin: 0;
+            color: var(--ink);
+            background:
+                linear-gradient(90deg, rgba(23, 26, 31, 0.045) 1px, transparent 1px) 0 0 / 72px 72px,
+                linear-gradient(180deg, rgba(23, 26, 31, 0.035) 1px, transparent 1px) 0 0 / 72px 72px,
+                radial-gradient(circle at 83% 18%, rgba(47, 111, 95, 0.13), transparent 28rem),
+                var(--paper);
+            font-family: var(--font-body);
+            line-height: 1.55;
             -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
 
-        /* ── Layout ─────────────────────────────────────────── */
-        .container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+        body::before {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            content: "";
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");
+            opacity: 0.07;
+            mix-blend-mode: multiply;
+        }
 
-        /* ── Header ─────────────────────────────────────────── */
-        header {
-            background: linear-gradient(135deg, #7a5dc7 0%, #4f8c8a 100%);
-            color: #fff;
-            padding: 60px 0 50px;
-            text-align: center;
+        a {
+            color: inherit;
         }
-        header h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 10px;
+
+        .page-shell {
+            width: min(1180px, calc(100% - 40px));
+            margin: 0 auto;
         }
-        header p.tagline {
-            font-size: 1.1rem;
-            font-weight: 400;
-            opacity: 0.85;
-            margin-bottom: 24px;
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(16px);
+            background: rgba(247, 247, 242, 0.78);
+            border-bottom: 1px solid rgba(220, 227, 225, 0.82);
         }
-        .app-icon {
-            width: 96px;
-            height: 96px;
-            border-radius: 22px;
-            background: rgba(255,255,255,0.15);
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 72px;
+            gap: 24px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            font-family: var(--font-display);
+            font-weight: 800;
+            letter-spacing: 0;
+        }
+
+        .mark {
+            display: inline-grid;
+            width: 38px;
+            height: 38px;
+            place-items: center;
+            color: var(--panel);
+            background: var(--accent-dark);
+            border-radius: var(--radius);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        }
+
+        .mark svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            color: var(--soft-ink);
+            font-size: 0.92rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-dark);
+        }
+
+        .button {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.8rem;
-            margin-bottom: 18px;
-            backdrop-filter: blur(4px);
-        }
-
-        /* ── Badge ──────────────────────────────────────────── */
-        .badge {
-            display: inline-block;
-            background: #fff;
-            color: #1c1d24;
-            padding: 10px 22px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
+            gap: 10px;
+            min-height: 46px;
+            padding: 0 18px;
+            border: 1px solid transparent;
+            border-radius: var(--radius);
+            font-weight: 800;
             text-decoration: none;
-            transition: transform 0.2s;
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
         }
-        .badge:hover { transform: scale(1.03); }
-        .badge svg { vertical-align: -3px; margin-right: 6px; }
 
-        /* ── Sections ───────────────────────────────────────── */
-        section { padding: 48px 0; }
-        section + section { border-top: 1px solid #e0e2e8; }
+        .button:active {
+            transform: translateY(1px) scale(0.99);
+        }
+
+        .button.primary {
+            color: var(--panel);
+            background: var(--accent-dark);
+        }
+
+        .button.secondary {
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.68);
+            border-color: var(--line);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
+            gap: clamp(36px, 6vw, 84px);
+            align-items: center;
+            min-height: calc(100dvh - 72px);
+            padding: clamp(52px, 8vw, 96px) 0 44px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            color: var(--accent-dark);
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            width: 8px;
+            height: 8px;
+            content: "";
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 0 7px rgba(47, 111, 95, 0.12);
+        }
+
+        h1, h2, h3, p {
+            margin-top: 0;
+        }
+
+        h1 {
+            max-width: 11ch;
+            margin-bottom: 24px;
+            font-family: var(--font-display);
+            font-size: clamp(3.4rem, 8vw, 6.7rem);
+            font-weight: 900;
+            line-height: 0.92;
+            letter-spacing: 0;
+        }
+
+        .hero-copy {
+            max-width: 58ch;
+            margin-bottom: 30px;
+            color: var(--soft-ink);
+            font-size: clamp(1.03rem, 1.4vw, 1.22rem);
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+
+        .trust-strip {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            max-width: 560px;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .trust-item {
+            min-height: 88px;
+            padding: 16px 18px 14px 0;
+        }
+
+        .trust-item + .trust-item {
+            padding-left: 18px;
+            border-left: 1px solid var(--line);
+        }
+
+        .trust-value {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 1.08rem;
+            font-weight: 800;
+            color: var(--accent-dark);
+        }
+
+        .trust-label {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .product-stage {
+            position: relative;
+            min-height: 650px;
+        }
+
+        .phone {
+            position: relative;
+            width: min(360px, 78vw);
+            min-height: 642px;
+            margin-left: auto;
+            overflow: hidden;
+            background: #fefefe;
+            border: 10px solid #202429;
+            border-radius: 44px;
+            box-shadow: var(--shadow);
+        }
+
+        .phone::before {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            z-index: 4;
+            width: 96px;
+            height: 26px;
+            content: "";
+            background: #202429;
+            border-radius: 999px;
+            transform: translateX(-50%);
+        }
+
+        .phone-screen {
+            min-height: 622px;
+            padding: 54px 18px 20px;
+            background:
+                linear-gradient(180deg, rgba(47, 111, 95, 0.14), rgba(255, 255, 255, 0) 34%),
+                #fbfcfa;
+        }
+
+        .app-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .app-kicker {
+            color: var(--muted);
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .app-title {
+            margin: 2px 0 0;
+            font-family: var(--font-display);
+            font-size: 1.42rem;
+            font-weight: 900;
+            line-height: 1.05;
+        }
+
+        .lock-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 32px;
+            padding: 0 10px;
+            color: var(--accent-dark);
+            background: var(--accent-wash);
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 800;
+        }
+
+        .balance-card {
+            padding: 18px;
+            color: var(--panel);
+            background: linear-gradient(135deg, #1f4d43, #3a7768);
+            border-radius: 20px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        }
+
+        .balance-label {
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 0.82rem;
+        }
+
+        .balance-amount {
+            margin: 6px 0 16px;
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .mini-bars {
+            display: grid;
+            grid-template-columns: 1.4fr 0.75fr 1fr;
+            gap: 8px;
+            align-items: end;
+            height: 58px;
+        }
+
+        .mini-bars span {
+            display: block;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px 8px 2px 2px;
+            animation: barRise 3.8s ease-in-out infinite;
+        }
+
+        .mini-bars span:nth-child(1) { height: 54%; }
+        .mini-bars span:nth-child(2) { height: 84%; animation-delay: 0.28s; }
+        .mini-bars span:nth-child(3) { height: 66%; animation-delay: 0.56s; }
+
+        .statement-panel {
+            margin-top: 14px;
+            padding: 14px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+        }
+
+        .panel-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 12px 0;
+        }
+
+        .panel-row + .panel-row {
+            border-top: 1px solid #eef1ef;
+        }
+
+        .merchant {
+            display: block;
+            color: var(--ink);
+            font-weight: 850;
+            font-size: 0.92rem;
+        }
+
+        .meta {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 0.76rem;
+        }
+
+        .amount {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .floating-ticket {
+            position: absolute;
+            left: 0;
+            bottom: 86px;
+            width: 260px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.86);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 18px;
+            box-shadow: 0 18px 58px rgba(31, 49, 43, 0.16);
+            backdrop-filter: blur(20px);
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        .ticket-label {
+            color: var(--muted);
+            font-size: 0.74rem;
+            font-weight: 850;
+            text-transform: uppercase;
+        }
+
+        .ticket-title {
+            margin: 5px 0 10px;
+            font-family: var(--font-display);
+            font-size: 1.18rem;
+            font-weight: 900;
+            line-height: 1.08;
+        }
+
+        .ticket-meter {
+            height: 8px;
+            overflow: hidden;
+            background: #e7ece8;
+            border-radius: 999px;
+        }
+
+        .ticket-meter span {
+            display: block;
+            width: 72%;
+            height: 100%;
+            background: var(--accent);
+            border-radius: inherit;
+        }
+
+        .import-card {
+            position: absolute;
+            top: 76px;
+            left: 12px;
+            width: 210px;
+            padding: 14px;
+            background: #171a1f;
+            color: var(--panel);
+            border-radius: 18px;
+            box-shadow: 0 18px 60px rgba(23, 26, 31, 0.24);
+            transform: rotate(-4deg);
+        }
+
+        .import-card svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 12px;
+            color: #b6d8cb;
+        }
+
+        .import-card strong {
+            display: block;
+            font-family: var(--font-display);
+            line-height: 1.1;
+        }
+
+        .import-card span {
+            display: block;
+            margin-top: 7px;
+            color: rgba(255, 255, 255, 0.68);
+            font-size: 0.78rem;
+        }
+
+        section {
+            padding: clamp(72px, 10vw, 118px) 0;
+        }
+
+        .section-heading {
+            display: grid;
+            grid-template-columns: minmax(0, 0.72fr) minmax(260px, 0.44fr);
+            gap: 42px;
+            align-items: end;
+            margin-bottom: 34px;
+        }
 
         h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-            letter-spacing: -0.01em;
-        }
-        h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 24px;
-            margin-bottom: 8px;
+            max-width: 13ch;
+            margin-bottom: 0;
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 4.6vw, 4.8rem);
+            font-weight: 900;
+            line-height: 0.98;
+            letter-spacing: 0;
         }
 
-        p, li { color: #3a3c48; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 6px; }
+        .section-copy {
+            color: var(--soft-ink);
+            font-size: 1.02rem;
+        }
 
-        /* ── Features grid ──────────────────────────────────── */
-        .features {
+        .workflow-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 8px;
-        }
-        .feature-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-        }
-        .feature-card .icon { font-size: 1.6rem; margin-bottom: 8px; }
-        .feature-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
-        .feature-card p { font-size: 0.88rem; }
-
-        @media (max-width: 520px) {
-            .features { grid-template-columns: 1fr; }
-            header h1 { font-size: 1.6rem; }
-            header { padding: 40px 0 32px; }
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 18px;
         }
 
-        /* ── Privacy policy ─────────────────────────────────── */
-        .privacy h2 { margin-top: 32px; }
-        .privacy p, .privacy li { font-size: 0.95rem; }
-
-        /* ── Footer ─────────────────────────────────────────── */
-        footer {
-            text-align: center;
-            padding: 32px 0;
-            font-size: 0.85rem;
-            color: #8a8c98;
+        .wide-panel,
+        .feature-panel,
+        .privacy-panel,
+        .support-panel {
+            background: rgba(255, 255, 255, 0.76);
+            border: 1px solid rgba(220, 227, 225, 0.94);
+            border-radius: var(--radius);
+            box-shadow: 0 18px 48px rgba(57, 65, 60, 0.08);
         }
-        footer a { color: #7a5dc7; text-decoration: none; }
+
+        .wide-panel {
+            display: grid;
+            grid-template-columns: 0.78fr 1fr;
+            min-height: 420px;
+            overflow: hidden;
+        }
+
+        .statement-stack {
+            padding: 30px;
+            background: var(--accent-dark);
+            color: var(--panel);
+        }
+
+        .file-chip {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.11);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius);
+        }
+
+        .file-chip svg {
+            flex: 0 0 auto;
+        }
+
+        .file-chip strong,
+        .file-chip span {
+            display: block;
+        }
+
+        .file-chip span {
+            color: rgba(255, 255, 255, 0.63);
+            font-size: 0.8rem;
+        }
+
+        .review-list {
+            padding: 30px;
+        }
+
+        .review-title {
+            margin-bottom: 18px;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        .review-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+            padding: 16px 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .status-pill {
+            padding: 6px 9px;
+            color: var(--accent-dark);
+            background: var(--accent-wash);
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 850;
+        }
+
+        .feature-column {
+            display: grid;
+            gap: 18px;
+        }
+
+        .feature-panel {
+            min-height: 201px;
+            padding: 24px;
+        }
+
+        .feature-panel svg,
+        .privacy-panel svg,
+        .support-panel svg {
+            width: 28px;
+            height: 28px;
+            margin-bottom: 18px;
+            color: var(--accent);
+        }
+
+        h3 {
+            margin-bottom: 9px;
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .feature-panel p,
+        .privacy-panel p,
+        .support-panel p {
+            margin-bottom: 0;
+            color: var(--soft-ink);
+        }
+
+        .privacy-section {
+            background:
+                linear-gradient(180deg, rgba(238, 243, 238, 0.4), rgba(247, 247, 242, 0));
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .privacy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+        }
+
+        .privacy-panel {
+            padding: 28px;
+        }
+
+        .privacy-panel.featured {
+            color: var(--panel);
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+        }
+
+        .privacy-panel.featured svg,
+        .privacy-panel.featured p {
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .privacy-panel.featured h3 {
+            color: var(--panel);
+        }
+
+        .policy-layout {
+            display: grid;
+            grid-template-columns: minmax(220px, 0.35fr) minmax(0, 0.65fr);
+            gap: 48px;
+            align-items: start;
+        }
+
+        .policy-sidebar {
+            position: sticky;
+            top: 104px;
+        }
+
+        .policy-sidebar p {
+            color: var(--muted);
+            font-family: var(--font-mono);
+            font-size: 0.86rem;
+        }
+
+        .policy-copy {
+            color: var(--soft-ink);
+        }
+
+        .policy-copy h3 {
+            margin-top: 32px;
+            padding-top: 26px;
+            border-top: 1px solid var(--line);
+        }
+
+        .support-panel {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 24px;
+            align-items: center;
+            padding: clamp(26px, 5vw, 46px);
+            background: #171a1f;
+            color: var(--panel);
+        }
+
+        .support-panel h2 {
+            max-width: 12ch;
+            color: var(--panel);
+        }
+
+        .support-panel p {
+            max-width: 58ch;
+            color: rgba(255, 255, 255, 0.74);
+        }
+
+        .site-footer {
+            padding: 34px 0 48px;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            border-top: 1px solid var(--line);
+            padding-top: 24px;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translate3d(0, 0, 0); }
+            50% { transform: translate3d(0, -12px, 0); }
+        }
+
+        @keyframes barRise {
+            0%, 100% { transform: scaleY(0.82); transform-origin: bottom; opacity: 0.82; }
+            50% { transform: scaleY(1); opacity: 1; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+        }
+
+        @media (max-width: 980px) {
+            .hero,
+            .section-heading,
+            .workflow-grid,
+            .wide-panel,
+            .privacy-grid,
+            .policy-layout,
+            .support-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                min-height: auto;
+            }
+
+            h1 {
+                max-width: 10ch;
+            }
+
+            .product-stage {
+                min-height: 690px;
+            }
+
+            .phone {
+                margin: 0 auto;
+            }
+
+            .import-card {
+                left: 2%;
+            }
+
+            .floating-ticket {
+                right: 2%;
+                left: auto;
+            }
+
+            .policy-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page-shell {
+                width: min(100% - 28px, 1180px);
+            }
+
+            .nav {
+                min-height: 66px;
+            }
+
+            .nav-links a:not(.button) {
+                display: none;
+            }
+
+            .brand span:last-child {
+                max-width: 145px;
+                line-height: 1.05;
+            }
+
+            .hero {
+                gap: 34px;
+                padding-top: 42px;
+            }
+
+            h1 {
+                font-size: clamp(3.1rem, 15vw, 4.55rem);
+            }
+
+            .trust-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-item {
+                min-height: auto;
+                padding: 13px 0;
+            }
+
+            .trust-item + .trust-item {
+                padding-left: 0;
+                border-top: 1px solid var(--line);
+                border-left: 0;
+            }
+
+            .product-stage {
+                min-height: 610px;
+            }
+
+            .phone {
+                width: min(318px, 100%);
+                min-height: 574px;
+                border-width: 8px;
+                border-radius: 38px;
+            }
+
+            .phone-screen {
+                min-height: 558px;
+                padding: 50px 14px 16px;
+            }
+
+            .balance-amount {
+                font-size: 1.86rem;
+            }
+
+            .import-card,
+            .floating-ticket {
+                display: none;
+            }
+
+            section {
+                padding: 64px 0;
+            }
+
+            .statement-stack,
+            .review-list {
+                padding: 22px;
+            }
+
+            .support-panel {
+                padding: 26px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
+    <header class="site-header">
+        <nav class="nav page-shell" aria-label="Main navigation">
+            <a class="brand" href="#top" aria-label="Pro Money Manager home">
+                <span class="mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4.5 17.5V7.2c0-1 .8-1.7 1.8-1.7h11.4c1 0 1.8.7 1.8 1.7v10.3c0 1-.8 1.7-1.8 1.7H6.3c-1 0-1.8-.7-1.8-1.7Z"></path>
+                        <path d="M8 9.2h8"></path>
+                        <path d="M8 13h3"></path>
+                        <path d="M14.5 15.2c1.1 0 2-.8 2-1.8s-.9-1.8-2-1.8-2 .8-2 1.8.9 1.8 2 1.8Z"></path>
+                    </svg>
+                </span>
+                <span>Pro Money Manager</span>
+            </a>
+            <div class="nav-links">
+                <a href="#workflow">Workflow</a>
+                <a href="#privacy">Privacy</a>
+                <a href="#policy">Policy</a>
+                <a class="button primary" href="mailto:aneeshtan@gmail.com">Contact</a>
+            </div>
+        </nav>
+    </header>
 
-<!-- ════════════════ HEADER ════════════════ -->
-<header>
-    <div class="app-icon">💰</div>
-    <h1>Pro Money Manager</h1>
-    <p class="tagline">Private budget and import tracker — all on your iPhone.</p>
-    <a class="badge" href="#privacy">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-        </svg>
-        Privacy Policy
-    </a>
-</header>
+    <main id="top">
+        <section class="hero page-shell" aria-labelledby="hero-title">
+            <div>
+                <span class="eyebrow">Private finance workspace</span>
+                <h1 id="hero-title">Pro Money Manager</h1>
+                <p class="hero-copy">Import bank statements, review clean transaction lists, plan budgets, and export your own backup. Your finance data stays on your iPhone, with no account aggregation, ads, tracking, or cloud sync.</p>
+                <div class="hero-actions">
+                    <a class="button primary" href="mailto:aneeshtan@gmail.com">Request support</a>
+                    <a class="button secondary" href="#privacy">Read privacy promise</a>
+                </div>
+                <div class="trust-strip" aria-label="Privacy highlights">
+                    <div class="trust-item">
+                        <span class="trust-value">0 SDKs</span>
+                        <span class="trust-label">No analytics or ad tracking</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-value">Local</span>
+                        <span class="trust-label">SwiftData storage on device</span>
+                    </div>
+                    <div class="trust-item">
+                        <span class="trust-value">Manual</span>
+                        <span class="trust-label">Exports only when requested</span>
+                    </div>
+                </div>
+            </div>
 
-<!-- ════════════════ ABOUT ════════════════ -->
-<section>
-    <div class="container">
-        <h2>About the App</h2>
-        <p>Pro Money Manager is a local-first personal finance app for people who want control without bank-sync tracking or cloud services. Import bank PDFs, CSV files, Excel spreadsheets, or pasted SMS messages — everything is parsed and stored securely on your device.</p>
-        <p>Review AI-suggested categories, manage accounts and budgets, and export your own backup when needed. No accounts are linked, no data leaves your phone, and no third party has access to your finances.</p>
+            <div class="product-stage" aria-label="Product preview">
+                <div class="import-card" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8Z"></path>
+                        <path d="M14 3v5h5"></path>
+                        <path d="M8.5 13h7"></path>
+                        <path d="M8.5 16h4"></path>
+                    </svg>
+                    <strong>Statement imported</strong>
+                    <span>PDF, CSV, Excel, and pasted bank messages.</span>
+                </div>
 
-        <div class="features">
-            <div class="feature-card">
-                <div class="icon">📄</div>
-                <h4>Import Anything</h4>
-                <p>PDF, CSV, Excel, or pasted bank SMS messages. Parsed on-device with smart category suggestions.</p>
+                <div class="phone">
+                    <div class="phone-screen">
+                        <div class="app-topline">
+                            <div>
+                                <span class="app-kicker">June overview</span>
+                                <p class="app-title">Money view</p>
+                            </div>
+                            <span class="lock-pill">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                                    <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                                </svg>
+                                Local
+                            </span>
+                        </div>
+
+                        <div class="balance-card">
+                            <span class="balance-label">Net position</span>
+                            <div class="balance-amount">AED 14,820</div>
+                            <div class="mini-bars" aria-hidden="true">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+
+                        <div class="statement-panel">
+                            <div class="panel-row">
+                                <div>
+                                    <span class="merchant">Grocery Market</span>
+                                    <span class="meta">Food and household</span>
+                                </div>
+                                <span class="amount">-186.40</span>
+                            </div>
+                            <div class="panel-row">
+                                <div>
+                                    <span class="merchant">Salary Deposit</span>
+                                    <span class="meta">Income reviewed</span>
+                                </div>
+                                <span class="amount">+18,500</span>
+                            </div>
+                            <div class="panel-row">
+                                <div>
+                                    <span class="merchant">Transit Card</span>
+                                    <span class="meta">Transport</span>
+                                </div>
+                                <span class="amount">-42.75</span>
+                            </div>
+                            <div class="panel-row">
+                                <div>
+                                    <span class="merchant">Cloud Storage</span>
+                                    <span class="meta">Subscription</span>
+                                </div>
+                                <span class="amount">-39.99</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="floating-ticket" aria-hidden="true">
+                    <span class="ticket-label">Budget signal</span>
+                    <p class="ticket-title">Dining is 72% used with 9 days left.</p>
+                    <div class="ticket-meter"><span></span></div>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="icon">🔒</div>
-                <h4>100% Private</h4>
-                <p>All data stays on your iPhone. No cloud, no analytics, no tracking, no bank sync.</p>
+        </section>
+
+        <section id="workflow" class="page-shell" aria-labelledby="workflow-title">
+            <div class="section-heading">
+                <h2 id="workflow-title">Built around review, not bank sync.</h2>
+                <p class="section-copy">The app is designed for people who want control over statements and categories without giving a finance aggregator permanent access to bank accounts.</p>
             </div>
-            <div class="feature-card">
-                <div class="icon">📊</div>
-                <h4>Budgeting</h4>
-                <p>Set monthly limits by category. Track spending, detect recurring bills, and see safe-to-spend in real time.</p>
+
+            <div class="workflow-grid">
+                <div class="wide-panel">
+                    <div class="statement-stack">
+                        <div class="file-chip">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"></path>
+                                <path d="M14 3v5h5"></path>
+                            </svg>
+                            <div>
+                                <strong>statement-june.pdf</strong>
+                                <span>42 transactions detected</span>
+                            </div>
+                        </div>
+                        <div class="file-chip">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M4 7h16"></path>
+                                <path d="M4 12h16"></path>
+                                <path d="M4 17h16"></path>
+                                <path d="M7 4v16"></path>
+                                <path d="M13 4v16"></path>
+                            </svg>
+                            <div>
+                                <strong>card-export.csv</strong>
+                                <span>Ready for review</span>
+                            </div>
+                        </div>
+                        <div class="file-chip">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"></path>
+                            </svg>
+                            <div>
+                                <strong>pasted bank alert</strong>
+                                <span>Parsed on device</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="review-list">
+                        <p class="review-title">Review before it enters your ledger</p>
+                        <div class="review-item">
+                            <div>
+                                <span class="merchant">International School</span>
+                                <span class="meta">Education category suggested</span>
+                            </div>
+                            <span class="status-pill">Review</span>
+                        </div>
+                        <div class="review-item">
+                            <div>
+                                <span class="merchant">Health Clinic</span>
+                                <span class="meta">Medical category matched</span>
+                            </div>
+                            <span class="status-pill">Ready</span>
+                        </div>
+                        <div class="review-item">
+                            <div>
+                                <span class="merchant">Statement page footer</span>
+                                <span class="meta">Rejected as non-transaction text</span>
+                            </div>
+                            <span class="status-pill">Ignored</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-column">
+                    <article class="feature-panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 19V5"></path>
+                            <path d="M8 19V9"></path>
+                            <path d="M12 19V3"></path>
+                            <path d="M16 19v-7"></path>
+                            <path d="M20 19V8"></path>
+                        </svg>
+                        <h3>Budgets and trends</h3>
+                        <p>Track monthly limits, recurring bills, income, expense patterns, and safe-to-spend signals without connecting live bank accounts.</p>
+                    </article>
+                    <article class="feature-panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 3v12"></path>
+                            <path d="m7 10 5 5 5-5"></path>
+                            <path d="M5 21h14"></path>
+                        </svg>
+                        <h3>Your backup, your timing</h3>
+                        <p>Export CSV for spreadsheets or JSON for local backup. Files are created only when you choose to create them.</p>
+                    </article>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="icon">📤</div>
-                <h4>Export & Backup</h4>
-                <p>Export CSV or JSON backup files on your terms. Only when you choose.</p>
+        </section>
+
+        <section id="privacy" class="privacy-section" aria-labelledby="privacy-title">
+            <div class="page-shell">
+                <div class="section-heading">
+                    <h2 id="privacy-title">Privacy is the product boundary.</h2>
+                    <p class="section-copy">Pro Money Manager is local-first by design. It avoids tracking, bank aggregation, cloud sync, advertising, and analytics SDKs.</p>
+                </div>
+
+                <div class="privacy-grid">
+                    <article class="privacy-panel featured">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                            <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+                        </svg>
+                        <h3>Stored locally</h3>
+                        <p>Finance records, rules, imported text, accounts, and budgets stay on your device using Apple platform storage.</p>
+                    </article>
+                    <article class="privacy-panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0Z"></path>
+                            <path d="m9 9 6 6"></path>
+                            <path d="m15 9-6 6"></path>
+                        </svg>
+                        <h3>No tracking stack</h3>
+                        <p>No analytics SDKs, advertising SDKs, cross-app tracking, third-party account aggregation, or cloud sync.</p>
+                    </article>
+                    <article class="privacy-panel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 7 9 18l-5-5"></path>
+                        </svg>
+                        <h3>User-controlled export</h3>
+                        <p>Backup and CSV files are created through explicit actions, then controlled by you through iOS sharing and file storage.</p>
+                    </article>
+                </div>
             </div>
+        </section>
+
+        <section id="policy" class="page-shell policy-layout" aria-labelledby="policy-title">
+            <aside class="policy-sidebar">
+                <span class="eyebrow">Privacy policy</span>
+                <h2 id="policy-title">Plain terms.</h2>
+                <p>Effective date: June 12, 2026</p>
+            </aside>
+
+            <div class="policy-copy">
+                <p>Pro Money Manager is designed as a private, local-first personal finance app.</p>
+
+                <h3>Data Collection</h3>
+                <p>Pro Money Manager does not collect, transmit, sell, rent, or share personal data. The app does not use analytics SDKs, advertising SDKs, tracking SDKs, third-party account aggregation, or cloud sync.</p>
+
+                <h3>Data Stored on Device</h3>
+                <p>The app stores finance records you create or import, including accounts, categories, budgets, merchant rules, imported transaction text, and backup or export history. This data is stored locally on your device using SwiftData.</p>
+                <p>Imported PDF, CSV, spreadsheet, and pasted message content is processed on device. The app does not upload these files or their contents to a server.</p>
+
+                <h3>Exports and Backups</h3>
+                <p>You may choose to export CSV or JSON backup files. Exported files are created only after you request them and are controlled by you through iOS sharing and file storage features.</p>
+
+                <h3>Tracking</h3>
+                <p>Pro Money Manager does not track you across apps or websites.</p>
+            </div>
+        </section>
+
+        <section class="page-shell" aria-labelledby="support-title">
+            <div class="support-panel">
+                <div>
+                    <h2 id="support-title">Questions or support?</h2>
+                    <p>Send feedback, app questions, privacy questions, or support requests directly to the developer.</p>
+                </div>
+                <a class="button primary" href="mailto:aneeshtan@gmail.com">aneeshtan@gmail.com</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner page-shell">
+            <span>&copy; 2026 Pro Money Manager. All rights reserved.</span>
+            <span>Local-first personal finance for iPhone.</span>
         </div>
-    </div>
-</section>
-
-<!-- ════════════════ CONTACT ════════════════ -->
-<section>
-    <div class="container">
-        <h2>Support</h2>
-        <p>For questions, feedback, or support requests, reach out to the developer at:</p>
-        <p style="margin-top:8px"><a href="mailto:aneeshtan@gmail.com" style="color:#7a5dc7;font-weight:600;text-decoration:none;font-size:1.1rem;">aneeshtan@gmail.com</a></p>
-    </div>
-</section>
-
-<!-- ════════════════ PRIVACY POLICY ════════════════ -->
-<section class="privacy" id="privacy">
-    <div class="container">
-        <h2>Privacy Policy</h2>
-        <p><strong>Effective date:</strong> June 12, 2026</p>
-
-        <p>Pro Money Manager is designed as a private, local-first personal finance app.</p>
-
-        <h3>Data Collection</h3>
-        <p>Pro Money Manager does not collect, transmit, sell, rent, or share personal data. The app does not use analytics SDKs, advertising SDKs, tracking SDKs, third-party account aggregation, or cloud sync.</p>
-
-        <h3>Data Stored on Device</h3>
-        <p>The app stores finance records you create or import, including accounts, categories, budgets, merchant rules, imported transaction text, and backup/export history. This data is stored locally on your device using SwiftData.</p>
-        <p>Imported PDF, CSV, and pasted message content is processed on device. The app does not upload these files or their contents to a server.</p>
-
-        <h3>Exports and Backups</h3>
-        <p>You may choose to export CSV or JSON backup files. Exported files are created only after you request them and are controlled by you through iOS sharing and file storage features.</p>
-
-        <h3>Tracking</h3>
-        <p>Pro Money Manager does not track you across apps or websites.</p>
-
-        <h3>Contact</h3>
-        <p>For privacy questions or support, contact the developer at:<br>
-        <a href="mailto:aneeshtan@gmail.com">aneeshtan@gmail.com</a></p>
-    </div>
-</section>
-
-<!-- ════════════════ FOOTER ════════════════ -->
-<footer>
-    <div class="container">
-        <p>&copy; 2026 Pro Money Manager. All rights reserved.</p>
-    </div>
-</footer>
-
+    </footer>
 </body>
 </html>
