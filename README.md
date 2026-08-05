@@ -10,22 +10,22 @@ Native SwiftUI personal finance app for replacing SMS-based tracking with review
 - Import review screen with duplicate detection, review-only defaults for payments/cashback/fees, category editing, and bulk save.
 - Transaction list/editor, dashboard, accounts, category/rule browser, and CSV/JSON export.
 
-## App Store Submission
+## Store submission
 
-Comprehensive documentation has been prepared for App Store submission:
+Reference docs kept for future releases on both stores:
 
-- `AppStore/PrivacyPolicy.md` - Complete privacy policy for the app
-- `AppStore/SubmissionChecklist.md` - Detailed checklist of submission requirements
-- `AppStore/Marketing/AppStoreListing.md` - Drafted App Store metadata and descriptions
-- `AppStore/CompleteSubmissionGuide.md` - Step-by-step guide for the entire submission process
-- `AppStore/Marketing/Screenshots/` - Prepared screenshots for iPhone 6.7" and 6.9" displays
+- `AppStore/PrivacyPolicy.md` - Source text for the published privacy policy
+- `AppStore/SubmissionChecklist.md` - App Store submission requirements
+- `AppStore/CompleteSubmissionGuide.md` - App Store Connect listing copy and steps
+- `AppStore/GooglePlaySubmissionGuide.md` - Google Play Console listing copy and steps
+- `AppStore/AndroidSubmissionChecklist.md` - Play Store submission requirements
+- `CHANGELOG.md` - Release notes, copied into "What's New" for each submission
 
-The app is ready for App Store submission with:
-- Local-first privacy compliance
-- No data collection or tracking
-- Sign in with Apple integration
-- Complete privacy manifest
-- Comprehensive review notes
+Marketing screenshots and store graphics are uploaded directly in App Store Connect
+and Google Play Console; they are not kept in this repo.
+
+`docs/index.html` is the GitHub Pages site that serves the support and privacy policy
+URLs registered with both stores. Do not delete it while the apps are published.
 
 ## Regenerate seed data
 
