@@ -1,0 +1,531 @@
+/* 
+  Localizable.strings (German - de)
+  Pro Money Manager
+*/
+
+// MARK: - Common
+"Cancel" = "Abbrechen";
+"Save" = "Speichern";
+"Delete" = "Löschen";
+"Done" = "Fertig";
+"Edit" = "Bearbeiten";
+"Add" = "Hinzufügen";
+"OK" = "OK";
+"Yes" = "Ja";
+"No" = "Nein";
+"None" = "Keine";
+"All" = "Alle";
+"Any" = "Beliebig";
+"Search" = "Suchen";
+"Filter" = "Filter";
+"Apply" = "Anwenden";
+"Clear" = "Leeren";
+"Close" = "Schließen";
+"Continue" = "Fortfahren";
+"Back" = "Zurück";
+"Next" = "Weiter";
+"Previous" = "Zurück";
+"Loading" = "Wird geladen";
+"Error" = "Fehler";
+"Success" = "Erfolg";
+"Warning" = "Warnung";
+"Info" = "Info";
+"Optional" = "Optional";
+"Required" = "Erforderlich";
+"Unknown" = "Unbekannt";
+"Uncategorized" = "Nicht kategorisiert";
+"Archived" = "Archiviert";
+"Active" = "Aktiv";
+"Default" = "Standard";
+"Custom" = "Benutzerdefiniert";
+"Other" = "Sonstiges";
+"Total" = "Gesamt";
+"Subtotal" = "Zwischensumme";
+"Average" = "Durchschnitt";
+"Count" = "Anzahl";
+"Amount" = "Betrag";
+"Balance" = "Saldo";
+"Income" = "Einnahmen";
+"Expense" = "Ausgaben";
+"Net" = "Netto";
+"Remaining" = "Verbleibend";
+"Spent" = "Ausgegeben";
+"Budgeted" = "Budgetiert";
+"Target" = "Ziel";
+"Current" = "Aktuell";
+"Name" = "Name";
+"Note" = "Notiz";
+"Description" = "Beschreibung";
+"Category" = "Kategorie";
+"Subcategory" = "Unterkategorie";
+"Account" = "Konto";
+"Currency" = "Währung";
+"Type" = "Typ";
+"Date" = "Datum";
+"Time" = "Uhrzeit";
+"Status" = "Status";
+"Enabled" = "Aktiviert";
+"Disabled" = "Deaktiviert";
+"Priority" = "Priorität";
+"Pattern" = "Muster";
+"Merchant" = "Händler";
+"Frequency" = "Häufigkeit";
+"Strategy" = "Strategie";
+"Interest" = "Zinsen";
+"Monthly" = "Monatlich";
+"Yearly" = "Jährlich";
+"Weekly" = "Wöchentlich";
+"Daily" = "Täglich";
+"Today" = "Heute";
+"Tomorrow" = "Morgen";
+"Yesterday" = "Gestern";
+"Overdue" = "Überfällig";
+"Upcoming" = "Bevorstehend";
+"Recurring" = "Wiederkehrend";
+"One-time" = "Einmalig";
+"Split" = "Aufteilen";
+"Review" = "Prüfen";
+"Duplicate" = "Duplikat";
+"Learn" = "Lernen";
+"Apply" = "Anwenden";
+"Restore" = "Wiederherstellen";
+"Remove" = "Entfernen";
+"Permanently" = "Dauerhaft";
+"Select" = "Auswählen";
+"Choose" = "Auswählen";
+"Top level" = "Oberste Ebene";
+"Sort order" = "Sortierreihenfolge";
+"Current value" = "Aktueller Wert";
+"Monthly limit" = "Monatliches Limit";
+"Minimum payment" = "Mindestzahlung";
+"Extra payment" = "Zusätzliche Zahlung";
+"Interest rate %" = "Zinssatz %";
+"Total debt" = "Gesamtschulden";
+"Target amount" = "Zielbetrag";
+"Current amount" = "Aktueller Betrag";
+"Set target date" = "Zieldatum festlegen";
+"Target date" = "Zieldatum";
+"Withdraw from goal" = "Vom Ziel abheben";
+"Confidence %" = "Sicherheit %";
+"Note keyword" = "Notiz-Schlüsselwort";
+"Min amount" = "Mindestbetrag";
+"Max amount" = "Höchstbetrag";
+"Conditions (optional)" = "Bedingungen (optional)";
+"Rename behavior" = "Umbenennungsverhalten";
+"Saving a new name updates existing transactions linked to this account. Current value adjusts the opening balance behind the scenes." = "Beim Speichern eines neuen Namens werden vorhandene Transaktionen aktualisiert, die mit diesem Konto verknüpft sind. Der aktuelle Wert passt im Hintergrund den Anfangssaldo an.";
+"Saving a new name updates linked transactions, merchant rules, budgets, and child categories." = "Beim Speichern eines neuen Namens werden verknüpfte Transaktionen, Händlerregeln, Budgets und Unterkategorien aktualisiert.";
+
+// MARK: - Tab / Navigation
+"Accounts" = "Konten";
+"Transactions" = "Transaktionen";
+"Categories" = "Kategorien";
+"Stats" = "Statistiken";
+"More" = "Mehr";
+"Profile" = "Profil";
+"Import" = "Import";
+"Backup" = "Backup";
+"Search" = "Suchen";
+"Calendar" = "Kalender";
+"Trends" = "Trends";
+"Budget" = "Budget";
+"Scheduled" = "Geplant";
+"Subscriptions" = "Abonnements";
+"Savings Goals" = "Sparziele";
+"Debt Payoff" = "Schuldentilgung";
+"Tags" = "Tags";
+"App Lock" = "App-Sperre";
+"Smart Categorize" = "Intelligent kategorisieren";
+"Currency & Region" = "Währung & Region";
+"Select Currency" = "Währung auswählen";
+"Customize Dashboard" = "Dashboard anpassen";
+"Split Transaction" = "Transaktion aufteilen";
+"Add Contribution" = "Einzahlung hinzufügen";
+"Filter" = "Filter";
+"Duplicates" = "Duplikate";
+
+// MARK: - Onboarding / Auth
+"Pro Money Manager" = "Pro Money Manager";
+"Private finance tracking, stored on this device." = "Private Finanzverfolgung, gespeichert auf diesem Gerät.";
+"Continue on this device" = "Auf diesem Gerät fortfahren";
+"Your data stays on this device. Apple sign-in is optional and only unlocks this local workspace." = "Ihre Daten bleiben auf diesem Gerät. Die Anmeldung mit Apple ist optional und schaltet nur diesen lokalen Arbeitsbereich frei.";
+"Choose your home currency, region, and timezone." = "Wählen Sie Ihre Hauptwährung, Region und Zeitzone.";
+"Choose your language, home currency, region, and timezone." = "Wählen Sie Ihre Sprache, Hauptwährung, Region und Zeitzone.";
+"Language" = "Sprache";
+"Region" = "Region";
+"Timezone" = "Zeitzone";
+"Preparing your money view" = "Ihre Finanzübersicht wird vorbereitet";
+"Start managing money" = "Geldverwaltung starten";
+"Workspace" = "Arbeitsbereich";
+"Local data" = "Lokale Daten";
+"Private on device" = "Privat auf dem Gerät";
+"Sign out" = "Abmelden";
+"Account Deletion" = "Kontolöschung";
+"Permanently remove this local account and its data" = "Dieses lokale Konto und seine Daten dauerhaft entfernen";
+"This deletes your profile, accounts, transactions, categories, budgets, rules, imports, and attachments from this device. This action cannot be undone." = "Dadurch werden Ihr Profil, Ihre Konten, Transaktionen, Kategorien, Budgets, Regeln, Importe und Anhänge von diesem Gerät gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.";
+"Delete account and local data" = "Konto und lokale Daten löschen";
+"Email support" = "Support per E-Mail";
+"Delete Account?" = "Konto löschen?";
+"This permanently deletes your local account and all finance data stored by Pro Money Manager on this device." = "Dadurch werden Ihr lokales Konto und alle von Pro Money Manager auf diesem Gerät gespeicherten Finanzdaten dauerhaft gelöscht.";
+"Account Deleted" = "Konto gelöscht";
+"Your local account and finance data have been deleted from this device." = "Ihr lokales Konto und Ihre Finanzdaten wurden von diesem Gerät gelöscht.";
+"Bill reminders" = "Rechnungserinnerungen";
+"Notifications Disabled" = "Mitteilungen deaktiviert";
+"Please enable notifications in Settings to receive bill reminders." = "Aktivieren Sie Mitteilungen in den Einstellungen, um Rechnungserinnerungen zu erhalten.";
+"Open Settings" = "Einstellungen öffnen";
+
+// MARK: - Accounts
+"Your balances across cash, cards, and bank accounts." = "Ihre Salden über Bargeld, Karten und Bankkonten hinweg.";
+"Liquid" = "Liquide";
+"Debt" = "Schulden";
+"No accounts" = "Keine Konten";
+"Seeded accounts or newly created accounts will appear here." = "Vordefinierte oder neu erstellte Konten werden hier angezeigt.";
+"Restore an archived account or add a new one." = "Stellen Sie ein archiviertes Konto wieder her oder fügen Sie ein neues hinzu.";
+"Add account" = "Konto hinzufügen";
+"Add Account" = "Konto hinzufügen";
+"Edit Account" = "Konto bearbeiten";
+"Account cannot be deleted" = "Konto kann nicht gelöscht werden";
+"This archived account has %d transactions. Restore it, or move/delete its transactions before permanently deleting it." = "Dieses archivierte Konto hat %d Transaktionen. Stellen Sie es wieder her oder verschieben/löschen Sie seine Transaktionen, bevor Sie es dauerhaft löschen.";
+"%@ • %d transactions • %@" = "%1$@ • %2$d Transaktionen • %3$@";
+"Txns" = "Trans.";
+"Transactions" = "Transaktionen";
+"No transactions" = "Keine Transaktionen";
+"Transactions assigned to this account will appear here." = "Transaktionen, die diesem Konto zugeordnet sind, werden hier angezeigt.";
+"Archived account. Transactions are preserved, but this account is hidden from active totals and pickers." = "Archiviertes Konto. Transaktionen bleiben erhalten, aber dieses Konto wird in aktiven Summen und Auswahllisten ausgeblendet.";
+"Card exposure is %@. Track payments against statements." = "Die Kartenbelastung beträgt %@. Verfolgen Sie Zahlungen im Abgleich mit Abrechnungen.";
+"Card is currently not carrying a negative app balance." = "Diese Karte hat derzeit keinen negativen App-Saldo.";
+"Liability account. Keep this separated from cash and bank balances for clearer net worth." = "Verbindlichkeitskonto. Halten Sie es getrennt von Bargeld- und Bankguthaben, um das Nettovermögen klarer darzustellen.";
+"Investment account. Include periodic valuation updates to keep net worth accurate." = "Anlagekonto. Erfassen Sie regelmäßige Bewertungsaktualisierungen, damit das Nettovermögen korrekt bleibt.";
+"Liquid account. This contributes to cash available for spending." = "Liquides Konto. Es fließt in das verfügbare Geld für Ausgaben ein.";
+"Review this account type if you want more precise net worth grouping." = "Überprüfen Sie diesen Kontotyp, wenn Sie eine genauere Gruppierung des Nettovermögens wünschen.";
+"Archived" = "Archiviert";
+"removed accounts kept for history" = "entfernte Konten, die für den Verlauf behalten werden";
+
+// MARK: - Transactions
+"Add Transaction" = "Transaktion hinzufügen";
+"Edit Transaction" = "Transaktion bearbeiten";
+"Delete Transaction" = "Transaktion löschen";
+"Delete Transaction?" = "Transaktion löschen?";
+"Are you sure you want to delete this transaction? This action cannot be undone." = "Möchten Sie diese Transaktion wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Split into categories" = "In Kategorien aufteilen";
+"Money Manager Source" = "Money-Manager-Quelle";
+"Source" = "Quelle";
+"Row" = "Zeile";
+"Period" = "Zeitraum";
+"Accounts" = "Konten";
+"Source amount column" = "Quellspalte für Betrag";
+"Income/Expense" = "Einnahmen/Ausgaben";
+"Description" = "Beschreibung";
+"Accounts trailing" = "Konten am Ende";
+"Receipts" = "Belege";
+"No receipts attached." = "Keine Belege angehängt.";
+"Attach receipt photo" = "Belegfoto anhängen";
+"Attach file" = "Datei anhängen";
+"Tags" = "Tags";
+"No tags yet" = "Noch keine Tags";
+"Create tags like 'reimbursable', 'tax-deductible', or 'business' to organize transactions beyond categories." = "Erstellen Sie Tags wie „erstattbar“, „steuerlich absetzbar“ oder „geschäftlich“, um Transaktionen zusätzlich zu Kategorien zu organisieren.";
+"Your tags" = "Ihre Tags";
+"Tap a tag to see related transactions" = "Tippen Sie auf ein Tag, um zugehörige Transaktionen zu sehen";
+"Total tags" = "Tags insgesamt";
+"Tagged transactions" = "Getaggte Transaktionen";
+"%d transactions" = "%d Transaktionen";
+"%d txns" = "%d Trans.";
+"Activity" = "Aktivität";
+"%d visible transactions" = "%d sichtbare Transaktionen";
+"%d duplicate groups" = "%d Duplikatgruppen";
+"%d transactions need review" = "%d Transaktionen müssen geprüft werden";
+"Keep newest" = "Neueste behalten";
+"No matches" = "Keine Treffer";
+"No existing transactions currently match this merchant pattern." = "Derzeit entsprechen keine vorhandenen Transaktionen diesem Händlermuster.";
+"Date range" = "Datumsbereich";
+"From" = "Von";
+"Transaction type" = "Transaktionstyp";
+"Amount range" = "Betragsbereich";
+"Min" = "Min.";
+"Max" = "Max.";
+"Clear all filters" = "Alle Filter löschen";
+"No AI suggestion" = "Kein KI-Vorschlag";
+"Apply %@" = "%@ anwenden";
+
+// MARK: - Smart Categorize
+"No new rules to learn" = "Keine neuen Regeln zum Lernen";
+"Categorize a few more transactions with the same merchant and Smart Categorize will pick up the pattern." = "Kategorisieren Sie ein paar mehr Transaktionen mit demselben Händler und die intelligente Kategorisierung erkennt das Muster.";
+"Applying…" = "Wird angewendet…";
+"Apply %d suggestions" = "%d Vorschläge anwenden";
+"%d uncategorized • %d new rules" = "%d nicht kategorisiert • %d neue Regeln";
+"Learned rules" = "Gelernte Regeln";
+"Patterns discovered from your categorized transactions" = "Muster, die aus Ihren kategorisierten Transaktionen entdeckt wurden";
+"samples" = "Beispiele";
+"Preview" = "Vorschau";
+"Transactions that will be categorized" = "Transaktionen, die kategorisiert werden";
+"No transactions were categorized." = "Es wurden keine Transaktionen kategorisiert.";
+"Categorized %d transactions and saved %d new rules." = "%d Transaktionen kategorisiert und %d neue Regeln gespeichert.";
+
+// MARK: - Categories & Rules
+"Add Category" = "Kategorie hinzufügen";
+"Edit Category" = "Kategorie bearbeiten";
+"Add Rule" = "Regel hinzufügen";
+"Edit Rule" = "Regel bearbeiten";
+"Delete Category?" = "Kategorie löschen?";
+"This category is used by transactions, rules, budgets, or subcategories, so it was archived instead of deleted." = "Diese Kategorie wird von Transaktionen, Regeln, Budgets oder Unterkategorien verwendet und wurde daher archiviert statt gelöscht.";
+"Category updated" = "Kategorie aktualisiert";
+"Rule updated" = "Regel aktualisiert";
+"Matching rules" = "Passende Regeln";
+"%d merchant patterns" = "%d Händlermuster";
+"Subcategories" = "Unterkategorien";
+"%d linked under %@" = "%1$d unter %2$@ verknüpft";
+"Contains" = "Enthält";
+"Exact" = "Exakt";
+"Match" = "Übereinstimmung";
+"Any account" = "Beliebiges Konto";
+"Apply to uncategorized" = "Auf nicht kategorisierte anwenden";
+"Updated %d matching transactions." = "%d passende Transaktionen aktualisiert.";
+"No uncategorized matching transactions were found." = "Keine passenden nicht kategorisierten Transaktionen gefunden.";
+"Needs review" = "Prüfung erforderlich";
+"%d transactions are uncategorized. Fixing them will improve future auto-categorization." = "%d Transaktionen sind nicht kategorisiert. Wenn Sie sie korrigieren, verbessert sich die zukünftige automatische Kategorisierung.";
+"AI auto-categorization" = "KI-Autokategorisierung";
+"%d uncategorized • %d new rules" = "%1$d nicht kategorisiert • %2$d neue Regeln";
+"Review suggestions" = "Vorschläge prüfen";
+"Tap any category to see spending, rules, and transactions" = "Tippen Sie auf eine Kategorie, um Ausgaben, Regeln und Transaktionen zu sehen";
+"No merchant rules" = "Keine Händlerregeln";
+"Rules learned from imports and exports will appear here." = "Aus Importen und Exporten gelernte Regeln werden hier angezeigt.";
+"No categories" = "Keine Kategorien";
+"No categories yet" = "Noch keine Kategorien";
+
+// MARK: - Stats / Dashboard
+"Month overview" = "Monatsübersicht";
+"AI insights" = "KI-Einblicke";
+"Local suggestions from your spending patterns" = "Lokale Vorschläge aus Ihren Ausgabemustern";
+"Monthly summary" = "Monatszusammenfassung";
+"Plain-language readout" = "Einfach verständliche Auswertung";
+"Category / budget / notes" = "Kategorie / Budget / Notizen";
+"Spending by category" = "Ausgaben nach Kategorie";
+"Ranked by the selected month" = "Nach ausgewähltem Monat sortiert";
+"No category stats" = "Keine Kategoriestatistiken";
+"Transactions for this month will appear here after you import or add spending." = "Transaktionen für diesen Monat werden hier angezeigt, nachdem Sie Ausgaben importiert oder hinzugefügt haben.";
+"Budget plan" = "Budgetplan";
+"Monthly limits, remaining spend, and detected recurring charges" = "Monatliche Limits, verbleibende Ausgaben und erkannte wiederkehrende Belastungen";
+"Safe to spend" = "Verfügbar zum Ausgeben";
+"Budget left" = "Budget übrig";
+"Upcoming bills" = "Anstehende Rechnungen";
+"Add budget" = "Budget hinzufügen";
+"Copy to next month" = "In nächsten Monat kopieren";
+"No budgets yet" = "Noch keine Budgets";
+"Add category budgets to see remaining spend and overspend warnings." = "Fügen Sie Kategorienbudgets hinzu, um verbleibende Ausgaben und Warnungen bei Überschreitung zu sehen.";
+"Add Budget" = "Budget hinzufügen";
+"Edit Budget" = "Budget bearbeiten";
+"Delete budget" = "Budget löschen";
+"Recurring bills" = "Wiederkehrende Rechnungen";
+"Detected from repeated merchant charges" = "Aus wiederholten Händlerbelastungen erkannt";
+"No recurring bills detected" = "Keine wiederkehrenden Rechnungen erkannt";
+"Repeated monthly merchants will appear here automatically." = "Wiederkehrende monatliche Händler werden hier automatisch angezeigt.";
+"Expected %@ • %d samples" = "Erwartet %@ • %d Beispiele";
+"Notes" = "Notizen";
+"Context saved with this month's transactions" = "Kontext mit den Transaktionen dieses Monats gespeichert";
+"No notes" = "Keine Notizen";
+"Transaction notes for the selected month will appear here." = "Transaktionsnotizen für den ausgewählten Monat werden hier angezeigt.";
+"Net position" = "Nettoposition";
+"AI monthly summary" = "KI-Monatszusammenfassung";
+"In %@, %d transactions produced %@ income and %@ spending." = "In %1$@ ergaben %2$d Transaktionen %3$@ Einnahmen und %4$@ Ausgaben.";
+"%@ is the biggest category at %@ of spending." = "%1$@ ist mit %2$@ der Ausgaben die größte Kategorie.";
+"Expenses are %d%% %@ than the previous month." = "Die Ausgaben sind %1$d%% %2$@ als im Vormonat.";
+"higher" = "höher";
+"lower" = "niedriger";
+"%@ dominates" = "%@ dominiert";
+"%@ of this month's spending is in this category." = "%@ der Ausgaben dieses Monats entfallen auf diese Kategorie.";
+"Possible duplicates" = "Mögliche Duplikate";
+"%d same-day transactions share the same account, merchant, and amount." = "%d Transaktionen am selben Tag haben dasselbe Konto, denselben Händler und denselben Betrag.";
+"AI watch is clear" = "KI-Prüfung unauffällig";
+"No unusual category, duplicate, or review signals found for this month." = "Für diesen Monat wurden keine ungewöhnlichen Kategorien, Duplikate oder Prüfungssignale gefunden.";
+"This month budget" = "Budget dieses Monats";
+"Over budget" = "Über Budget";
+"On track" = "Im Plan";
+"Breakdown" = "Aufschlüsselung";
+"Expense inside this category" = "Ausgaben in dieser Kategorie";
+"No subcategory" = "Keine Unterkategorie";
+"Visible cards (drag to reorder)" = "Sichtbare Karten (zum Sortieren ziehen)";
+"Reset to default" = "Auf Standard zurücksetzen";
+"Customize dashboard" = "Dashboard anpassen";
+
+// MARK: - Savings Goals
+"Track progress toward your targets" = "Fortschritt zu Ihren Zielen verfolgen";
+"No savings goals" = "Keine Sparziele";
+"Create a goal for an emergency fund, vacation, or any target you want to reach." = "Erstellen Sie ein Ziel für einen Notgroschen, Urlaub oder ein beliebiges Ziel, das Sie erreichen möchten.";
+"Add savings goal" = "Sparziel hinzufügen";
+"Add Savings Goal" = "Sparziel hinzufügen";
+"Edit Savings Goal" = "Sparziel bearbeiten";
+"Delete Goal?" = "Ziel löschen?";
+"Are you sure you want to delete this savings goal? This action cannot be undone." = "Möchten Sie dieses Sparziel wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Overall progress" = "Gesamtfortschritt";
+"%d days left" = "%d Tage übrig";
+"Past target date" = "Zieldatum überschritten";
+"No target date" = "Kein Zieldatum";
+"of %@" = "von %@";
+"%@ to go" = "%@ fehlen noch";
+"Goal reached" = "Ziel erreicht";
+"Add contribution" = "Beitrag hinzufügen";
+"Contribution to %@" = "Beitrag zu %@";
+"Saved" = "Gespart";
+"Goal" = "Ziel";
+"Target date" = "Zieldatum";
+"Delete goal" = "Ziel löschen";
+
+// MARK: - Scheduled
+"Recurring transactions" = "Wiederkehrende Transaktionen";
+"No scheduled transactions" = "Keine geplanten Transaktionen";
+"Schedule recurring bills, income, or subscriptions to automatically create transactions on their due dates." = "Planen Sie wiederkehrende Rechnungen, Einnahmen oder Abonnements, damit Transaktionen am Fälligkeitsdatum automatisch erstellt werden.";
+"Add scheduled transaction" = "Geplante Transaktion hinzufügen";
+"Add Scheduled Transaction" = "Geplante Transaktion hinzufügen";
+"Edit Scheduled Transaction" = "Geplante Transaktion bearbeiten";
+"Delete Schedule?" = "Zeitplan löschen?";
+"Are you sure you want to delete this scheduled transaction? This action cannot be undone." = "Möchten Sie diese geplante Transaktion wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+"Upcoming" = "Bevorstehend";
+"Next occurrences for active schedules" = "Nächste Vorkommen für aktive Zeitpläne";
+"Paused" = "Pausiert";
+"%d disabled schedules" = "%d deaktivierte Zeitpläne";
+"In %d days" = "In %d Tagen";
+"Post now" = "Jetzt buchen";
+"Pause" = "Pausieren";
+"Enable" = "Aktivieren";
+"Schedule" = "Zeitplan";
+"Next date" = "Nächstes Datum";
+"Delete schedule" = "Zeitplan löschen";
+
+// MARK: - Subscriptions
+"Recurring charges" = "Wiederkehrende Belastungen";
+"Was %@ → now %@" = "Vorher %1$@ → jetzt %2$@";
+"%d charges • last %@" = "%1$d Belastungen • zuletzt %2$@";
+"/ month" = "/ Monat";
+
+// MARK: - Debt Payoff
+"Track your payoff progress" = "Fortschritt Ihrer Rückzahlung verfolgen";
+"No debt payoff plans" = "Keine Schuldentilgungspläne";
+"Create a plan to track your debt payoff progress using snowball or avalanche strategy." = "Erstellen Sie einen Plan, um Ihre Schuldentilgung mit der Schneeball- oder Lawinenstrategie zu verfolgen.";
+"Add debt payoff plan" = "Schuldentilgungsplan hinzufügen";
+"Add Debt Payoff Plan" = "Schuldentilgungsplan hinzufügen";
+"Edit Debt Payoff Plan" = "Schuldentilgungsplan bearbeiten";
+"Delete Plan?" = "Plan löschen?";
+"Are you sure you want to delete this debt payoff plan?" = "Möchten Sie diesen Schuldentilgungsplan wirklich löschen?";
+"remaining" = "verbleibend";
+"%@ paid off" = "%@ abbezahlt";
+"~%d months left" = "Noch ca. %d Monate";
+"Plan" = "Plan";
+"Payment" = "Zahlung";
+"Choose account" = "Konto auswählen";
+"Delete plan" = "Plan löschen";
+
+// MARK: - Import
+"Data Sources" = "Datenquellen";
+"Collect transactions from files, exports, and bank messages." = "Sammeln Sie Transaktionen aus Dateien, Exporten und Banknachrichten.";
+"PDF statement" = "PDF-Kontoauszug";
+"CSV / Excel export" = "CSV-/Excel-Export";
+"SMS paste" = "SMS einfügen";
+"Choose File" = "Datei auswählen";
+"Parse pasted text" = "Eingefügten Text analysieren";
+"Ready for a statement" = "Bereit für einen Kontoauszug";
+"Ready for CSV" = "Bereit für CSV";
+"Ready for messages" = "Bereit für Nachrichten";
+"Choose a searchable bank PDF. Known statement formats get exact parsing; other PDFs use generic date, amount, and merchant detection." = "Wählen Sie eine durchsuchbare Bank-PDF. Bekannte Auszugsformate werden exakt analysiert; andere PDFs nutzen eine allgemeine Erkennung von Datum, Betrag und Händler.";
+"Import a CSV exported from Excel, Google Sheets, or your bank. Headers like Date, Description, Amount, Debit, Credit, and Currency are supported." = "Importieren Sie eine CSV-Datei aus Excel, Google Sheets oder Ihrer Bank. Spaltenüberschriften wie Date, Description, Amount, Debit, Credit und Currency werden unterstützt.";
+"Paste bank SMS messages or notification text. The app detects amount, date, merchant, and income or expense direction where possible." = "Fügen Sie Bank-SMS oder Benachrichtigungstexte ein. Die App erkennt nach Möglichkeit Betrag, Datum, Händler und ob es sich um Einnahmen oder Ausgaben handelt.";
+"Review import" = "Import prüfen";
+"Parsed from statement text" = "Aus Auszugstext analysiert";
+"Parsed from spreadsheet rows" = "Aus Tabellenzeilen analysiert";
+"Parsed from pasted messages" = "Aus eingefügten Nachrichten analysiert";
+"Select clean" = "Saubere auswählen";
+"Showing the first %d of %d rows. Save will include all selected rows." = "Die ersten %1$d von %2$d Zeilen werden angezeigt. Beim Speichern werden alle ausgewählten Zeilen übernommen.";
+"Parsed" = "Analysiert";
+"Selected" = "Ausgewählt";
+"Review" = "Prüfen";
+"Learn rule" = "Regel lernen";
+"Merge duplicate" = "Duplikat zusammenführen";
+"Saving transactions…" = "Transaktionen werden gespeichert …";
+"Loaded %d transactions…" = "%d Transaktionen geladen …";
+"Saved %d of %d…" = "%1$d von %2$d gespeichert …";
+"Could not save imported transactions: %@" = "Importierte Transaktionen konnten nicht gespeichert werden: %@";
+"Pasted messages" = "Eingefügte Nachrichten";
+"Paste bank messages" = "Banknachrichten einfügen";
+"One message per line works best" = "Eine Nachricht pro Zeile funktioniert am besten";
+
+// MARK: - Backup / Export
+"Export a portable copy of your transactions or the full local database." = "Exportieren Sie eine portable Kopie Ihrer Transaktionen oder der vollständigen lokalen Datenbank.";
+"Latest export" = "Letzter Export";
+"%d saved • %d ignored • %@" = "%1$d gespeichert • %2$d ignoriert • %3$@";
+
+// MARK: - Calendar
+"Select a day" = "Tag auswählen";
+"Tap a date to review its transactions." = "Tippen Sie auf ein Datum, um die Transaktionen zu prüfen.";
+
+// MARK: - Trends
+"Last %d months" = "Letzte %d Monate";
+"%d months" = "%d Monate";
+
+// MARK: - App Lock
+"Security" = "Sicherheit";
+"Use Face ID / Touch ID or a passcode to protect access." = "Verwenden Sie Face ID / Touch ID oder einen Code, um den Zugriff zu schützen.";
+"Enable App Lock" = "App-Sperre aktivieren";
+"Authenticate to unlock" = "Zum Entsperren authentifizieren";
+"Authentication failed" = "Authentifizierung fehlgeschlagen";
+"Please try again or use your device passcode." = "Versuchen Sie es erneut oder verwenden Sie den Gerätecode.";
+
+// MARK: - Errors / Empty states
+"No transactions" = "Keine Transaktionen";
+"Transactions assigned to this category will appear here." = "Transaktionen, die dieser Kategorie zugeordnet sind, werden hier angezeigt.";
+"No matches" = "Keine Treffer";
+"No recurring bills detected" = "Keine wiederkehrenden Rechnungen erkannt";
+"Could not read this file." = "Diese Datei konnte nicht gelesen werden.";
+"Excel .xlsx files are not parsed directly yet. Export the sheet as CSV and import that file." = "Excel-Dateien im .xlsx-Format werden noch nicht direkt analysiert. Exportieren Sie das Blatt als CSV und importieren Sie diese Datei.";
+"No transaction rows were found. Try CSV, a searchable PDF, or paste bank SMS messages." = "Es wurden keine Transaktionszeilen gefunden. Versuchen Sie CSV, eine durchsuchbare PDF oder fügen Sie Bank-SMS ein.";
+"Unsupported bank statement format. Please try a different file or contact support." = "Nicht unterstütztes Kontoauszugsformat. Versuchen Sie eine andere Datei oder kontaktieren Sie den Support.";
+
+// MARK: - Account Types
+"Cash" = "Bargeld";
+"Bank" = "Bank";
+"Credit Card" = "Kreditkarte";
+"Liability" = "Verbindlichkeit";
+"Investment" = "Investition";
+"Other" = "Sonstiges";
+
+// MARK: - Transaction Kinds
+"Expense" = "Ausgabe";
+"Income" = "Einnahme";
+"Transfer" = "Überweisung";
+
+// MARK: - Schedule Frequencies
+"Weekly" = "Wöchentlich";
+"Biweekly" = "Alle zwei Wochen";
+"Monthly" = "Monatlich";
+"Quarterly" = "Vierteljährlich";
+"Yearly" = "Jährlich";
+
+// MARK: - Debt Strategies
+"Snowball (lowest balance first)" = "Schneeball (niedrigster Saldo zuerst)";
+"Avalanche (highest interest first)" = "Lawine (höchster Zinssatz zuerst)";
+
+// MARK: - Match Types
+"exact" = "exakt";
+"contains" = "enthält";
+
+// MARK: - Additional view strings
+"Add split" = "Aufteilung hinzufügen";
+"Add tag" = "Tag hinzufügen";
+"Add transaction" = "Transaktion hinzufügen";
+"Apply splits" = "Aufteilungen anwenden";
+"Are you sure you want to delete this tag?" = "Möchten Sie dieses Tag wirklich löschen?";
+"Classification" = "Klassifizierung";
+"Color" = "Farbe";
+"Currencies" = "Währungen";
+"Current status" = "Aktueller Status";
+"Delete Account" = "Konto löschen";
+"Delete Permanently" = "Dauerhaft löschen";
+"Delete tag" = "Tag löschen";
+"Filter transactions" = "Transaktionen filtern";
+"Label your transactions" = "Transaktionen kennzeichnen";
+"Manager" = "Manager";
+"Pro Money" = "Pro Money";
+"Rule" = "Regel";
+"Rules" = "Regeln";
+"Splits" = "Aufteilungen";
+"Tag" = "Tag";
+"Transaction" = "Transaktion";
+"Your data is stored locally on this device. Exports are created only when you choose them." = "Ihre Daten werden lokal auf diesem Gerät gespeichert. Exporte werden nur erstellt, wenn Sie sie auswählen.";
+"to" = "bis";

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:shortcutDisabledMessage="@string/shortcut_add_expense_long"
+        android:shortcutId="add_expense"
+        android:shortcutLongLabel="@string/shortcut_add_expense_long"
+        android:shortcutShortLabel="@string/shortcut_add_expense_short">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.farshadghanzanfari.promoneymanager.MainActivity"
+            android:targetPackage="com.farshadghanzanfari.promoneymanager">
+            <extra
+                android:name="shortcut_destination"
+                android:value="add_expense" />
+        </intent>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:shortcutDisabledMessage="@string/shortcut_import_statement_long"
+        android:shortcutId="import_statement"
+        android:shortcutLongLabel="@string/shortcut_import_statement_long"
+        android:shortcutShortLabel="@string/shortcut_import_statement_short">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.farshadghanzanfari.promoneymanager.MainActivity"
+            android:targetPackage="com.farshadghanzanfari.promoneymanager">
+            <extra
+                android:name="shortcut_destination"
+                android:value="import_statement" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:shortcutDisabledMessage="@string/shortcut_search_long"
+        android:shortcutId="search"
+        android:shortcutLongLabel="@string/shortcut_search_long"
+        android:shortcutShortLabel="@string/shortcut_search_short">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.farshadghanzanfari.promoneymanager.MainActivity"
+            android:targetPackage="com.farshadghanzanfari.promoneymanager">
+            <extra
+                android:name="shortcut_destination"
+                android:value="search" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:shortcutDisabledMessage="@string/shortcut_upcoming_bills_long"
+        android:shortcutId="upcoming_bills"
+        android:shortcutLongLabel="@string/shortcut_upcoming_bills_long"
+        android:shortcutShortLabel="@string/shortcut_upcoming_bills_short">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.farshadghanzanfari.promoneymanager.MainActivity"
+            android:targetPackage="com.farshadghanzanfari.promoneymanager">
+            <extra
+                android:name="shortcut_destination"
+                android:value="upcoming_bills" />
+        </intent>
+    </shortcut>
+</shortcuts>

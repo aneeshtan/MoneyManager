@@ -1,0 +1,517 @@
+/* 
+  Localizable.strings (Hindi - hi)
+  Pro Money Manager
+*/
+
+// MARK: - Common
+"Cancel" = "रद्द करें";
+"Save" = "सहेजें";
+"Delete" = "हटाएं";
+"Done" = "पूर्ण";
+"Edit" = "संपादित करें";
+"Add" = "जोड़ें";
+"OK" = "ठीक है";
+"Yes" = "हाँ";
+"No" = "नहीं";
+"None" = "कोई नहीं";
+"All" = "सभी";
+"Any" = "कोई भी";
+"Search" = "खोजें";
+"Filter" = "फ़िल्टर";
+"Apply" = "लागू करें";
+"Clear" = "साफ़ करें";
+"Close" = "बंद करें";
+"Continue" = "जारी रखें";
+"Back" = "वापस";
+"Next" = "अगला";
+"Previous" = "पिछला";
+"Loading" = "लोड हो रहा है";
+"Error" = "त्रुटि";
+"Success" = "सफलता";
+"Warning" = "चेतावनी";
+"Info" = "जानकारी";
+"Optional" = "वैकल्पिक";
+"Required" = "आवश्यक";
+"Unknown" = "अज्ञात";
+"Uncategorized" = "श्रेणीहीन";
+"Archived" = "संग्रहीत";
+"Active" = "सक्रिय";
+"Default" = "डिफ़ॉल्ट";
+"Custom" = "कस्टम";
+"Other" = "अन्य";
+"Total" = "कुल";
+"Subtotal" = "उप-योग";
+"Average" = "औसत";
+"Count" = "गिनती";
+"Amount" = "राशि";
+"Balance" = "शेष";
+"Income" = "आय";
+"Expense" = "व्यय";
+"Net" = "शुद्ध";
+"Remaining" = "शेष";
+"Spent" = "खर्च किया गया";
+"Budgeted" = "बजटित";
+"Target" = "लक्ष्य";
+"Current" = "वर्तमान";
+"Name" = "नाम";
+"Note" = "नोट";
+"Description" = "विवरण";
+"Category" = "श्रेणी";
+"Subcategory" = "उपश्रेणी";
+"Account" = "खाता";
+"Currency" = "मुद्रा";
+"Type" = "प्रकार";
+"Date" = "दिनांक";
+"Time" = "समय";
+"Status" = "स्थिति";
+"Enabled" = "सक्षम";
+"Disabled" = "अक्षम";
+"Priority" = "प्राथमिकता";
+"Pattern" = "पैटर्न";
+"Merchant" = "व्यापारी";
+"Frequency" = "आवृत्ति";
+"Strategy" = "रणनीति";
+"Interest" = "ब्याज";
+"Monthly" = "मासिक";
+"Yearly" = "वार्षिक";
+"Weekly" = "साप्ताहिक";
+"Daily" = "दैनिक";
+"Today" = "आज";
+"Tomorrow" = "कल";
+"Yesterday" = "कल";
+"Overdue" = "अतिदेय";
+"Upcoming" = "आगामी";
+"Recurring" = "आवर्ती";
+"One-time" = "एक बार";
+"Split" = "विभाजित";
+"Review" = "समीक्षा";
+"Duplicate" = "डुप्लिकेट";
+"Learn" = "सीखें";
+"Apply" = "लागू करें";
+"Restore" = "पुनर्स्थापित";
+"Remove" = "हटाएं";
+"Permanently" = "स्थायी रूप से";
+"Select" = "चुनें";
+"Choose" = "चुनें";
+"Top level" = "शीर्ष स्तर";
+"Sort order" = "क्रमबद्ध क्रम";
+"Current value" = "वर्तमान मूल्य";
+"Monthly limit" = "मासिक सीमा";
+"Minimum payment" = "न्यूनतम भुगतान";
+"Extra payment" = "अतिरिक्त भुगतान";
+"Interest rate %" = "ब्याज दर %";
+"Total debt" = "कुल ऋण";
+"Target amount" = "लक्ष्य राशि";
+"Current amount" = "वर्तमान राशि";
+"Set target date" = "लक्ष्य तिथि निर्धारित करें";
+"Target date" = "लक्ष्य तिथि";
+"Withdraw from goal" = "लक्ष्य से निकासी";
+"Confidence %" = "विश्वास %";
+"Note keyword" = "नोट कीवर्ड";
+"Min amount" = "न्यूनतम राशि";
+"Max amount" = "अधिकतम राशि";
+"Conditions (optional)" = "शर्तें (वैकल्पिक)";
+"Rename behavior" = "नाम बदलने का व्यवहार";
+"Saving a new name updates existing transactions linked to this account. Current value adjusts the opening balance behind the scenes." = "नया नाम सहेजने से इस खाते से जुड़े मौजूदा लेन-देन अपडेट हो जाते हैं। वर्तमान मान पर्दे के पीछे प्रारंभिक शेष को समायोजित करता है।";
+"Saving a new name updates linked transactions, merchant rules, budgets, and child categories." = "नया नाम सहेजने से जुड़े लेन-देन, व्यापारी नियम, बजट और उपश्रेणियाँ अपडेट हो जाती हैं।";
+
+// MARK: - Tab / Navigation
+"Accounts" = "खाते";
+"Transactions" = "लेन-देन";
+"Categories" = "श्रेणियाँ";
+"Stats" = "आँकड़े";
+"More" = "और";
+"Profile" = "प्रोफ़ाइल";
+"Import" = "आयात";
+"Backup" = "बैकअप";
+"Search" = "खोजें";
+"Calendar" = "कैलेंडर";
+"Trends" = "रुझान";
+"Budget" = "बजट";
+"Scheduled" = "अनुसूचित";
+"Subscriptions" = "सदस्यताएँ";
+"Savings Goals" = "बचत लक्ष्य";
+"Debt Payoff" = "ऋण भुगतान";
+"Tags" = "टैग";
+"App Lock" = "ऐप लॉक";
+"Smart Categorize" = "स्मार्ट वर्गीकरण";
+"Currency & Region" = "मुद्रा और क्षेत्र";
+"Select Currency" = "मुद्रा चुनें";
+"Customize Dashboard" = "डैशबोर्ड अनुकूलित करें";
+"Split Transaction" = "लेन-देन विभाजित करें";
+"Add Contribution" = "योगदान जोड़ें";
+"Filter" = "फ़िल्टर";
+"Duplicates" = "डुप्लिकेट";
+
+// MARK: - Onboarding / Auth
+"Pro Money Manager" = "Pro Money Manager";
+"Private finance tracking, stored on this device." = "निजी वित्त ट्रैकिंग, इस डिवाइस पर संग्रहीत।";
+"Continue on this device" = "इस डिवाइस पर जारी रखें";
+"Your data stays on this device. Apple sign-in is optional and only unlocks this local workspace." = "आपका डेटा इस डिवाइस पर रहता है। Apple साइन-इन वैकल्पिक है और केवल इस स्थानीय कार्यक्षेत्र को अनलॉक करता है।";
+"Choose your home currency, region, and timezone." = "अपनी मुख्य मुद्रा, क्षेत्र और समय क्षेत्र चुनें।";
+"Choose your language, home currency, region, and timezone." = "अपनी भाषा, मुख्य मुद्रा, क्षेत्र और समय क्षेत्र चुनें।";
+"Language" = "भाषा";
+"Region" = "क्षेत्र";
+"Timezone" = "समय क्षेत्र";
+"Preparing your money view" = "आपका वित्त दृश्य तैयार किया जा रहा है";
+"Start managing money" = "पैसे प्रबंधित करना शुरू करें";
+"Workspace" = "कार्यक्षेत्र";
+"Local data" = "स्थानीय डेटा";
+"Private on device" = "डिवाइस पर निजी";
+"Sign out" = "साइन आउट";
+"Account Deletion" = "खाता हटाना";
+"Permanently remove this local account and its data" = "इस स्थानीय खाते और इसके डेटा को स्थायी रूप से हटाएं";
+"This deletes your profile, accounts, transactions, categories, budgets, rules, imports, and attachments from this device. This action cannot be undone." = "यह आपकी प्रोफ़ाइल, खाते, लेन-देन, श्रेणियाँ, बजट, नियम, आयात और अनुलग्नकों को इस डिवाइस से हटा देता है। यह क्रिया पूर्ववत नहीं की जा सकती।";
+"Delete account and local data" = "खाता और स्थानीय डेटा हटाएं";
+"Email support" = "ईमेल समर्थन";
+"Delete Account?" = "खाता हटाएं?";
+"This permanently deletes your local account and all finance data stored by Pro Money Manager on this device." = "यह आपके स्थानीय खाते और Pro Money Manager द्वारा इस डिवाइस पर संग्रहीत सभी वित्त डेटा को स्थायी रूप से हटा देता है।";
+"Account Deleted" = "खाता हटा दिया गया";
+"Your local account and finance data have been deleted from this device." = "आपका स्थानीय खाता और वित्त डेटा इस डिवाइस से हटा दिया गया है।";
+"Bill reminders" = "बिल अनुस्मारक";
+"Notifications Disabled" = "सूचनाएँ अक्षम";
+"Please enable notifications in Settings to receive bill reminders." = "बिल अनुस्मारक प्राप्त करने के लिए कृपया सेटिंग्स में सूचनाएँ सक्षम करें।";
+"Open Settings" = "सेटिंग्स खोलें";
+
+// MARK: - Accounts
+"Your balances across cash, cards, and bank accounts." = "नकद, कार्ड और बैंक खातों में आपकी शेष राशि।";
+"Liquid" = "तरल";
+"Debt" = "ऋण";
+"No accounts" = "कोई खाता नहीं";
+"Seeded accounts or newly created accounts will appear here." = "पूर्व-निर्धारित या नवनिर्मित खाते यहाँ दिखाई देंगे।";
+"Restore an archived account or add a new one." = "कोई संग्रहीत खाता पुनर्स्थापित करें या नया जोड़ें।";
+"Add account" = "खाता जोड़ें";
+"Add Account" = "खाता जोड़ें";
+"Edit Account" = "खाता संपादित करें";
+"Account cannot be deleted" = "खाता हटाया नहीं जा सकता";
+"This archived account has %d transactions. Restore it, or move/delete its transactions before permanently deleting it." = "इस संग्रहीत खाते में %d लेन-देन हैं। इसे पुनर्स्थापित करें, या स्थायी रूप से हटाने से पहले इसके लेन-देन को स्थानांतरित/हटाएं।";
+"%@ • %d transactions • %@" = "%1$@ • %2$d लेन-देन • %3$@";
+"Txns" = "लेन-देन";
+"Transactions" = "लेन-देन";
+"No transactions" = "कोई लेन-देन नहीं";
+"Transactions assigned to this account will appear here." = "इस खाते को निर्दिष्ट लेन-देन यहाँ दिखाई देंगे।";
+"Archived account. Transactions are preserved, but this account is hidden from active totals and pickers." = "संग्रहीत खाता। लेन-देन संरक्षित हैं, लेकिन यह खाता सक्रिय योग और चयनकर्ताओं से छिपा हुआ है।";
+"Card exposure is %@. Track payments against statements." = "कार्ड एक्सपोज़र %@ है। विवरणों के विरुद्ध भुगतान ट्रैक करें।";
+"Card is currently not carrying a negative app balance." = "कार्ड वर्तमान में नकारात्मक ऐप शेष नहीं रख रहा है।";
+"Liability account. Keep this separated from cash and bank balances for clearer net worth." = "देयता खाता। स्पष्ट नेट वर्थ के लिए इसे नकद और बैंक शेष से अलग रखें।";
+"Investment account. Include periodic valuation updates to keep net worth accurate." = "निवेश खाता। नेट वर्थ सटीक रखने के लिए समय-समय पर मूल्यांकन अपडेट शामिल करें।";
+"Liquid account. This contributes to cash available for spending." = "तरल खाता। यह खर्च के लिए उपलब्ध नकदी में योगदान देता है।";
+"Review this account type if you want more precise net worth grouping." = "यदि आप अधिक सटीक नेट वर्थ समूहीकरण चाहते हैं तो इस खाता प्रकार की समीक्षा करें।";
+"Archived" = "संग्रहीत";
+"removed accounts kept for history" = "इतिहास के लिए रखे गए हटाए गए खाते";
+
+// MARK: - Transactions
+"Add Transaction" = "लेन-देन जोड़ें";
+"Edit Transaction" = "लेन-देन संपादित करें";
+"Delete Transaction" = "लेन-देन हटाएं";
+"Delete Transaction?" = "लेन-देन हटाएं?";
+"Are you sure you want to delete this transaction? This action cannot be undone." = "क्या आप वाकई इस लेन-देन को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।";
+"Split into categories" = "श्रेणियों में विभाजित करें";
+"Money Manager Source" = "Money Manager स्रोत";
+"Source" = "स्रोत";
+"Row" = "पंक्ति";
+"Period" = "अवधि";
+"Accounts" = "खाते";
+"Source amount column" = "स्रोत राशि कॉलम";
+"Income/Expense" = "आय/व्यय";
+"Description" = "विवरण";
+"Accounts trailing" = "अंत में खाते";
+"Receipts" = "रसीदें";
+"No receipts attached." = "कोई रसीद संलग्न नहीं।";
+"Attach receipt photo" = "रसीद फ़ोटो संलग्न करें";
+"Attach file" = "फ़ाइल संलग्न करें";
+"Tags" = "टैग";
+"No tags yet" = "अभी तक कोई टैग नहीं";
+"Create tags like 'reimbursable', 'tax-deductible', or 'business' to organize transactions beyond categories." = "श्रेणियों से परे लेन-देन को व्यवस्थित करने के लिए 'प्रतिपूर्ति योग्य', 'कर-कटौती योग्य' या 'व्यवसाय' जैसे टैग बनाएं।";
+"Your tags" = "आपके टैग";
+"Tap a tag to see related transactions" = "संबंधित लेन-देन देखने के लिए टैग पर टैप करें";
+"Total tags" = "कुल टैग";
+"Tagged transactions" = "टैग किए गए लेन-देन";
+"%d transactions" = "%d लेन-देन";
+"%d txns" = "%d लेन-देन";
+"Activity" = "गतिविधि";
+"%d visible transactions" = "%d दृश्य लेन-देन";
+"%d duplicate groups" = "%d डुप्लिकेट समूह";
+"%d transactions need review" = "%d लेन-देन की समीक्षा आवश्यक";
+"Keep newest" = "नवीनतम रखें";
+"No matches" = "कोई मेल नहीं";
+"No existing transactions currently match this merchant pattern." = "वर्तमान में कोई मौजूदा लेन-देन इस व्यापारी पैटर्न से मेल नहीं खाता।";
+"Date range" = "दिनांक सीमा";
+"From" = "से";
+"Transaction type" = "लेन-देन प्रकार";
+"Amount range" = "राशि सीमा";
+"Min" = "न्यूनतम";
+"Max" = "अधिकतम";
+"Clear all filters" = "सभी फ़िल्टर साफ़ करें";
+"No AI suggestion" = "कोई AI सुझाव नहीं";
+"Apply %@" = "%@ लागू करें";
+
+// MARK: - Categories & Rules
+"Add Category" = "श्रेणी जोड़ें";
+"Edit Category" = "श्रेणी संपादित करें";
+"Add Rule" = "नियम जोड़ें";
+"Edit Rule" = "नियम संपादित करें";
+"Delete Category?" = "श्रेणी हटाएं?";
+"This category is used by transactions, rules, budgets, or subcategories, so it was archived instead of deleted." = "यह श्रेणी लेन-देन, नियम, बजट या उपश्रेणियों द्वारा उपयोग की जाती है, इसलिए इसे हटाने के बजाय संग्रहीत किया गया।";
+"Category updated" = "श्रेणी अपडेट की गई";
+"Rule updated" = "नियम अपडेट किया गया";
+"Matching rules" = "मेल खाने वाले नियम";
+"%d merchant patterns" = "%d व्यापारी पैटर्न";
+"Subcategories" = "उपश्रेणियाँ";
+"%d linked under %@" = "%1$d %2$@ के अंतर्गत जुड़ी हुई";
+"Contains" = "शामिल है";
+"Exact" = "सटीक";
+"Match" = "मिलान";
+"Any account" = "कोई भी खाता";
+"Apply to uncategorized" = "श्रेणीहीन पर लागू करें";
+"Updated %d matching transactions." = "%d मेल खाने वाले लेन-देन अपडेट किए गए।";
+"No uncategorized matching transactions were found." = "कोई मेल खाने वाला श्रेणीहीन लेन-देन नहीं मिला।";
+"Needs review" = "समीक्षा आवश्यक";
+"%d transactions are uncategorized. Fixing them will improve future auto-categorization." = "%d लेन-देन श्रेणीहीन हैं। उन्हें ठीक करने से भविष्य में स्वचालित वर्गीकरण में सुधार होगा।";
+"AI auto-categorization" = "AI स्वचालित वर्गीकरण";
+"%d uncategorized • %d new rules" = "%1$d श्रेणीहीन • %2$d नए नियम";
+"Review suggestions" = "सुझावों की समीक्षा करें";
+"Tap any category to see spending, rules, and transactions" = "व्यय, नियम और लेन-देन देखने के लिए किसी भी श्रेणी पर टैप करें";
+"No merchant rules" = "कोई व्यापारी नियम नहीं";
+"Rules learned from imports and exports will appear here." = "आयात और निर्यात से सीखे गए नियम यहाँ दिखाई देंगे।";
+"No categories" = "कोई श्रेणी नहीं";
+"No categories yet" = "अभी तक कोई श्रेणी नहीं";
+
+// MARK: - Stats / Dashboard
+"Month overview" = "माह अवलोकन";
+"AI insights" = "AI अंतर्दृष्टि";
+"Local suggestions from your spending patterns" = "आपके खर्च पैटर्न से स्थानीय सुझाव";
+"Monthly summary" = "मासिक सारांश";
+"Plain-language readout" = "सरल भाषा में पठन";
+"Category / budget / notes" = "श्रेणी / बजट / नोट्स";
+"Spending by category" = "श्रेणी के अनुसार व्यय";
+"Ranked by the selected month" = "चयनित माह के अनुसार क्रमबद्ध";
+"No category stats" = "कोई श्रेणी आँकड़े नहीं";
+"Transactions for this month will appear here after you import or add spending." = "आयात या व्यय जोड़ने के बाद इस माह के लेन-देन यहाँ दिखाई देंगे।";
+"Budget plan" = "बजट योजना";
+"Monthly limits, remaining spend, and detected recurring charges" = "मासिक सीमाएँ, शेष व्यय और पहचाने गए आवर्ती शुल्क";
+"Safe to spend" = "खर्च करने के लिए सुरक्षित";
+"Budget left" = "शेष बजट";
+"Upcoming bills" = "आगामी बिल";
+"Add budget" = "बजट जोड़ें";
+"Copy to next month" = "अगले माह में कॉपी करें";
+"No budgets yet" = "अभी तक कोई बजट नहीं";
+"Add category budgets to see remaining spend and overspend warnings." = "शेष व्यय और अतिव्यय चेतावनी देखने के लिए श्रेणी बजट जोड़ें।";
+"Add Budget" = "बजट जोड़ें";
+"Edit Budget" = "बजट संपादित करें";
+"Delete budget" = "बजट हटाएं";
+"Recurring bills" = "आवर्ती बिल";
+"Detected from repeated merchant charges" = "बार-बार व्यापारी शुल्क से पहचाना गया";
+"No recurring bills detected" = "कोई आवर्ती बिल नहीं मिला";
+"Repeated monthly merchants will appear here automatically." = "बार-बार आने वाले मासिक व्यापारी स्वचालित रूप से यहाँ दिखाई देंगे।";
+"Expected %@ • %d samples" = "अपेक्षित %@ • %d नमूने";
+"Notes" = "नोट्स";
+"Context saved with this month's transactions" = "इस माह के लेन-देन के साथ सहेजा गया संदर्भ";
+"No notes" = "कोई नोट नहीं";
+"Transaction notes for the selected month will appear here." = "चयनित माह के लेन-देन नोट्स यहाँ दिखाई देंगे।";
+"Net position" = "शुद्ध स्थिति";
+"AI monthly summary" = "AI मासिक सारांश";
+"In %@, %d transactions produced %@ income and %@ spending." = "%1$@ में, %2$d लेन-देन ने %3$@ आय और %4$@ व्यय उत्पन्न किया।";
+"%@ is the biggest category at %@ of spending." = "%1$@ व्यय के %2$@ के साथ सबसे बड़ी श्रेणी है।";
+"Expenses are %d%% %@ than the previous month." = "व्यय पिछले माह की तुलना में %1$d%% %2$@ हैं।";
+"higher" = "अधिक";
+"lower" = "कम";
+"%@ dominates" = "%@ हावी है";
+"%@ of this month's spending is in this category." = "इस माह के %@ व्यय इस श्रेणी में हैं।";
+"Possible duplicates" = "संभावित डुप्लिकेट";
+"%d same-day transactions share the same account, merchant, and amount." = "%d एक ही दिन के लेन-देन में समान खाता, व्यापारी और राशि है।";
+"AI watch is clear" = "AI निगरानी स्पष्ट है";
+"No unusual category, duplicate, or review signals found for this month." = "इस माह के लिए कोई असामान्य श्रेणी, डुप्लिकेट या समीक्षा संकेत नहीं मिला।";
+"This month budget" = "इस माह का बजट";
+"Over budget" = "बजट से अधिक";
+"On track" = "सही रास्ते पर";
+"Breakdown" = "विभाजन";
+"Expense inside this category" = "इस श्रेणी के अंतर्गत व्यय";
+"No subcategory" = "कोई उपश्रेणी नहीं";
+"Visible cards (drag to reorder)" = "दृश्य कार्ड (पुनर्क्रमित करने के लिए खींचें)";
+"Reset to default" = "डिफ़ॉल्ट पर रीसेट करें";
+"Customize dashboard" = "डैशबोर्ड अनुकूलित करें";
+
+// MARK: - Savings Goals
+"Track progress toward your targets" = "अपने लक्ष्यों की ओर प्रगति ट्रैक करें";
+"No savings goals" = "कोई बचत लक्ष्य नहीं";
+"Create a goal for an emergency fund, vacation, or any target you want to reach." = "आपातकालीन निधि, छुट्टी या किसी भी लक्ष्य के लिए एक लक्ष्य बनाएं जिसे आप प्राप्त करना चाहते हैं।";
+"Add savings goal" = "बचत लक्ष्य जोड़ें";
+"Add Savings Goal" = "बचत लक्ष्य जोड़ें";
+"Edit Savings Goal" = "बचत लक्ष्य संपादित करें";
+"Delete Goal?" = "लक्ष्य हटाएं?";
+"Are you sure you want to delete this savings goal? This action cannot be undone." = "क्या आप वाकई इस बचत लक्ष्य को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।";
+"Overall progress" = "समग्र प्रगति";
+"%d days left" = "%d दिन शेष";
+"Past target date" = "लक्ष्य तिथि समाप्त";
+"No target date" = "कोई लक्ष्य तिथि नहीं";
+"of %@" = "%@ में से";
+"%@ to go" = "%@ शेष";
+"Goal reached" = "लक्ष्य प्राप्त";
+"Add contribution" = "योगदान जोड़ें";
+"Contribution to %@" = "%@ में योगदान";
+"Saved" = "बचत";
+"Goal" = "लक्ष्य";
+"Target date" = "लक्ष्य तिथि";
+"Delete goal" = "लक्ष्य हटाएं";
+
+// MARK: - Scheduled
+"Recurring transactions" = "आवर्ती लेन-देन";
+"No scheduled transactions" = "कोई अनुसूचित लेन-देन नहीं";
+"Schedule recurring bills, income, or subscriptions to automatically create transactions on their due dates." = "आवर्ती बिल, आय या सदस्यताओं को शेड्यूल करें ताकि उनकी नियत तिथियों पर स्वचालित रूप से लेन-देन बनाए जा सकें।";
+"Add scheduled transaction" = "अनुसूचित लेन-देन जोड़ें";
+"Add Scheduled Transaction" = "अनुसूचित लेन-देन जोड़ें";
+"Edit Scheduled Transaction" = "अनुसूचित लेन-देन संपादित करें";
+"Delete Schedule?" = "शेड्यूल हटाएं?";
+"Are you sure you want to delete this scheduled transaction? This action cannot be undone." = "क्या आप वाकई इस अनुसूचित लेन-देन को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।";
+"Upcoming" = "आगामी";
+"Next occurrences for active schedules" = "सक्रिय शेड्यूल के लिए अगली घटनाएँ";
+"Paused" = "रोका गया";
+"%d disabled schedules" = "%d अक्षम शेड्यूल";
+"In %d days" = "%d दिनों में";
+"Post now" = "अब पोस्ट करें";
+"Pause" = "रोकें";
+"Enable" = "सक्षम करें";
+"Schedule" = "शेड्यूल";
+"Next date" = "अगली तिथि";
+"Delete schedule" = "शेड्यूल हटाएं";
+
+// MARK: - Subscriptions
+"Recurring charges" = "आवर्ती शुल्क";
+"Was %@ → now %@" = "पहले %1$@ → अब %2$@";
+"%d charges • last %@" = "%1$d शुल्क • अंतिम %2$@";
+"/ month" = "/ माह";
+
+// MARK: - Debt Payoff
+"Track your payoff progress" = "अपने भुगतान की प्रगति ट्रैक करें";
+"No debt payoff plans" = "कोई ऋण भुगतान योजना नहीं";
+"Create a plan to track your debt payoff progress using snowball or avalanche strategy." = "स्नोबॉल या एवलांच रणनीति का उपयोग करके अपने ऋण भुगतान की प्रगति ट्रैक करने के लिए एक योजना बनाएं।";
+"Add debt payoff plan" = "ऋण भुगतान योजना जोड़ें";
+"Add Debt Payoff Plan" = "ऋण भुगतान योजना जोड़ें";
+"Edit Debt Payoff Plan" = "ऋण भुगतान योजना संपादित करें";
+"Delete Plan?" = "योजना हटाएं?";
+"Are you sure you want to delete this debt payoff plan?" = "क्या आप वाकई इस ऋण भुगतान योजना को हटाना चाहते हैं?";
+"remaining" = "शेष";
+"%@ paid off" = "%@ भुगतान किया गया";
+"~%d months left" = "लगभग %d माह शेष";
+"Plan" = "योजना";
+"Payment" = "भुगतान";
+"Choose account" = "खाता चुनें";
+"Delete plan" = "योजना हटाएं";
+
+// MARK: - Import
+"Data Sources" = "डेटा स्रोत";
+"Collect transactions from files, exports, and bank messages." = "फ़ाइलों, निर्यात और बैंक संदेशों से लेन-देन एकत्र करें।";
+"PDF statement" = "PDF विवरण";
+"CSV / Excel export" = "CSV / Excel निर्यात";
+"SMS paste" = "SMS चिपकाएं";
+"Choose File" = "फ़ाइल चुनें";
+"Parse pasted text" = "चिपकाए गए टेक्स्ट का विश्लेषण करें";
+"Ready for a statement" = "विवरण के लिए तैयार";
+"Ready for CSV" = "CSV के लिए तैयार";
+"Ready for messages" = "संदेशों के लिए तैयार";
+"Choose a searchable bank PDF. Known statement formats get exact parsing; other PDFs use generic date, amount, and merchant detection." = "एक खोजने योग्य बैंक PDF चुनें। ज्ञात विवरण प्रारूप सटीक पार्सिंग प्राप्त करते हैं; अन्य PDF सामान्य दिनांक, राशि और व्यापारी पहचान का उपयोग करते हैं।";
+"Import a CSV exported from Excel, Google Sheets, or your bank. Headers like Date, Description, Amount, Debit, Credit, and Currency are supported." = "Excel, Google Sheets या आपके बैंक से निर्यात किया गया CSV आयात करें। Date, Description, Amount, Debit, Credit और Currency जैसे हेडर समर्थित हैं।";
+"Paste bank SMS messages or notification text. The app detects amount, date, merchant, and income or expense direction where possible." = "बैंक SMS संदेश या सूचना टेक्स्ट चिपकाएं। ऐप संभव होने पर राशि, दिनांक, व्यापारी और आय या व्यय दिशा का पता लगाता है।";
+"Review import" = "आयात की समीक्षा करें";
+"Parsed from statement text" = "विवरण टेक्स्ट से विश्लेषित";
+"Parsed from spreadsheet rows" = "स्प्रेडशीट पंक्तियों से विश्लेषित";
+"Parsed from pasted messages" = "चिपकाए गए संदेशों से विश्लेषित";
+"Select clean" = "स्वच्छ चुनें";
+"Showing the first %d of %d rows. Save will include all selected rows." = "पहली %1$d / %2$d पंक्तियाँ दिखाई गई हैं। सहेजने में सभी चयनित पंक्तियाँ शामिल होंगी।";
+"Parsed" = "विश्लेषित";
+"Selected" = "चयनित";
+"Review" = "समीक्षा";
+"Learn rule" = "नियम सीखें";
+"Merge duplicate" = "डुप्लिकेट मर्ज करें";
+"Saving transactions…" = "लेन-देन सहेजे जा रहे हैं…";
+"Loaded %d transactions…" = "%d लेन-देन लोड किए गए…";
+"Saved %d of %d…" = "%1$d / %2$d सहेजे गए…";
+"Could not save imported transactions: %@" = "आयातित लेन-देन सहेजे नहीं जा सके: %@";
+"Pasted messages" = "चिपकाए गए संदेश";
+"Paste bank messages" = "बैंक संदेश चिपकाएं";
+"One message per line works best" = "प्रति पंक्ति एक संदेश सबसे अच्छा काम करता है";
+
+// MARK: - Backup / Export
+"Export a portable copy of your transactions or the full local database." = "अपने लेन-देन या पूर्ण स्थानीय डेटाबेस की एक पोर्टेबल प्रतिलिपि निर्यात करें।";
+"Latest export" = "नवीनतम निर्यात";
+"%d saved • %d ignored • %@" = "%1$d सहेजे गए • %2$d अनदेखा • %3$@";
+
+// MARK: - Calendar
+"Select a day" = "एक दिन चुनें";
+"Tap a date to review its transactions." = "इसके लेन-देन की समीक्षा करने के लिए एक तिथि पर टैप करें।";
+
+// MARK: - Trends
+"Last %d months" = "पिछले %d माह";
+"%d months" = "%d माह";
+
+// MARK: - App Lock
+"Security" = "सुरक्षा";
+"Use Face ID / Touch ID or a passcode to protect access." = "पहुँच की सुरक्षा के लिए Face ID / Touch ID या पासकोड का उपयोग करें।";
+"Enable App Lock" = "ऐप लॉक सक्षम करें";
+"Authenticate to unlock" = "अनलॉक करने के लिए प्रमाणित करें";
+"Authentication failed" = "प्रमाणीकरण विफल";
+"Please try again or use your device passcode." = "कृपया पुनः प्रयास करें या अपने डिवाइस का पासकोड उपयोग करें।";
+
+// MARK: - Errors / Empty states
+"No transactions" = "कोई लेन-देन नहीं";
+"Transactions assigned to this category will appear here." = "इस श्रेणी को निर्दिष्ट लेन-देन यहाँ दिखाई देंगे।";
+"No matches" = "कोई मेल नहीं";
+"No recurring bills detected" = "कोई आवर्ती बिल नहीं मिला";
+"Could not read this file." = "यह फ़ाइल पढ़ी नहीं जा सकी।";
+"Excel .xlsx files are not parsed directly yet. Export the sheet as CSV and import that file." = "Excel .xlsx फ़ाइलों का अभी तक सीधे विश्लेषण नहीं किया जाता है। शीट को CSV के रूप में निर्यात करें और उस फ़ाइल को आयात करें।";
+"No transaction rows were found. Try CSV, a searchable PDF, or paste bank SMS messages." = "कोई लेन-देन पंक्तियाँ नहीं मिलीं। CSV, खोजने योग्य PDF आज़माएं या बैंक SMS संदेश चिपकाएं।";
+"Unsupported bank statement format. Please try a different file or contact support." = "असमर्थित बैंक विवरण प्रारूप। कृपया कोई भिन्न फ़ाइल आज़माएं या सहायता से संपर्क करें।";
+
+// MARK: - Account Types
+"Cash" = "नकद";
+"Bank" = "बैंक";
+"Credit Card" = "क्रेडिट कार्ड";
+"Liability" = "देयता";
+"Investment" = "निवेश";
+"Other" = "अन्य";
+
+// MARK: - Transaction Kinds
+"Expense" = "व्यय";
+"Income" = "आय";
+"Transfer" = "स्थानांतरण";
+
+// MARK: - Schedule Frequencies
+"Weekly" = "साप्ताहिक";
+"Biweekly" = "पाक्षिक";
+"Monthly" = "मासिक";
+"Quarterly" = "त्रैमासिक";
+"Yearly" = "वार्षिक";
+
+// MARK: - Debt Strategies
+"Snowball (lowest balance first)" = "स्नोबॉल (सबसे कम शेष पहले)";
+"Avalanche (highest interest first)" = "एवलांच (सबसे अधिक ब्याज पहले)";
+
+// MARK: - Match Types
+"exact" = "सटीक";
+"contains" = "शामिल है";
+
+// MARK: - Additional view strings
+"Add split" = "विभाजन जोड़ें";
+"Add tag" = "टैग जोड़ें";
+"Add transaction" = "लेन-देन जोड़ें";
+"Apply splits" = "विभाजन लागू करें";
+"Are you sure you want to delete this tag?" = "क्या आप वाकई इस टैग को हटाना चाहते हैं?";
+"Classification" = "वर्गीकरण";
+"Color" = "रंग";
+"Currencies" = "मुद्राएँ";
+"Current status" = "वर्तमान स्थिति";
+"Delete Account" = "खाता हटाएं";
+"Delete Permanently" = "स्थायी रूप से हटाएं";
+"Delete tag" = "टैग हटाएं";
+"Filter transactions" = "लेन-देन फ़िल्टर करें";
+"Label your transactions" = "अपने लेन-देन को लेबल करें";
+"Manager" = "Manager";
+"Pro Money" = "Pro Money";
+"Rule" = "नियम";
+"Rules" = "नियम";
+"Splits" = "विभाजन";
+"Tag" = "टैग";
+"Transaction" = "लेन-देन";
+"Your data is stored locally on this device. Exports are created only when you choose them." = "आपका डेटा इस डिवाइस पर स्थानीय रूप से संग्रहीत है। निर्यात केवल तभी बनाए जाते हैं जब आप उन्हें चुनते हैं।";
+"to" = "को";

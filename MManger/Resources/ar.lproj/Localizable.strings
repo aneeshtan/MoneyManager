@@ -1,0 +1,531 @@
+/* 
+  Localizable.strings (Arabic - ar)
+  Pro Money Manager
+*/
+
+// MARK: - Common
+"Cancel" = "إلغاء";
+"Save" = "حفظ";
+"Delete" = "حذف";
+"Done" = "تم";
+"Edit" = "تعديل";
+"Add" = "إضافة";
+"OK" = "حسنًا";
+"Yes" = "نعم";
+"No" = "لا";
+"None" = "لا شيء";
+"All" = "الكل";
+"Any" = "أي";
+"Search" = "بحث";
+"Filter" = "تصفية";
+"Apply" = "تطبيق";
+"Clear" = "مسح";
+"Close" = "إغلاق";
+"Continue" = "متابعة";
+"Back" = "رجوع";
+"Next" = "التالي";
+"Previous" = "السابق";
+"Loading" = "جارٍ التحميل";
+"Error" = "خطأ";
+"Success" = "تم بنجاح";
+"Warning" = "تحذير";
+"Info" = "معلومات";
+"Optional" = "اختياري";
+"Required" = "مطلوب";
+"Unknown" = "غير معروف";
+"Uncategorized" = "غير مصنف";
+"Archived" = "مؤرشف";
+"Active" = "نشط";
+"Default" = "افتراضي";
+"Custom" = "مخصص";
+"Other" = "أخرى";
+"Total" = "الإجمالي";
+"Subtotal" = "الإجمالي الفرعي";
+"Average" = "المتوسط";
+"Count" = "العدد";
+"Amount" = "المبلغ";
+"Balance" = "الرصيد";
+"Income" = "الدخل";
+"Expense" = "المصروف";
+"Net" = "الصافي";
+"Remaining" = "المتبقي";
+"Spent" = "المصروف";
+"Budgeted" = "ضمن الميزانية";
+"Target" = "الهدف";
+"Current" = "الحالي";
+"Name" = "الاسم";
+"Note" = "ملاحظة";
+"Description" = "الوصف";
+"Category" = "الفئة";
+"Subcategory" = "الفئة الفرعية";
+"Account" = "الحساب";
+"Currency" = "العملة";
+"Type" = "النوع";
+"Date" = "التاريخ";
+"Time" = "الوقت";
+"Status" = "الحالة";
+"Enabled" = "مفعّل";
+"Disabled" = "معطّل";
+"Priority" = "الأولوية";
+"Pattern" = "النمط";
+"Merchant" = "التاجر";
+"Frequency" = "التكرار";
+"Strategy" = "الاستراتيجية";
+"Interest" = "الفائدة";
+"Monthly" = "شهري";
+"Yearly" = "سنوي";
+"Weekly" = "أسبوعي";
+"Daily" = "يومي";
+"Today" = "اليوم";
+"Tomorrow" = "غدًا";
+"Yesterday" = "أمس";
+"Overdue" = "متأخر";
+"Upcoming" = "قادم";
+"Recurring" = "متكرر";
+"One-time" = "لمرة واحدة";
+"Split" = "تقسيم";
+"Review" = "مراجعة";
+"Duplicate" = "مكرر";
+"Learn" = "تعلّم";
+"Apply" = "تطبيق";
+"Restore" = "استعادة";
+"Remove" = "إزالة";
+"Permanently" = "نهائيًا";
+"Select" = "تحديد";
+"Choose" = "اختيار";
+"Top level" = "المستوى الأعلى";
+"Sort order" = "ترتيب الفرز";
+"Current value" = "القيمة الحالية";
+"Monthly limit" = "الحد الشهري";
+"Minimum payment" = "الحد الأدنى للدفع";
+"Extra payment" = "دفعة إضافية";
+"Interest rate %" = "نسبة الفائدة %";
+"Total debt" = "إجمالي الدين";
+"Target amount" = "المبلغ المستهدف";
+"Current amount" = "المبلغ الحالي";
+"Set target date" = "تحديد تاريخ الهدف";
+"Target date" = "تاريخ الهدف";
+"Withdraw from goal" = "سحب من الهدف";
+"Confidence %" = "نسبة الثقة %";
+"Note keyword" = "كلمة مفتاحية للملاحظة";
+"Min amount" = "الحد الأدنى للمبلغ";
+"Max amount" = "الحد الأقصى للمبلغ";
+"Conditions (optional)" = "الشروط (اختياري)";
+"Rename behavior" = "سلوك تغيير الاسم";
+"Saving a new name updates existing transactions linked to this account. Current value adjusts the opening balance behind the scenes." = "عند حفظ اسم جديد، سيتم تحديث المعاملات الحالية المرتبطة بهذا الحساب. وتقوم القيمة الحالية بتعديل الرصيد الافتتاحي في الخلفية.";
+"Saving a new name updates linked transactions, merchant rules, budgets, and child categories." = "عند حفظ اسم جديد، سيتم تحديث المعاملات المرتبطة، وقواعد التجار، والميزانيات، والفئات الفرعية.";
+
+// MARK: - Tab / Navigation
+"Accounts" = "الحسابات";
+"Transactions" = "المعاملات";
+"Categories" = "الفئات";
+"Stats" = "الإحصائيات";
+"More" = "المزيد";
+"Profile" = "الملف الشخصي";
+"Import" = "استيراد";
+"Backup" = "نسخة احتياطية";
+"Search" = "بحث";
+"Calendar" = "التقويم";
+"Trends" = "الاتجاهات";
+"Budget" = "الميزانية";
+"Scheduled" = "المجدولة";
+"Subscriptions" = "الاشتراكات";
+"Savings Goals" = "أهداف الادخار";
+"Debt Payoff" = "سداد الديون";
+"Tags" = "الوسوم";
+"App Lock" = "قفل التطبيق";
+"Smart Categorize" = "تصنيف ذكي";
+"Currency & Region" = "العملة والمنطقة";
+"Select Currency" = "اختيار العملة";
+"Customize Dashboard" = "تخصيص لوحة التحكم";
+"Split Transaction" = "تقسيم المعاملة";
+"Add Contribution" = "إضافة مساهمة";
+"Filter" = "تصفية";
+"Duplicates" = "المكررات";
+
+// MARK: - Onboarding / Auth
+"Pro Money Manager" = "Pro Money Manager";
+"Private finance tracking, stored on this device." = "تتبع مالي خاص، محفوظ على هذا الجهاز.";
+"Continue on this device" = "المتابعة على هذا الجهاز";
+"Your data stays on this device. Apple sign-in is optional and only unlocks this local workspace." = "تبقى بياناتك على هذا الجهاز. تسجيل الدخول باستخدام Apple اختياري، ويُستخدم فقط لفتح مساحة العمل المحلية هذه.";
+"Choose your home currency, region, and timezone." = "اختر عملتك الأساسية، والمنطقة، والمنطقة الزمنية.";
+"Choose your language, home currency, region, and timezone." = "اختر لغتك، وعملتك الأساسية، والمنطقة، والمنطقة الزمنية.";
+"Language" = "اللغة";
+"Region" = "المنطقة";
+"Timezone" = "المنطقة الزمنية";
+"Preparing your money view" = "جارٍ تجهيز عرضك المالي";
+"Start managing money" = "ابدأ إدارة المال";
+"Workspace" = "مساحة العمل";
+"Local data" = "بيانات محلية";
+"Private on device" = "خاص على الجهاز";
+"Sign out" = "تسجيل الخروج";
+"Account Deletion" = "حذف الحساب";
+"Permanently remove this local account and its data" = "إزالة هذا الحساب المحلي وبياناته نهائيًا";
+"This deletes your profile, accounts, transactions, categories, budgets, rules, imports, and attachments from this device. This action cannot be undone." = "سيؤدي ذلك إلى حذف ملفك الشخصي، والحسابات، والمعاملات، والفئات، والميزانيات، والقواعد، وعمليات الاستيراد، والمرفقات من هذا الجهاز. لا يمكن التراجع عن هذا الإجراء.";
+"Delete account and local data" = "حذف الحساب والبيانات المحلية";
+"Email support" = "مراسلة الدعم عبر البريد";
+"Delete Account?" = "هل تريد حذف الحساب؟";
+"This permanently deletes your local account and all finance data stored by Pro Money Manager on this device." = "سيؤدي ذلك إلى حذف حسابك المحلي وكل البيانات المالية المخزنة بواسطة Pro Money Manager على هذا الجهاز نهائيًا.";
+"Account Deleted" = "تم حذف الحساب";
+"Your local account and finance data have been deleted from this device." = "تم حذف حسابك المحلي وبياناتك المالية من هذا الجهاز.";
+"Bill reminders" = "تذكيرات الفواتير";
+"Notifications Disabled" = "الإشعارات معطلة";
+"Please enable notifications in Settings to receive bill reminders." = "يرجى تفعيل الإشعارات من الإعدادات لتلقي تذكيرات الفواتير.";
+"Open Settings" = "فتح الإعدادات";
+
+// MARK: - Accounts
+"Your balances across cash, cards, and bank accounts." = "أرصدتك عبر النقد والبطاقات والحسابات البنكية.";
+"Liquid" = "سائل";
+"Debt" = "دين";
+"No accounts" = "لا توجد حسابات";
+"Seeded accounts or newly created accounts will appear here." = "ستظهر هنا الحسابات الافتراضية أو الحسابات التي تنشئها حديثًا.";
+"Restore an archived account or add a new one." = "استعد حسابًا مؤرشفًا أو أضف حسابًا جديدًا.";
+"Add account" = "إضافة حساب";
+"Add Account" = "إضافة حساب";
+"Edit Account" = "تعديل الحساب";
+"Account cannot be deleted" = "لا يمكن حذف الحساب";
+"This archived account has %d transactions. Restore it, or move/delete its transactions before permanently deleting it." = "يحتوي هذا الحساب المؤرشف على %d معاملة. استعده، أو انقل/احذف معاملاته قبل حذفه نهائيًا.";
+"%@ • %d transactions • %@" = "%1$@ • %2$d معاملة • %3$@";
+"Txns" = "معاملات";
+"Transactions" = "المعاملات";
+"No transactions" = "لا توجد معاملات";
+"Transactions assigned to this account will appear here." = "ستظهر هنا المعاملات المخصصة لهذا الحساب.";
+"Archived account. Transactions are preserved, but this account is hidden from active totals and pickers." = "حساب مؤرشف. تم الاحتفاظ بالمعاملات، لكن هذا الحساب مخفي من الإجماليات النشطة وقوائم الاختيار.";
+"Card exposure is %@. Track payments against statements." = "التعرض على البطاقة هو %@. تتبع المدفوعات مقابل كشوف الحساب.";
+"Card is currently not carrying a negative app balance." = "لا تحمل هذه البطاقة حاليًا رصيدًا سلبيًا في التطبيق.";
+"Liability account. Keep this separated from cash and bank balances for clearer net worth." = "حساب التزامات. أبقه منفصلًا عن النقد والأرصدة البنكية للحصول على صافي ثروة أوضح.";
+"Investment account. Include periodic valuation updates to keep net worth accurate." = "حساب استثماري. أضف تحديثات تقييم دورية للحفاظ على دقة صافي الثروة.";
+"Liquid account. This contributes to cash available for spending." = "حساب سائل. يساهم في النقد المتاح للإنفاق.";
+"Review this account type if you want more precise net worth grouping." = "راجع نوع هذا الحساب إذا كنت تريد تجميعًا أدق لصافي الثروة.";
+"Archived" = "مؤرشف";
+"removed accounts kept for history" = "حسابات تمت إزالتها والاحتفاظ بها للسجل";
+
+// MARK: - Transactions
+"Add Transaction" = "إضافة معاملة";
+"Edit Transaction" = "تعديل المعاملة";
+"Delete Transaction" = "حذف المعاملة";
+"Delete Transaction?" = "هل تريد حذف المعاملة؟";
+"Are you sure you want to delete this transaction? This action cannot be undone." = "هل أنت متأكد أنك تريد حذف هذه المعاملة؟ لا يمكن التراجع عن هذا الإجراء.";
+"Split into categories" = "تقسيم إلى فئات";
+"Money Manager Source" = "مصدر Money Manager";
+"Source" = "المصدر";
+"Row" = "الصف";
+"Period" = "الفترة";
+"Accounts" = "الحسابات";
+"Source amount column" = "عمود مبلغ المصدر";
+"Income/Expense" = "دخل/مصروف";
+"Description" = "الوصف";
+"Accounts trailing" = "الحسابات في النهاية";
+"Receipts" = "الإيصالات";
+"No receipts attached." = "لا توجد إيصالات مرفقة.";
+"Attach receipt photo" = "إرفاق صورة إيصال";
+"Attach file" = "إرفاق ملف";
+"Tags" = "الوسوم";
+"No tags yet" = "لا توجد وسوم بعد";
+"Create tags like 'reimbursable', 'tax-deductible', or 'business' to organize transactions beyond categories." = "أنشئ وسومًا مثل «قابل للاسترداد»، أو «قابل للخصم الضريبي»، أو «عمل» لتنظيم المعاملات بما يتجاوز الفئات.";
+"Your tags" = "وسومك";
+"Tap a tag to see related transactions" = "اضغط على وسم لرؤية المعاملات المرتبطة";
+"Total tags" = "إجمالي الوسوم";
+"Tagged transactions" = "معاملات موسومة";
+"%d transactions" = "%d معاملة";
+"%d txns" = "%d معاملة";
+"Activity" = "النشاط";
+"%d visible transactions" = "%d معاملة ظاهرة";
+"%d duplicate groups" = "%d مجموعة مكررة";
+"%d transactions need review" = "%d معاملة تحتاج إلى مراجعة";
+"Keep newest" = "الاحتفاظ بالأحدث";
+"No matches" = "لا توجد نتائج";
+"No existing transactions currently match this merchant pattern." = "لا توجد حاليًا معاملات تطابق نمط هذا التاجر.";
+"Date range" = "نطاق التاريخ";
+"From" = "من";
+"Transaction type" = "نوع المعاملة";
+"Amount range" = "نطاق المبلغ";
+"Min" = "الحد الأدنى";
+"Max" = "الحد الأقصى";
+"Clear all filters" = "مسح كل عوامل التصفية";
+"No AI suggestion" = "لا يوجد اقتراح من الذكاء الاصطناعي";
+"Apply %@" = "تطبيق %@";
+
+// MARK: - Smart Categorize
+"No new rules to learn" = "ليس هناك قوانين جديدة للتعلم";
+"Categorize a few more transactions with the same merchant and Smart Categorize will pick up the pattern." = "قم بتصنيف المزيد من المعاملات بنفس التاجر وسيقوم التصنيف الذكي بالتعرف على النمط.";
+"Applying…" = "جارٍ التطبيق…";
+"Apply %d suggestions" = "تطبيق %d اقتراح";
+"%d uncategorized • %d new rules" = "%d غير مصنف • %d قانون جديد";
+"Learned rules" = "القواعد المتعلمة";
+"Patterns discovered from your categorized transactions" = "الأنماط المكتشفة من معاملاتك المصنفة";
+"samples" = "عينة";
+"Preview" = "معاينة";
+"Transactions that will be categorized" = "المعاملات التي سيتم تصنيفها";
+"No transactions were categorized." = "لم يتم تصنيف أي معاملة.";
+"Categorized %d transactions and saved %d new rules." = "تم تصنيف %d معاملة وحفظ %d قانون جديد.";
+
+// MARK: - Categories & Rules
+"Add Category" = "إضافة فئة";
+"Edit Category" = "تعديل الفئة";
+"Add Rule" = "إضافة قاعدة";
+"Edit Rule" = "تعديل القاعدة";
+"Delete Category?" = "هل تريد حذف الفئة؟";
+"This category is used by transactions, rules, budgets, or subcategories, so it was archived instead of deleted." = "تُستخدم هذه الفئة في معاملات أو قواعد أو ميزانيات أو فئات فرعية، لذلك تم أرشفتها بدلًا من حذفها.";
+"Category updated" = "تم تحديث الفئة";
+"Rule updated" = "تم تحديث القاعدة";
+"Matching rules" = "القواعد المطابقة";
+"%d merchant patterns" = "%d نمط تاجر";
+"Subcategories" = "الفئات الفرعية";
+"%d linked under %@" = "%1$d مرتبطة ضمن %2$@";
+"Contains" = "يحتوي على";
+"Exact" = "مطابق تمامًا";
+"Match" = "مطابقة";
+"Any account" = "أي حساب";
+"Apply to uncategorized" = "تطبيق على غير المصنف";
+"Updated %d matching transactions." = "تم تحديث %d معاملة مطابقة.";
+"No uncategorized matching transactions were found." = "لم يتم العثور على معاملات غير مصنفة مطابقة.";
+"Needs review" = "يحتاج إلى مراجعة";
+"%d transactions are uncategorized. Fixing them will improve future auto-categorization." = "%d معاملة غير مصنفة. سيؤدي تصحيحها إلى تحسين التصنيف التلقائي مستقبلًا.";
+"AI auto-categorization" = "تصنيف تلقائي بالذكاء الاصطناعي";
+"%d uncategorized • %d new rules" = "%1$d غير مصنفة • %2$d قواعد جديدة";
+"Review suggestions" = "مراجعة الاقتراحات";
+"Tap any category to see spending, rules, and transactions" = "اضغط على أي فئة لرؤية المصروفات والقواعد والمعاملات";
+"No merchant rules" = "لا توجد قواعد للتجار";
+"Rules learned from imports and exports will appear here." = "ستظهر هنا القواعد التي تم تعلمها من عمليات الاستيراد والتصدير.";
+"No categories" = "لا توجد فئات";
+"No categories yet" = "لا توجد فئات بعد";
+
+// MARK: - Stats / Dashboard
+"Month overview" = "نظرة عامة على الشهر";
+"AI insights" = "رؤى الذكاء الاصطناعي";
+"Local suggestions from your spending patterns" = "اقتراحات محلية بناءً على أنماط إنفاقك";
+"Monthly summary" = "ملخص شهري";
+"Plain-language readout" = "قراءة بلغة بسيطة";
+"Category / budget / notes" = "الفئة / الميزانية / الملاحظات";
+"Spending by category" = "الإنفاق حسب الفئة";
+"Ranked by the selected month" = "مرتبة حسب الشهر المحدد";
+"No category stats" = "لا توجد إحصاءات للفئات";
+"Transactions for this month will appear here after you import or add spending." = "ستظهر معاملات هذا الشهر هنا بعد استيراد أو إضافة المصروفات.";
+"Budget plan" = "خطة الميزانية";
+"Monthly limits, remaining spend, and detected recurring charges" = "الحدود الشهرية، والإنفاق المتبقي، والرسوم المتكررة المكتشفة";
+"Safe to spend" = "متاح للإنفاق";
+"Budget left" = "المتبقي من الميزانية";
+"Upcoming bills" = "الفواتير القادمة";
+"Add budget" = "إضافة ميزانية";
+"Copy to next month" = "نسخ إلى الشهر القادم";
+"No budgets yet" = "لا توجد ميزانيات بعد";
+"Add category budgets to see remaining spend and overspend warnings." = "أضف ميزانيات للفئات لرؤية الإنفاق المتبقي وتحذيرات تجاوز الميزانية.";
+"Add Budget" = "إضافة ميزانية";
+"Edit Budget" = "تعديل الميزانية";
+"Delete budget" = "حذف الميزانية";
+"Recurring bills" = "فواتير متكررة";
+"Detected from repeated merchant charges" = "تم اكتشافها من رسوم التجار المتكررة";
+"No recurring bills detected" = "لم يتم اكتشاف فواتير متكررة";
+"Repeated monthly merchants will appear here automatically." = "سيظهر التجار المتكررون شهريًا هنا تلقائيًا.";
+"Expected %@ • %d samples" = "متوقع %1$@ • %2$d عينات";
+"Notes" = "ملاحظات";
+"Context saved with this month's transactions" = "تم حفظ السياق مع معاملات هذا الشهر";
+"No notes" = "لا توجد ملاحظات";
+"Transaction notes for the selected month will appear here." = "ستظهر هنا ملاحظات معاملات الشهر المحدد.";
+"Net position" = "الوضع الصافي";
+"AI monthly summary" = "ملخص شهري بالذكاء الاصطناعي";
+"In %@, %d transactions produced %@ income and %@ spending." = "في %1$@، نتج عن %2$d معاملة دخل بقيمة %3$@ وإنفاق بقيمة %4$@.";
+"%@ is the biggest category at %@ of spending." = "%1$@ هي أكبر فئة بنسبة %2$@ من الإنفاق.";
+"Expenses are %d%% %@ than the previous month." = "المصروفات %1$d%% %2$@ من الشهر السابق.";
+"higher" = "أعلى";
+"lower" = "أقل";
+"%@ dominates" = "%@ تستحوذ على النسبة الأكبر";
+"%@ of this month's spending is in this category." = "%@ من إنفاق هذا الشهر يقع ضمن هذه الفئة.";
+"Possible duplicates" = "مكررات محتملة";
+"%d same-day transactions share the same account, merchant, and amount." = "%d معاملات في اليوم نفسه تشترك في الحساب نفسه، والتاجر نفسه، والمبلغ نفسه.";
+"AI watch is clear" = "فحص الذكاء الاصطناعي سليم";
+"No unusual category, duplicate, or review signals found for this month." = "لم يتم العثور على فئات غير معتادة أو مكررات أو مؤشرات تحتاج إلى مراجعة لهذا الشهر.";
+"This month budget" = "ميزانية هذا الشهر";
+"Over budget" = "تجاوز الميزانية";
+"On track" = "على المسار الصحيح";
+"Breakdown" = "تفصيل";
+"Expense inside this category" = "مصروف داخل هذه الفئة";
+"No subcategory" = "بدون فئة فرعية";
+"Visible cards (drag to reorder)" = "البطاقات الظاهرة (اسحب لإعادة الترتيب)";
+"Reset to default" = "إعادة التعيين إلى الافتراضي";
+"Customize dashboard" = "تخصيص لوحة التحكم";
+
+// MARK: - Savings Goals
+"Track progress toward your targets" = "تتبع تقدمك نحو أهدافك";
+"No savings goals" = "لا توجد أهداف ادخار";
+"Create a goal for an emergency fund, vacation, or any target you want to reach." = "أنشئ هدفًا لصندوق طوارئ، أو إجازة، أو أي هدف تريد الوصول إليه.";
+"Add savings goal" = "إضافة هدف ادخار";
+"Add Savings Goal" = "إضافة هدف ادخار";
+"Edit Savings Goal" = "تعديل هدف الادخار";
+"Delete Goal?" = "هل تريد حذف الهدف؟";
+"Are you sure you want to delete this savings goal? This action cannot be undone." = "هل أنت متأكد أنك تريد حذف هدف الادخار هذا؟ لا يمكن التراجع عن هذا الإجراء.";
+"Overall progress" = "التقدم الإجمالي";
+"%d days left" = "متبقٍ %d يوم";
+"Past target date" = "تجاوز تاريخ الهدف";
+"No target date" = "لا يوجد تاريخ هدف";
+"of %@" = "من %@";
+"%@ to go" = "متبقٍ %@";
+"Goal reached" = "تم الوصول إلى الهدف";
+"Add contribution" = "إضافة مساهمة";
+"Contribution to %@" = "مساهمة في %@";
+"Saved" = "مدخر";
+"Goal" = "الهدف";
+"Target date" = "تاريخ الهدف";
+"Delete goal" = "حذف الهدف";
+
+// MARK: - Scheduled
+"Recurring transactions" = "معاملات متكررة";
+"No scheduled transactions" = "لا توجد معاملات مجدولة";
+"Schedule recurring bills, income, or subscriptions to automatically create transactions on their due dates." = "قم بجدولة الفواتير أو الدخل أو الاشتراكات المتكررة لإنشاء المعاملات تلقائيًا في تواريخ استحقاقها.";
+"Add scheduled transaction" = "إضافة معاملة مجدولة";
+"Add Scheduled Transaction" = "إضافة معاملة مجدولة";
+"Edit Scheduled Transaction" = "تعديل المعاملة المجدولة";
+"Delete Schedule?" = "هل تريد حذف الجدولة؟";
+"Are you sure you want to delete this scheduled transaction? This action cannot be undone." = "هل أنت متأكد أنك تريد حذف هذه المعاملة المجدولة؟ لا يمكن التراجع عن هذا الإجراء.";
+"Upcoming" = "قادم";
+"Next occurrences for active schedules" = "التكرارات القادمة للجداول النشطة";
+"Paused" = "متوقف مؤقتًا";
+"%d disabled schedules" = "%d جداول معطلة";
+"In %d days" = "خلال %d يوم";
+"Post now" = "تسجيل الآن";
+"Pause" = "إيقاف مؤقت";
+"Enable" = "تفعيل";
+"Schedule" = "جدولة";
+"Next date" = "التاريخ التالي";
+"Delete schedule" = "حذف الجدولة";
+
+// MARK: - Subscriptions
+"Recurring charges" = "رسوم متكررة";
+"Was %@ → now %@" = "كان %1$@ ← الآن %2$@";
+"%d charges • last %@" = "%1$d رسوم • آخرها %2$@";
+"/ month" = "/ شهر";
+
+// MARK: - Debt Payoff
+"Track your payoff progress" = "تتبع تقدمك في السداد";
+"No debt payoff plans" = "لا توجد خطط لسداد الديون";
+"Create a plan to track your debt payoff progress using snowball or avalanche strategy." = "أنشئ خطة لتتبع تقدم سداد ديونك باستخدام استراتيجية كرة الثلج أو الانهيار.";
+"Add debt payoff plan" = "إضافة خطة سداد دين";
+"Add Debt Payoff Plan" = "إضافة خطة سداد دين";
+"Edit Debt Payoff Plan" = "تعديل خطة سداد الدين";
+"Delete Plan?" = "هل تريد حذف الخطة؟";
+"Are you sure you want to delete this debt payoff plan?" = "هل أنت متأكد أنك تريد حذف خطة سداد الدين هذه؟";
+"remaining" = "متبقٍ";
+"%@ paid off" = "تم سداد %@";
+"~%d months left" = "متبقٍ حوالي %d أشهر";
+"Plan" = "الخطة";
+"Payment" = "الدفع";
+"Choose account" = "اختيار حساب";
+"Delete plan" = "حذف الخطة";
+
+// MARK: - Import
+"Data Sources" = "مصادر البيانات";
+"Collect transactions from files, exports, and bank messages." = "اجمع المعاملات من الملفات، وعمليات التصدير، ورسائل البنك.";
+"PDF statement" = "كشف حساب PDF";
+"CSV / Excel export" = "تصدير CSV / Excel";
+"SMS paste" = "لصق رسالة SMS";
+"Choose File" = "اختيار ملف";
+"Parse pasted text" = "تحليل النص الملصق";
+"Ready for a statement" = "جاهز لكشف الحساب";
+"Ready for CSV" = "جاهز لملف CSV";
+"Ready for messages" = "جاهز للرسائل";
+"Choose a searchable bank PDF. Known statement formats get exact parsing; other PDFs use generic date, amount, and merchant detection." = "اختر ملف PDF بنكيًا قابلًا للبحث. يتم تحليل تنسيقات الكشوف المعروفة بدقة؛ أما ملفات PDF الأخرى فتستخدم كشفًا عامًا للتاريخ والمبلغ والتاجر.";
+"Import a CSV exported from Excel, Google Sheets, or your bank. Headers like Date, Description, Amount, Debit, Credit, and Currency are supported." = "استورد ملف CSV تم تصديره من Excel أو Google Sheets أو بنكك. يتم دعم عناوين أعمدة مثل Date وDescription وAmount وDebit وCredit وCurrency.";
+"Paste bank SMS messages or notification text. The app detects amount, date, merchant, and income or expense direction where possible." = "الصق رسائل SMS البنكية أو نص الإشعارات. يكتشف التطبيق المبلغ، والتاريخ، والتاجر، وما إذا كانت العملية دخلًا أو مصروفًا عند الإمكان.";
+"Review import" = "مراجعة الاستيراد";
+"Parsed from statement text" = "تم التحليل من نص كشف الحساب";
+"Parsed from spreadsheet rows" = "تم التحليل من صفوف جدول البيانات";
+"Parsed from pasted messages" = "تم التحليل من الرسائل الملصقة";
+"Select clean" = "تحديد السليم";
+"Showing the first %d of %d rows. Save will include all selected rows." = "يتم عرض أول %1$d من %2$d صفوف. سيشمل الحفظ كل الصفوف المحددة.";
+"Parsed" = "تم التحليل";
+"Selected" = "محدد";
+"Review" = "مراجعة";
+"Learn rule" = "تعلّم قاعدة";
+"Merge duplicate" = "دمج المكرر";
+"Saving transactions…" = "جارٍ حفظ المعاملات…";
+"Loaded %d transactions…" = "تم تحميل %d معاملة…";
+"Saved %d of %d…" = "تم حفظ %1$d من %2$d…";
+"Could not save imported transactions: %@" = "تعذر حفظ المعاملات المستوردة: %@";
+"Pasted messages" = "الرسائل الملصقة";
+"Paste bank messages" = "لصق رسائل البنك";
+"One message per line works best" = "يفضل وضع رسالة واحدة في كل سطر";
+
+// MARK: - Backup / Export
+"Export a portable copy of your transactions or the full local database." = "صدّر نسخة قابلة للنقل من معاملاتك أو من قاعدة البيانات المحلية كاملة.";
+"Latest export" = "آخر تصدير";
+"%d saved • %d ignored • %@" = "%1$d محفوظة • %2$d متجاهلة • %3$@";
+
+// MARK: - Calendar
+"Select a day" = "اختر يومًا";
+"Tap a date to review its transactions." = "اضغط على تاريخ لمراجعة معاملاته.";
+
+// MARK: - Trends
+"Last %d months" = "آخر %d أشهر";
+"%d months" = "%d أشهر";
+
+// MARK: - App Lock
+"Security" = "الأمان";
+"Use Face ID / Touch ID or a passcode to protect access." = "استخدم Face ID / Touch ID أو رمز الدخول لحماية الوصول.";
+"Enable App Lock" = "تفعيل قفل التطبيق";
+"Authenticate to unlock" = "قم بالمصادقة لإلغاء القفل";
+"Authentication failed" = "فشلت المصادقة";
+"Please try again or use your device passcode." = "يرجى المحاولة مرة أخرى أو استخدام رمز دخول الجهاز.";
+
+// MARK: - Errors / Empty states
+"No transactions" = "لا توجد معاملات";
+"Transactions assigned to this category will appear here." = "ستظهر هنا المعاملات المخصصة لهذه الفئة.";
+"No matches" = "لا توجد نتائج";
+"No recurring bills detected" = "لم يتم اكتشاف فواتير متكررة";
+"Could not read this file." = "تعذر قراءة هذا الملف.";
+"Excel .xlsx files are not parsed directly yet. Export the sheet as CSV and import that file." = "لا يتم تحليل ملفات Excel بصيغة .xlsx مباشرة حتى الآن. صدّر الورقة كملف CSV ثم استورد ذلك الملف.";
+"No transaction rows were found. Try CSV, a searchable PDF, or paste bank SMS messages." = "لم يتم العثور على صفوف معاملات. جرّب CSV أو PDF قابلًا للبحث أو الصق رسائل SMS البنكية.";
+"Unsupported bank statement format. Please try a different file or contact support." = "تنسيق كشف الحساب البنكي غير مدعوم. يرجى تجربة ملف آخر أو التواصل مع الدعم.";
+
+// MARK: - Account Types
+"Cash" = "نقد";
+"Bank" = "بنك";
+"Credit Card" = "بطاقة ائتمان";
+"Liability" = "التزام";
+"Investment" = "استثمار";
+"Other" = "أخرى";
+
+// MARK: - Transaction Kinds
+"Expense" = "مصروف";
+"Income" = "دخل";
+"Transfer" = "تحويل";
+
+// MARK: - Schedule Frequencies
+"Weekly" = "أسبوعي";
+"Biweekly" = "كل أسبوعين";
+"Monthly" = "شهري";
+"Quarterly" = "ربع سنوي";
+"Yearly" = "سنوي";
+
+// MARK: - Debt Strategies
+"Snowball (lowest balance first)" = "كرة الثلج (أقل رصيد أولًا)";
+"Avalanche (highest interest first)" = "الانهيار (أعلى فائدة أولًا)";
+
+// MARK: - Match Types
+"exact" = "مطابق تمامًا";
+"contains" = "يحتوي على";
+
+// MARK: - Additional view strings
+"Add split" = "إضافة تقسيم";
+"Add tag" = "إضافة وسم";
+"Add transaction" = "إضافة معاملة";
+"Apply splits" = "تطبيق التقسيمات";
+"Are you sure you want to delete this tag?" = "هل أنت متأكد أنك تريد حذف هذا الوسم؟";
+"Classification" = "التصنيف";
+"Color" = "اللون";
+"Currencies" = "العملات";
+"Current status" = "الحالة الحالية";
+"Delete Account" = "حذف الحساب";
+"Delete Permanently" = "حذف نهائي";
+"Delete tag" = "حذف الوسم";
+"Filter transactions" = "تصفية المعاملات";
+"Label your transactions" = "وسم معاملاتك";
+"Manager" = "المدير";
+"Pro Money" = "Pro Money";
+"Rule" = "قاعدة";
+"Rules" = "قواعد";
+"Splits" = "تقسيمات";
+"Tag" = "وسم";
+"Transaction" = "معاملة";
+"Your data is stored locally on this device. Exports are created only when you choose them." = "يتم تخزين بياناتك محليًا على هذا الجهاز. لا يتم إنشاء ملفات التصدير إلا عندما تختار ذلك.";
+"to" = "إلى";
