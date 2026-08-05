@@ -15,8 +15,14 @@ build/
 *.json.backup
 android/.gradle/
 android/**/build/
+android/app/release/
 android/local.properties
 android/.idea/
 android/captures/
 android/.kotlin/
+*.aab
+*.apk
+*.ipa
+*.keystore
+*.jks
 ProMoneyManager.xcodeproj/project.xcworkspace/xcuserdata/
