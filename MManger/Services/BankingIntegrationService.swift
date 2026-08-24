@@ -139,18 +139,15 @@ enum BankFormat {
 
 enum UniversalImportParserError: LocalizedError {
     case unreadableFile
-    case unsupportedSpreadsheet
     case noTransactionsFound
     case unsupportedBankFormat
-    
+
     var errorDescription: String? {
         switch self {
         case .unreadableFile:
             "Could not read this file."
-        case .unsupportedSpreadsheet:
-            "Excel .xlsx files are not parsed directly yet. Export the sheet as CSV and import that file."
         case .noTransactionsFound:
-            "No transaction rows were found. Try CSV, a searchable PDF, or paste bank SMS messages."
+            "No transaction rows were found. Try an .xlsx or .csv export, a searchable PDF, or paste bank SMS messages."
         case .unsupportedBankFormat:
             "Unsupported bank statement format. Please try a different file or contact support."
         }

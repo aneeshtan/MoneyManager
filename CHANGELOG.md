@@ -5,6 +5,10 @@ All notable user-facing changes, written so entries can be copied into the App S
 ## Unreleased
 
 ### Smarter importing
+- **Import Excel files directly** — `.xlsx` workbooks now open straight in the app; you no longer have to convert them to CSV first. Pick Excel/CSV on the Import screen and choose the file.
+- **Keeps the categories your file already has** — if the spreadsheet has Category, Subcategory, or Account columns (like a Money Manager export), those are imported exactly as they are instead of being re-guessed, and multi-account files land each row in the right account, creating any accounts that don't exist yet.
+- **Learns your categories from the file** — after importing an already-categorized spreadsheet, the app studies it and builds merchant rules from how *you* categorized things, so later statement and SMS imports categorize themselves. When a merchant appears under several categories the most common one wins, and genuinely split merchants are skipped rather than guessed.
+- **Better merchant recognition on condensed statements** — some banks export narrations with all spaces removed and a running balance on every line, which previously made each transaction look like a brand-new merchant. These are now cleaned up properly, which noticeably increases how much of an import gets categorized automatically.
 - **New-merchant review during import** — when an imported statement contains merchants the app hasn't seen before, they're grouped into a "New merchants" card. Pick a category once per merchant and it's applied to every matching row and remembered for all future imports.
 - **Learns from your edits** — when you categorize a transaction by hand, the app offers to apply the same category to all similar uncategorized transactions from that merchant, and remembers the choice.
 - **Fuzzy merchant matching** — branch and store variants (e.g. "STARBUCKS 3391" vs "STARBUCKS MALL") now map to the same category automatically, so far fewer imported transactions land as "Uncategorized".
@@ -21,6 +25,7 @@ All notable user-facing changes, written so entries can be copied into the App S
 
 ### Fixed
 - **Crash when saving a large import** — saving a big statement (around 1,300+ transactions) could crash the app just as the import finished. The review list was reading rows by position while the list was being cleared at the end of the save. Imports of any size now complete cleanly.
+- **Re-importing a file no longer creates duplicates** — duplicate detection now compares merchant names using the current cleanup rules on both sides, so transactions saved by an older version are still recognized when you import the same file again.
 - **Wrong currency symbol in a few places** — the Trends screen, budget progress text on Categories, and recurring-bill notifications could show a `$` sign instead of your selected currency. All amounts now consistently use your chosen currency.
 
 ### Safety

@@ -17,6 +17,7 @@ struct ImportPDFView: View {
     @State private var parsedRows: [ParsedBankTransaction] = []
     @State private var sourceFileName = ""
     @State private var errorMessage: String?
+    @State private var importSummary: ImportSummary?
     @State private var isParsing = false
     @State private var isSaving = false
     @State private var parsingLabel = ""
@@ -70,6 +71,15 @@ struct ImportPDFView: View {
                                 Label(errorMessage, systemImage: "exclamationmark.triangle")
                                     .font(.subheadline.weight(.medium))
                                     .foregroundStyle(AppTheme.coral)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+
+                        if let importSummary {
+                            GlassSurface {
+                                Label(importSummary.message, systemImage: "checkmark.seal")
+                                    .font(.subheadline.weight(.medium))
+                                    .foregroundStyle(AppTheme.teal)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
@@ -159,25 +169,24 @@ struct ImportPDFView: View {
 
     private func importFile(_ url: URL) {
         errorMessage = nil
+        importSummary = nil
         sourceFileName = url.lastPathComponent
         parsingLabel = "Reading \(url.lastPathComponent)…"
         isParsing = true
         parsedRows = []
 
         let ext = url.pathExtension.lowercased()
-        if ["xlsx", "xls"].contains(ext) {
-            errorMessage = UniversalImportParserError.unsupportedSpreadsheet.localizedDescription
-            isParsing = false
-            return
-        }
 
         importTask?.cancel()
         importTask = Task { @MainActor in
             let accountName = selectedAccountName
             let fallbackCurrency = selectedAccountCurrency
             let ruleSnapshots = rules.map(MerchantRuleSnapshot.init)
-            let existingSnapshots = selectedAccountTransactions.map(TransactionSnapshot.init)
+            // Spreadsheet exports can name an account per row, so duplicate detection has
+            // to consider every account rather than only the one picked above.
+            let existingSnapshots = transactions.map(TransactionSnapshot.init)
             let format: ImportFormat = ext == "pdf" ? .pdf : (ext == "csv" ? .csv : .plainText)
+            let isWorkbook = ["xlsx", "xls"].contains(ext)
 
             // Extract and parse off the main actor in a detached task, streaming results back
             // in chunks. The PDFDocument stays confined to that single task, which is the
@@ -186,25 +195,57 @@ struct ImportPDFView: View {
                 Task.detached(priority: .userInitiated) {
                     defer { continuation.finish() }
                     do {
-                        let rawText: String
-                        if ext == "pdf" {
-                            rawText = try BankStatementPDFParser.extractText(from: url)
-                        } else if let text = try? String(contentsOf: url, encoding: .utf8) {
-                            rawText = text
+                        let all: [ParsedBankTransaction]
+                        if isWorkbook {
+                            await MainActor.run { parsingLabel = "Reading worksheet…" }
+                            let table = try SpreadsheetImportParser.table(fromXLSX: url)
+                            guard SpreadsheetImportParser.isSupported(table) else {
+                                throw UniversalImportParserError.noTransactionsFound
+                            }
+                            await MainActor.run { parsingLabel = "Parsing transactions…" }
+                            all = SpreadsheetImportParser.parse(
+                                table,
+                                ruleSnapshots: ruleSnapshots,
+                                existingSnapshots: existingSnapshots,
+                                defaultAccountName: accountName,
+                                fallbackCurrency: fallbackCurrency
+                            )
+                            guard !all.isEmpty else { throw UniversalImportParserError.noTransactionsFound }
                         } else {
-                            throw UniversalImportParserError.unreadableFile
+                            let rawText: String
+                            if ext == "pdf" {
+                                rawText = try BankStatementPDFParser.extractText(from: url)
+                            } else if let text = try? String(contentsOf: url, encoding: .utf8) {
+                                rawText = text
+                            } else {
+                                throw UniversalImportParserError.unreadableFile
+                            }
+
+                            await MainActor.run { parsingLabel = "Parsing transactions…" }
+
+                            // A CSV carrying its own Category/Account columns is a full
+                            // export, not a bank statement, so keep those columns instead
+                            // of re-deriving them.
+                            let table = format == .csv ? SpreadsheetImportParser.table(fromCSV: rawText) : SpreadsheetTable(headers: [], rows: [])
+                            if SpreadsheetImportParser.isSupported(table) {
+                                all = SpreadsheetImportParser.parse(
+                                    table,
+                                    ruleSnapshots: ruleSnapshots,
+                                    existingSnapshots: existingSnapshots,
+                                    defaultAccountName: accountName,
+                                    fallbackCurrency: fallbackCurrency
+                                )
+                            } else {
+                                all = try UniversalImportParser().parseText(
+                                    rawText,
+                                    format: format,
+                                    ruleSnapshots: ruleSnapshots,
+                                    existingSnapshots: existingSnapshots,
+                                    accountName: accountName,
+                                    fallbackCurrency: fallbackCurrency
+                                )
+                            }
                         }
-
-                        await MainActor.run { parsingLabel = "Parsing transactions…" }
-
-                        let all = try UniversalImportParser().parseText(
-                            rawText,
-                            format: format,
-                            ruleSnapshots: ruleSnapshots,
-                            existingSnapshots: existingSnapshots,
-                            accountName: accountName,
-                            fallbackCurrency: fallbackCurrency
-                        )
                         // Stream in chunks of 30 so the UI renders progressively
                         let chunkSize = 30
                         var index = 0
@@ -235,6 +276,7 @@ struct ImportPDFView: View {
 
     private func parsePastedText() {
         errorMessage = nil
+        importSummary = nil
         sourceFileName = "Pasted messages"
         parsingLabel = "Parsing messages…"
         isParsing = true
@@ -304,6 +346,7 @@ struct ImportPDFView: View {
                 var existingByIdentity = existingIdentity
                 var ruleLookup = makeRuleLookup(allRules)
                 var saved = 0
+                var trainingRows: [FinanceTransaction] = []
                 let batchSize = 50  // small batches keep memory low and UI responsive
 
                 for pair in zip(rowsToSave, draftsToSave) {
@@ -318,8 +361,16 @@ struct ImportPDFView: View {
                         }
                         existingByIdentity[key] = []
                     }
-                    modelContext.insert(draft.transaction(importBatchId: batch.id))
-                    createRule(from: row, rulesByPattern: &ruleLookup)
+                    let transaction = draft.transaction(importBatchId: batch.id)
+                    modelContext.insert(transaction)
+                    // Rows the file already categorized are learned in one voting pass
+                    // below. Writing a rule per row here would emit thousands of
+                    // single-sample exact rules and let a merchant's rarest category win.
+                    if row.isPreCategorized {
+                        trainingRows.append(transaction)
+                    } else {
+                        createRule(from: row, rulesByPattern: &ruleLookup)
+                    }
                     saved += 1
 
                     if saved % batchSize == 0 {
@@ -330,9 +381,16 @@ struct ImportPDFView: View {
                 }
 
                 try modelContext.save()
+
+                let learnedCount = learnRules(from: trainingRows, existingRules: allRules)
+                if learnedCount > 0 {
+                    try modelContext.save()
+                }
+
                 parsedRows.removeAll()
                 pastedText = ""
                 parsingLabel = ""
+                importSummary = ImportSummary(savedCount: savedCount, learnedRuleCount: learnedCount)
             } catch {
                 errorMessage = "Could not save imported transactions: \(error.localizedDescription)"
             }
@@ -342,16 +400,20 @@ struct ImportPDFView: View {
     private func backfillImportMetadata(for drafts: [ImportSaveDraft]) {
         guard !drafts.isEmpty else { return }
 
-        let existingAccountNames = Set(accounts.map(\.name))
-        if !existingAccountNames.contains(selectedAccountName) {
-            let accountCurrency = drafts.first?.currency ?? selectedAccountCurrency
+        // A spreadsheet export can reference several accounts in one file, so create every
+        // account the rows name rather than only the one selected in the picker.
+        var existingAccountNames = Set(accounts.map(\.name))
+        var nextAccountSortOrder = (accounts.map(\.sortOrder).max() ?? 0) + 1
+        for draft in drafts where !existingAccountNames.contains(draft.accountName) {
             modelContext.insert(
                 Account(
-                    name: selectedAccountName,
-                    currency: accountCurrency,
-                    sortOrder: (accounts.map(\.sortOrder).max() ?? 0) + 1
+                    name: draft.accountName,
+                    currency: draft.currency,
+                    sortOrder: nextAccountSortOrder
                 )
             )
+            existingAccountNames.insert(draft.accountName)
+            nextAccountSortOrder += 1
         }
 
         var existingCategoryKeys = Set(categories.map { categoryKey(name: $0.name, parentName: $0.parentName) })
@@ -415,6 +477,25 @@ struct ImportPDFView: View {
         return lookup
     }
 
+    /// Turns the categories a file already carried into reusable merchant rules, so the
+    /// next statement or SMS import categorizes itself. Returns how many rules were added.
+    private func learnRules(from trainingRows: [FinanceTransaction], existingRules: [MerchantRule]) -> Int {
+        guard !trainingRows.isEmpty else { return 0 }
+        parsingLabel = "Learning categories…"
+        // One sample is enough here, unlike the in-app sweep: a category that came from
+        // the file is a decision the user already made, not a guess worth corroborating.
+        // On a 5k-row export this traded ~1pp of precision for ~4pp more coverage.
+        let learned = SmartCategorizationService.learnRules(
+            from: trainingRows,
+            existingRules: existingRules,
+            minSamples: 1
+        )
+        for rule in learned {
+            modelContext.insert(rule)
+        }
+        return learned.count
+    }
+
     private func createRule(from row: ParsedBankTransaction, existingRules: [MerchantRule]) {
         var lookup = makeRuleLookup(existingRules)
         createRule(from: row, rulesByPattern: &lookup)
@@ -465,12 +546,12 @@ struct ImportPDFView: View {
     }
 
     private func existingTransactionsByIdentity() -> [String: [FinanceTransaction]] {
-        Dictionary(grouping: selectedAccountTransactions) { transaction in
+        Dictionary(grouping: transactions) { transaction in
             TransactionIdentityKey.make(
                 accountName: transaction.accountName,
                 date: transaction.date,
                 amount: transaction.amount,
-                normalizedMerchant: transaction.normalizedMerchant
+                normalizedMerchant: MerchantNormalizer.normalize(transaction.normalizedMerchant)
             )
         }
     }
@@ -485,6 +566,22 @@ struct ImportPDFView: View {
     }
 }
 
+private struct ImportSummary {
+    var savedCount: Int
+    var learnedRuleCount: Int
+
+    var message: String {
+        guard learnedRuleCount > 0 else {
+            return String(format: NSLocalizedString("Saved %d transactions.", comment: ""), savedCount)
+        }
+        return String(
+            format: NSLocalizedString("Saved %d transactions and learned %d categorization rules from this file.", comment: ""),
+            savedCount,
+            learnedRuleCount
+        )
+    }
+}
+
 private enum ImportSource: String, CaseIterable, Identifiable {
     case pdf = "PDF"
     case csv = "CSV"
@@ -495,7 +592,7 @@ private enum ImportSource: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .pdf: "PDF statement"
-        case .csv: "CSV / Excel export"
+        case .csv: "Excel / CSV export"
         case .paste: "SMS paste"
         }
     }
@@ -513,7 +610,8 @@ private enum ImportSource: String, CaseIterable, Identifiable {
         case .pdf:
             [.pdf]
         case .csv:
-            [.commaSeparatedText, .plainText, .text]
+            [.commaSeparatedText, .spreadsheet, .plainText, .text]
+                + [UTType(filenameExtension: "xlsx"), UTType(filenameExtension: "xls")].compactMap { $0 }
         case .paste:
             [.plainText, .text]
         }
@@ -550,7 +648,7 @@ private enum ImportSource: String, CaseIterable, Identifiable {
         case .pdf:
             "Choose a searchable bank PDF. Known statement formats get exact parsing; other PDFs use generic date, amount, and merchant detection."
         case .csv:
-            "Import a CSV exported from Excel, Google Sheets, or your bank. Headers like Date, Description, Amount, Debit, Credit, and Currency are supported."
+            "Import an .xlsx or .csv export from Excel, Google Sheets, another money app, or your bank. Headers like Date, Description, Amount, Debit, Credit, and Currency are supported. If the file has Category, Subcategory, or Account columns those are kept as-is and used to teach categorization."
         case .paste:
             "Paste bank SMS messages or notification text. The app detects amount, date, merchant, and income or expense direction where possible."
         }

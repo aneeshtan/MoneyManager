@@ -8,6 +8,15 @@ enum MerchantNormalizer {
         "AJMAN", "SHARJAH", "UAE", "AE"
     ]
 
+    /// Some exports strip every space out of the bank narration, so the spaced suffixes
+    /// above never match. Longest first, so "DUBAIAE" wins over a bare "AE".
+    private static let unspacedLocationSuffixes = [
+        "ABUDHABIARE", "ABUDHABIAE", "RASALKHAIMA", "DUBAIARE", "SHARJAHAE",
+        "DUBAIAE", "AJMANAE", "ABUDHABI", "SHARJAH", "AJMAN", "DUBAI", "UAE", "ARE", "AE"
+    ]
+
+    private static let monthAlternation = "JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC"
+
     // Compiled once: recompiling these on every call dominated import parsing time.
     private static let strippingRegexes: [NSRegularExpression] = {
         let patterns = [
@@ -17,13 +26,25 @@ enum MerchantNormalizer {
             #"CARDXXX\d+USED"#,
             #"\(\+\d+(?:\.\d+)?%[^)]*\)"#,
             #"AVL\.?\s*CR\.?\s*LIMIT(?:\s*IS)?\s*[A-Z]{3}[\d,.]+"#,
-            #"AVLCRLIMIT(?:IS)?[A-Z]{3}[\d,.]+"#
+            #"AVLCRLIMIT(?:IS)?[A-Z]{3}[\d,.]+"#,
+            // Running balances and account/reference numbers differ on every line, so
+            // without these each transaction normalizes to its own unique merchant.
+            #"AVL\.?\s*BAL\.?\s*[A-Z]{3}[\d,.]+"#,
+            #"AVAILABLE\s*BALANCE\s*IS\s*[A-Z]{3}[\d,.]+"#,
+            #"IS\s*DEBITED\s*WITH\s*[A-Z]{3}[\d,.]+"#,
+            #"DEAR\s*CUS(?:TO)?MER"#,
+            #"DEBITED\s*A/?C\s*\d+"#,
+            #"(?:TRANSACTION\s*)?(?:ACC?|A/C)?\s*NO\.?\s*XXX\d+"#,
+            #"XXX\d+"#,
+            #"(?:\#(monthAlternation))\d{1,2}20\d\d"#,
+            #"\d{1,2}(?:\#(monthAlternation))20\d\d"#
         ]
         return patterns.compactMap { try? NSRegularExpression(pattern: $0) }
     }()
 
     private static let disallowedCharacterRegex = try? NSRegularExpression(pattern: #"[^A-Z0-9&%+./ -]"#)
     private static let whitespaceRunRegex = try? NSRegularExpression(pattern: #"\s+"#)
+    private static let trailingDigitRunRegex = try? NSRegularExpression(pattern: #"\d{4,}$"#)
 
     static func normalize(_ value: String) -> String {
         var text = value.uppercased()
@@ -38,6 +59,10 @@ enum MerchantNormalizer {
         }
         text = text.trimmingCharacters(in: CharacterSet(charactersIn: " -,."))
 
+        // Trailing reference digits are stripped inside this loop, not after it: removing
+        // them can expose a location suffix ("STOREUAE1234" -> "STOREUAE"), and a pass
+        // that left one behind would normalize differently the second time it ran. Import
+        // deduplication re-normalizes stored merchants, so convergence here matters.
         var changed = true
         while changed {
             changed = false
@@ -48,6 +73,22 @@ enum MerchantNormalizer {
             for suffix in locationSuffixes where text.hasSuffix("-\(suffix)") {
                 text = String(text.dropLast(suffix.count)).trimmingCharacters(in: CharacterSet(charactersIn: " -,."))
                 changed = true
+            }
+            for suffix in unspacedLocationSuffixes where text.hasSuffix(suffix) && text.count > suffix.count {
+                text = String(text.dropLast(suffix.count)).trimmingCharacters(in: CharacterSet(charactersIn: " -,."))
+                changed = true
+                break
+            }
+            if let regex = trailingDigitRunRegex {
+                let stripped = regex.stringByReplacingMatches(
+                    in: text,
+                    range: NSRange(text.startIndex..<text.endIndex, in: text),
+                    withTemplate: ""
+                ).trimmingCharacters(in: CharacterSet(charactersIn: " -,."))
+                if stripped != text, !stripped.isEmpty {
+                    text = stripped
+                    changed = true
+                }
             }
         }
         return text
@@ -69,6 +110,8 @@ struct PreparedCategoryMatcher: Sendable {
         var normalizedPattern: String
         var normalizedNotePattern: String?
     }
+
+    fileprivate static let minimumContainsLength = 4
 
     private let rules: [PreparedRule]
 
@@ -113,7 +156,10 @@ struct PreparedCategoryMatcher: Sendable {
             case .exact:
                 merchantMatch = normalizedMerchant == pattern
             case .contains:
-                merchantMatch = normalizedMerchant.contains(pattern) || pattern.contains(normalizedMerchant)
+                // Without a floor, a two-letter pattern matches nearly every merchant.
+                guard pattern.count >= Self.minimumContainsLength else { continue }
+                merchantMatch = normalizedMerchant.contains(pattern)
+                    || (normalizedMerchant.count >= Self.minimumContainsLength && pattern.contains(normalizedMerchant))
             }
             guard merchantMatch else { continue }
 
@@ -169,12 +215,21 @@ enum CategoryMatcher {
         )
     }
 
+    /// Matched with spaces removed on both sides: some exports strip every space out of
+    /// the narration, so "UNIONCOOPDUBAIAE" has to still hit the "UNION COOP" entry.
     fileprivate static func hardCodedFallback(for merchant: String, fallbackKind: TransactionKind) -> CategorySuggestion? {
-        guard let mapping = fallbackMappings.first(where: { merchant.contains($0.0) }) else {
+        let condensed = merchant.replacingOccurrences(of: " ", with: "")
+        guard !condensed.isEmpty,
+              let mapping = condensedFallbackMappings.first(where: { condensed.contains($0.0) }) else {
             return nil
         }
         return CategorySuggestion(category: mapping.1, subcategory: mapping.2, kind: fallbackKind, confidence: 0.75)
     }
+
+    /// Longest patterns first so "CAREEM DELIVERIES" wins over a bare "CAREEM" entry.
+    private static let condensedFallbackMappings: [(String, String, String?)] = fallbackMappings
+        .map { ($0.0.replacingOccurrences(of: " ", with: ""), $0.1, $0.2) }
+        .sorted { $0.0.count > $1.0.count }
 
     private static let fallbackMappings: [(String, String, String?)] = [
             ("CAREEM HALA", "Transportation", "Taxi"),

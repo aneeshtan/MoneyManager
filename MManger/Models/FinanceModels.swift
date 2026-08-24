@@ -129,31 +129,39 @@ struct TransactionSnapshot: Sendable {
     }
 }
 
+/// Merchant keys are re-normalized on both sides rather than compared as stored, so
+/// transactions saved under an older normalizer still match a fresh import of the same
+/// file instead of silently reappearing as new rows.
 struct DuplicateTransactionLookup {
     private let calendar: Calendar
     private let keys: Set<String>
 
     init(existingTransactions: [FinanceTransaction], calendar: Calendar = Calendar(identifier: .gregorian)) {
-        self.calendar = calendar
-        self.keys = Set(existingTransactions.map { transaction in
-            TransactionIdentityKey.make(
-                accountName: transaction.accountName,
-                date: transaction.date,
-                amount: transaction.amount,
-                normalizedMerchant: transaction.normalizedMerchant,
-                calendar: calendar
-            )
-        })
+        self.init(
+            merchantKeys: existingTransactions.map {
+                ($0.accountName, $0.date, $0.amount, $0.normalizedMerchant)
+            },
+            calendar: calendar
+        )
     }
 
     init(snapshots: [TransactionSnapshot], calendar: Calendar = Calendar(identifier: .gregorian)) {
+        self.init(
+            merchantKeys: snapshots.map {
+                ($0.accountName, $0.date, $0.amount, $0.normalizedMerchant)
+            },
+            calendar: calendar
+        )
+    }
+
+    private init(merchantKeys: [(String, Date, Decimal, String)], calendar: Calendar) {
         self.calendar = calendar
-        self.keys = Set(snapshots.map { snapshot in
+        self.keys = Set(merchantKeys.map { accountName, date, amount, merchant in
             TransactionIdentityKey.make(
-                accountName: snapshot.accountName,
-                date: snapshot.date,
-                amount: snapshot.amount,
-                normalizedMerchant: snapshot.normalizedMerchant,
+                accountName: accountName,
+                date: date,
+                amount: amount,
+                normalizedMerchant: MerchantNormalizer.normalize(merchant),
                 calendar: calendar
             )
         })
@@ -165,7 +173,7 @@ struct DuplicateTransactionLookup {
                 accountName: accountName,
                 date: date,
                 amount: amount,
-                normalizedMerchant: normalizedMerchant,
+                normalizedMerchant: MerchantNormalizer.normalize(normalizedMerchant),
                 calendar: calendar
             )
         )
@@ -824,9 +832,16 @@ struct ParsedBankTransaction: Identifiable, Hashable {
     var confidence: Double
     var isSelected: Bool
     var isDuplicate: Bool
+    /// Set when the source file carried its own account column, which overrides the
+    /// account picked in the import screen.
+    var accountName: String? = nil
+    /// The source file supplied this category rather than the matcher guessing it, so it
+    /// is trusted verbatim and used as training data.
+    var isPreCategorized: Bool = false
 
     var isReviewOnly: Bool {
-        normalizedMerchant.contains("PAYMENT RECEIVED")
+        guard !isPreCategorized else { return false }
+        return normalizedMerchant.contains("PAYMENT RECEIVED")
             || normalizedMerchant.contains("CASHBACK")
             || normalizedMerchant.contains("FOREIGN TRANSACTION FEE")
             || normalizedMerchant.contains("VAT ON FOREIGN")
@@ -856,7 +871,7 @@ struct ImportSaveDraft: Hashable {
         self.merchant = merchant.isEmpty ? "Imported transaction" : merchant
         self.normalizedMerchant = normalized.isEmpty ? MerchantNormalizer.normalize(self.merchant) : normalized
         self.rawDescription = row.description
-        self.accountName = accountName
+        self.accountName = row.accountName?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfBlank ?? accountName
         self.categoryName = row.suggestedCategory?.nilIfBlank
         self.subcategoryName = row.suggestedSubcategory?.nilIfBlank
         self.isDuplicate = row.isDuplicate

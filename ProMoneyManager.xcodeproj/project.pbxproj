@@ -33,6 +33,11 @@
 		AA1000001TREND00000000001 /* Views/TrendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1000001TREND00000000002 /* Views/TrendsView.swift */; };
 		AA2000001BKING00000000001 /* Services/BankingIntegrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000001BKING00000000002 /* Services/BankingIntegrationService.swift */; };
 		AA2000001SMART00000000001 /* Services/SmartCategorizationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000001SMART00000000002 /* Services/SmartCategorizationService.swift */; };
+		9FB41857D720A2D48C9C5FA3 /* Services/CloudSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4743BD100AD3A1E9754363 /* Services/CloudSyncService.swift */; };
+		0BDCF17276F101DB7DE44C79 /* Views/iCloudSyncSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D906386562098F0B82519C3F /* Views/iCloudSyncSettingsView.swift */; };
+		CF7628A1029CE8E6CE5B5FEF /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D6177BD5C7846E731740AF /* Config.swift */; };
+		BC24BFE6F6F6D30CF7E22C1A /* Services/SpreadsheetImportParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371732636364159045E3B7BF /* Services/SpreadsheetImportParser.swift */; };
+		DFC4C2F9E29825ABEE259565 /* Services/XLSXParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA59CE4F7C53F8E353821983 /* Services/XLSXParser.swift */; };
 		AA2000001SMRTC00000000001 /* Views/SmartCategorizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2000001SMRTC00000000002 /* Views/SmartCategorizeView.swift */; };
 		AA3000001CURCY00000000001 /* Views/CurrencyRegionSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3000001CURCY00000000002 /* Views/CurrencyRegionSelector.swift */; };
 		AA3000020000000000000002 /* NotificationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3000010000000000000001 /* NotificationServiceTests.swift */; };
@@ -46,6 +51,7 @@
 		AA4000001PTLOC0000000001 /* Resources/pt.lproj in Resources */ = {isa = PBXBuildFile; fileRef = AA4000001PTLOC0000000002 /* Resources/pt.lproj */; };
 		AA967D9B42084A1B87F20B4A /* Services/AppLockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86503C6BD54A48BF872E6C2C /* Services/AppLockService.swift */; };
 		B274D57B40D1221A70FB51FA /* CategoryMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D169A975E213394C0502B9 /* CategoryMatcherTests.swift */; };
+		77A4109615B68350E4B60F7D /* SpreadsheetImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18D71E8A15F77F1F75E2620 /* SpreadsheetImportTests.swift */; };
 		B46EC88A88363B1E005716A1 /* Views/AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6629E54044189BDE51865 /* Views/AccountsView.swift */; };
 		B77F53D5E7D40AA237F1994B /* Views/TransactionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763276048D37CEF8A504531F /* Views/TransactionEditorView.swift */; };
 		BA4F816619894CC2B35158C6 /* Views/CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9140E1D2C43B444CAD453076 /* Views/CalendarView.swift */; };
@@ -87,6 +93,7 @@
 		53DED583C3BE626F5209B265 /* Services/SeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SeedStore.swift; sourceTree = "<group>"; };
 		5F2C9AA36B954CE6A2B9F001 /* BudgetProgressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetProgressTests.swift; sourceTree = "<group>"; };
 		71D169A975E213394C0502B9 /* CategoryMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryMatcherTests.swift; sourceTree = "<group>"; };
+		D18D71E8A15F77F1F75E2620 /* SpreadsheetImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadsheetImportTests.swift; sourceTree = "<group>"; };
 		749DDFEBEB0093D00BD5F5D9 /* Views/Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Formatters.swift; sourceTree = "<group>"; };
 		763276048D37CEF8A504531F /* Views/TransactionEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/TransactionEditorView.swift; sourceTree = "<group>"; };
 		85D294356CFC451E84DC1973 /* Views/TagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/TagsView.swift; sourceTree = "<group>"; };
@@ -105,6 +112,11 @@
 		AA1000001TREND00000000002 /* Views/TrendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/TrendsView.swift; sourceTree = "<group>"; };
 		AA2000001BKING00000000002 /* Services/BankingIntegrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/BankingIntegrationService.swift; sourceTree = "<group>"; };
 		AA2000001SMART00000000002 /* Services/SmartCategorizationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SmartCategorizationService.swift; sourceTree = "<group>"; };
+		3B4743BD100AD3A1E9754363 /* Services/CloudSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/CloudSyncService.swift; sourceTree = "<group>"; };
+		D906386562098F0B82519C3F /* Views/iCloudSyncSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/iCloudSyncSettingsView.swift; sourceTree = "<group>"; };
+		89D6177BD5C7846E731740AF /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		371732636364159045E3B7BF /* Services/SpreadsheetImportParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SpreadsheetImportParser.swift; sourceTree = "<group>"; };
+		DA59CE4F7C53F8E353821983 /* Services/XLSXParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/XLSXParser.swift; sourceTree = "<group>"; };
 		AA2000001SMRTC00000000002 /* Views/SmartCategorizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/SmartCategorizeView.swift; sourceTree = "<group>"; };
 		AA3000001CURCY00000000002 /* Views/CurrencyRegionSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/CurrencyRegionSelector.swift; sourceTree = "<group>"; };
 		AA3000010000000000000001 /* NotificationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceTests.swift; sourceTree = "<group>"; };
@@ -162,6 +174,7 @@
 				B8418E9F60DE2384C8BAFB93 /* BankStatementPDFParserTests.swift */,
 				5F2C9AA36B954CE6A2B9F001 /* BudgetProgressTests.swift */,
 				71D169A975E213394C0502B9 /* CategoryMatcherTests.swift */,
+				D18D71E8A15F77F1F75E2620 /* SpreadsheetImportTests.swift */,
 				C7A6D5465C5544EF99E27001 /* DuplicateReviewTests.swift */,
 				AA3000010000000000000001 /* NotificationServiceTests.swift */,
 			);
@@ -199,6 +212,11 @@
 				14449DD36DEB7A86CF2137E2 /* Services/ExportService.swift */,
 				CEB5BF66143C97D390B35345 /* Services/MerchantNormalizer.swift */,
 				AA2000001SMART00000000002 /* Services/SmartCategorizationService.swift */,
+				3B4743BD100AD3A1E9754363 /* Services/CloudSyncService.swift */,
+				D906386562098F0B82519C3F /* Views/iCloudSyncSettingsView.swift */,
+				89D6177BD5C7846E731740AF /* Config.swift */,
+				371732636364159045E3B7BF /* Services/SpreadsheetImportParser.swift */,
+				DA59CE4F7C53F8E353821983 /* Services/XLSXParser.swift */,
 				53DED583C3BE626F5209B265 /* Services/SeedStore.swift */,
 				FABB840667EC41BDAF3E451D /* Services/AccountDeletionService.swift */,
 				DDB6629E54044189BDE51865 /* Views/AccountsView.swift */,
@@ -367,6 +385,11 @@
 				60C9659E8EB75FCFB104800E /* Services/ExportService.swift in Sources */,
 				2F66D1E3FE99FF3539501FB5 /* Services/MerchantNormalizer.swift in Sources */,
 				AA2000001SMART00000000001 /* Services/SmartCategorizationService.swift in Sources */,
+				9FB41857D720A2D48C9C5FA3 /* Services/CloudSyncService.swift in Sources */,
+				0BDCF17276F101DB7DE44C79 /* Views/iCloudSyncSettingsView.swift in Sources */,
+				CF7628A1029CE8E6CE5B5FEF /* Config.swift in Sources */,
+				BC24BFE6F6F6D30CF7E22C1A /* Services/SpreadsheetImportParser.swift in Sources */,
+				DFC4C2F9E29825ABEE259565 /* Services/XLSXParser.swift in Sources */,
 				F3920A522FAAD34440CD8244 /* Services/SeedStore.swift in Sources */,
 				5CFEF636EDAF4E2DA7ADE565 /* Services/AccountDeletionService.swift in Sources */,
 				B46EC88A88363B1E005716A1 /* Views/AccountsView.swift in Sources */,
@@ -410,6 +433,7 @@
 				5CC51022EB1773B9314B6741 /* BankStatementPDFParserTests.swift in Sources */,
 				5F2C9AA46B954CE6A2B9F001 /* BudgetProgressTests.swift in Sources */,
 				B274D57B40D1221A70FB51FA /* CategoryMatcherTests.swift in Sources */,
+				77A4109615B68350E4B60F7D /* SpreadsheetImportTests.swift in Sources */,
 				C7A6D5475C5544EF99E27001 /* DuplicateReviewTests.swift in Sources */,
 				AA3000020000000000000002 /* NotificationServiceTests.swift in Sources */,
 			);
