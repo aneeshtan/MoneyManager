@@ -1,5 +1,6 @@
 import XCTest
 import SwiftData
+import UniformTypeIdentifiers
 @testable import MManger
 
 final class SpreadsheetImportTests: XCTestCase {
@@ -507,5 +508,30 @@ final class SpreadsheetImportPersistenceTests: XCTestCase {
         ])
         let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
         return try ModelContainer(for: schema, configurations: [configuration])
+    }
+}
+
+// MARK: - Import source selection
+
+final class ImportSourceTests: XCTestCase {
+
+    /// Picking a file must not require declaring its format first, so the single file
+    /// source has to accept every importable type at once.
+    func testFileSourceAcceptsPDFSpreadsheetAndCSVTogether() throws {
+        let types = ImportSource.file.contentTypes
+
+        XCTAssertTrue(types.contains(.pdf))
+        XCTAssertTrue(types.contains(.commaSeparatedText))
+        XCTAssertTrue(types.contains(.spreadsheet))
+
+        let xlsx = try XCTUnwrap(UTType(filenameExtension: "xlsx"))
+        XCTAssertTrue(types.contains { xlsx.conforms(to: $0) || $0 == xlsx },
+                      "an .xlsx must be selectable from the same picker as a PDF")
+    }
+
+    /// Only file vs. paste remains; a separate PDF/CSV choice was a step the user had to
+    /// get right before the picker would even open.
+    func testOnlyFileAndPasteSourcesRemain() {
+        XCTAssertEqual(ImportSource.allCases.map(\.rawValue), ["File", "Paste"])
     }
 }

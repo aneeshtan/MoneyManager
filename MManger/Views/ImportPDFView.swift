@@ -10,7 +10,7 @@ struct ImportPDFView: View {
     @Query(sort: \Account.sortOrder) private var accounts: [Account]
     @Query(sort: \FinanceCategory.sortOrder) private var categories: [FinanceCategory]
 
-    @State private var selectedSource: ImportSource = .pdf
+    @State private var selectedSource: ImportSource = .file
     @State private var selectedAccountName = SeedStore.defaultImportAccountName
     @State private var showingPicker = false
     @State private var pastedText = ""
@@ -582,35 +582,33 @@ private struct ImportSummary {
     }
 }
 
-private enum ImportSource: String, CaseIterable, Identifiable {
-    case pdf = "PDF"
-    case csv = "CSV"
+enum ImportSource: String, CaseIterable, Identifiable {
+    case file = "File"
     case paste = "Paste"
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
-        case .pdf: "PDF statement"
-        case .csv: "Excel / CSV export"
+        case .file: "PDF, Excel or CSV"
         case .paste: "SMS paste"
         }
     }
 
     var systemImage: String {
         switch self {
-        case .pdf: "doc.text.magnifyingglass"
-        case .csv: "tablecells"
+        case .file: "doc.text.magnifyingglass"
         case .paste: "text.bubble"
         }
     }
 
+    /// One combined list so a file can be picked without first declaring its format.
+    /// The parser dispatches on the extension afterwards, so narrowing this per format
+    /// only ever added a step the user had to get right up front.
     var contentTypes: [UTType] {
         switch self {
-        case .pdf:
-            [.pdf]
-        case .csv:
-            [.commaSeparatedText, .spreadsheet, .plainText, .text]
+        case .file:
+            [.pdf, .commaSeparatedText, .spreadsheet, .plainText, .text]
                 + [UTType(filenameExtension: "xlsx"), UTType(filenameExtension: "xls")].compactMap { $0 }
         case .paste:
             [.plainText, .text]
@@ -619,16 +617,14 @@ private enum ImportSource: String, CaseIterable, Identifiable {
 
     var defaultSourceName: String {
         switch self {
-        case .pdf: "PDF statement"
-        case .csv: "CSV import"
+        case .file: "Imported file"
         case .paste: "Pasted bank messages"
         }
     }
 
     var reviewSubtitle: String {
         switch self {
-        case .pdf: "Parsed from statement text"
-        case .csv: "Parsed from spreadsheet rows"
+        case .file: "Parsed from the chosen file"
         case .paste: "Parsed from pasted messages"
         }
     }
@@ -637,18 +633,15 @@ private enum ImportSource: String, CaseIterable, Identifiable {
 
     var emptyTitle: String {
         switch self {
-        case .pdf: "Ready for a statement"
-        case .csv: "Ready for CSV"
+        case .file: "Ready for a file"
         case .paste: "Ready for messages"
         }
     }
 
     var emptyMessage: String {
         switch self {
-        case .pdf:
-            "Choose a searchable bank PDF. Known statement formats get exact parsing; other PDFs use generic date, amount, and merchant detection."
-        case .csv:
-            "Import an .xlsx or .csv export from Excel, Google Sheets, another money app, or your bank. Headers like Date, Description, Amount, Debit, Credit, and Currency are supported. If the file has Category, Subcategory, or Account columns those are kept as-is and used to teach categorization."
+        case .file:
+            "Choose a bank PDF, or an .xlsx or .csv export from Excel, Google Sheets, another money app, or your bank \u{2014} the format is detected for you. Headers like Date, Description, Amount, Debit, Credit, and Currency are supported. If the file has Category, Subcategory, or Account columns those are kept as-is and used to teach categorization."
         case .paste:
             "Paste bank SMS messages or notification text. The app detects amount, date, merchant, and income or expense direction where possible."
         }

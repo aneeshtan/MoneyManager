@@ -5,7 +5,8 @@ All notable user-facing changes, written so entries can be copied into the App S
 ## Unreleased
 
 ### Smarter importing
-- **Import Excel files directly** — `.xlsx` workbooks now open straight in the app; you no longer have to convert them to CSV first. Pick Excel/CSV on the Import screen and choose the file.
+- **Import Excel files directly** — `.xlsx` workbooks now open straight in the app; you no longer have to convert them to CSV first.
+- **One “Choose File” for every format** — the Import screen no longer asks you to say whether you're importing a PDF or a spreadsheet before it will let you pick. Tap Choose File once and select a PDF, `.xlsx`, or `.csv`; the format is detected from the file itself.
 - **Keeps the categories your file already has** — if the spreadsheet has Category, Subcategory, or Account columns (like a Money Manager export), those are imported exactly as they are instead of being re-guessed, and multi-account files land each row in the right account, creating any accounts that don't exist yet.
 - **Learns your categories from the file** — after importing an already-categorized spreadsheet, the app studies it and builds merchant rules from how *you* categorized things, so later statement and SMS imports categorize themselves. When a merchant appears under several categories the most common one wins, and genuinely split merchants are skipped rather than guessed.
 - **Better merchant recognition on condensed statements** — some banks export narrations with all spaces removed and a running balance on every line, which previously made each transaction look like a brand-new merchant. These are now cleaned up properly, which noticeably increases how much of an import gets categorized automatically.
