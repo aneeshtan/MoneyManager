@@ -258,7 +258,7 @@ private struct SavingsGoalEditorView: View {
     @State private var name = ""
     @State private var targetAmountText = ""
     @State private var currentAmountText = "0"
-    @State private var currency = "USD"
+    @State private var currency = ""
     @State private var hasTargetDate = false
     @State private var targetDate = Calendar.current.date(byAdding: .month, value: 6, to: .now) ?? .now
     @State private var showingDeleteConfirmation = false
@@ -347,7 +347,7 @@ private struct SavingsGoalEditorView: View {
             goal.name = cleanName
             goal.targetAmount = targetAmount
             goal.currentAmount = currentAmount
-            goal.currency = cleanCurrency.isEmpty ? "USD" : cleanCurrency
+            goal.currency = cleanCurrency.isEmpty ? appCurrency : cleanCurrency
             goal.targetDate = hasTargetDate ? targetDate : nil
         } else {
             modelContext.insert(
@@ -355,7 +355,7 @@ private struct SavingsGoalEditorView: View {
                     name: cleanName,
                     targetAmount: targetAmount,
                     currentAmount: currentAmount,
-                    currency: cleanCurrency.isEmpty ? "USD" : cleanCurrency,
+                    currency: cleanCurrency.isEmpty ? appCurrency : cleanCurrency,
                     targetDate: hasTargetDate ? targetDate : nil,
                     sortOrder: nextSortOrder
                 )

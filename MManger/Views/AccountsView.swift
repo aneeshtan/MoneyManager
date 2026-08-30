@@ -11,7 +11,7 @@ struct AccountsView: View {
     @State private var accountDeleteError: String?
 
     private var baseCurrency: String {
-        users.first?.baseCurrency ?? "USD"
+        users.first?.baseCurrency ?? AppFormatters.defaultCurrency()
     }
 
     private var reportingCurrency: String {
@@ -428,12 +428,13 @@ private struct AccountHealthBanner: View {
 private struct AccountEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.appCurrency) private var appCurrency
 
     var account: Account?
     var transactions: [FinanceTransaction]
 
     @State private var name = ""
-    @State private var currency = "USD"
+    @State private var currency = ""
     @State private var currentValue = ""
     @State private var type: AccountType = .other
     @State private var sortOrder = ""
@@ -490,6 +491,7 @@ private struct AccountEditorView: View {
         guard let account else {
             currentValue = "0"
             sortOrder = "0"
+            currency = appCurrency
             return
         }
         name = account.name
@@ -512,7 +514,7 @@ private struct AccountEditorView: View {
                 transactions: transactions
             )
             account.name = cleanName
-            account.currency = cleanCurrency.isEmpty ? "USD" : cleanCurrency
+            account.currency = cleanCurrency.isEmpty ? appCurrency : cleanCurrency
             account.type = type
             account.openingBalance = openingBalance
             account.sortOrder = intSortOrder
@@ -527,7 +529,7 @@ private struct AccountEditorView: View {
             modelContext.insert(
                 Account(
                     name: cleanName,
-                    currency: cleanCurrency.isEmpty ? "USD" : cleanCurrency,
+                    currency: cleanCurrency.isEmpty ? appCurrency : cleanCurrency,
                     openingBalance: targetCurrentValue,
                     type: type,
                     sortOrder: intSortOrder

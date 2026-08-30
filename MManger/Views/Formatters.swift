@@ -42,7 +42,7 @@ enum AppFormatters {
         return (localeCurrency?.isEmpty == false ? localeCurrency : nil) ?? language.suggestedCurrency
     }
 
-    static func money(_ amount: Decimal, currency: String = "USD") -> String {
+    static func money(_ amount: Decimal, currency: String) -> String {
         let effectiveCurrency = currency.uppercased()
         if effectiveCurrency == "IRR" {
             let toman = (amount as NSDecimalNumber).dividing(by: 10)
@@ -57,11 +57,11 @@ enum AppFormatters {
         return formatter.string(from: NSDecimalNumber(decimal: amount)) ?? "\(amount)"
     }
 
-    static func statMoney(_ amount: Decimal, currency: String = "USD") -> String {
+    static func statMoney(_ amount: Decimal, currency: String) -> String {
         money(amount, currency: currency)
     }
 
-    static func resolvedCurrency(_ currency: String?, fallback: String = "USD") -> String {
+    static func resolvedCurrency(_ currency: String?, fallback: String) -> String {
         let trimmed = (currency ?? "").trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         return trimmed.isEmpty ? fallback : trimmed
     }

@@ -52,6 +52,7 @@
 		AA967D9B42084A1B87F20B4A /* Services/AppLockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86503C6BD54A48BF872E6C2C /* Services/AppLockService.swift */; };
 		B274D57B40D1221A70FB51FA /* CategoryMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D169A975E213394C0502B9 /* CategoryMatcherTests.swift */; };
 		77A4109615B68350E4B60F7D /* SpreadsheetImportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D18D71E8A15F77F1F75E2620 /* SpreadsheetImportTests.swift */; };
+		C6D7407DCC7E4C70AD9A7119 /* CurrencyFormattingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640499508EA744868308F1D5 /* CurrencyFormattingTests.swift */; };
 		B46EC88A88363B1E005716A1 /* Views/AccountsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB6629E54044189BDE51865 /* Views/AccountsView.swift */; };
 		B77F53D5E7D40AA237F1994B /* Views/TransactionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 763276048D37CEF8A504531F /* Views/TransactionEditorView.swift */; };
 		BA4F816619894CC2B35158C6 /* Views/CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9140E1D2C43B444CAD453076 /* Views/CalendarView.swift */; };
@@ -94,6 +95,7 @@
 		5F2C9AA36B954CE6A2B9F001 /* BudgetProgressTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetProgressTests.swift; sourceTree = "<group>"; };
 		71D169A975E213394C0502B9 /* CategoryMatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryMatcherTests.swift; sourceTree = "<group>"; };
 		D18D71E8A15F77F1F75E2620 /* SpreadsheetImportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpreadsheetImportTests.swift; sourceTree = "<group>"; };
+		640499508EA744868308F1D5 /* CurrencyFormattingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyFormattingTests.swift; sourceTree = "<group>"; };
 		749DDFEBEB0093D00BD5F5D9 /* Views/Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Formatters.swift; sourceTree = "<group>"; };
 		763276048D37CEF8A504531F /* Views/TransactionEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/TransactionEditorView.swift; sourceTree = "<group>"; };
 		85D294356CFC451E84DC1973 /* Views/TagsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/TagsView.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				5F2C9AA36B954CE6A2B9F001 /* BudgetProgressTests.swift */,
 				71D169A975E213394C0502B9 /* CategoryMatcherTests.swift */,
 				D18D71E8A15F77F1F75E2620 /* SpreadsheetImportTests.swift */,
+				640499508EA744868308F1D5 /* CurrencyFormattingTests.swift */,
 				C7A6D5465C5544EF99E27001 /* DuplicateReviewTests.swift */,
 				AA3000010000000000000001 /* NotificationServiceTests.swift */,
 			);
@@ -434,6 +437,7 @@
 				5F2C9AA46B954CE6A2B9F001 /* BudgetProgressTests.swift in Sources */,
 				B274D57B40D1221A70FB51FA /* CategoryMatcherTests.swift in Sources */,
 				77A4109615B68350E4B60F7D /* SpreadsheetImportTests.swift in Sources */,
+				C6D7407DCC7E4C70AD9A7119 /* CurrencyFormattingTests.swift in Sources */,
 				C7A6D5475C5544EF99E27001 /* DuplicateReviewTests.swift in Sources */,
 				AA3000020000000000000002 /* NotificationServiceTests.swift in Sources */,
 			);

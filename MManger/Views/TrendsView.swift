@@ -5,11 +5,41 @@ import Charts
 struct TrendsView: View {
     @Query(sort: \FinanceTransaction.date, order: .reverse) private var transactions: [FinanceTransaction]
     @Query(sort: \Account.sortOrder) private var accounts: [Account]
+    @Environment(\.appCurrency) private var currency
 
     @State private var selectedChart: ChartMode = .spending
     @State private var monthCount = 12
 
     private var calendar: Calendar { .current }
+
+    // MARK: - Currency
+
+    /// Trends has no per-row currency label, so every figure on the screen has to be in
+    /// one currency. Pick the dominant one across the window and report only that,
+    /// rather than adding AED to USD to IRR and labelling the sum with whatever the
+    /// formatter defaulted to.
+    private var reportingCurrency: String {
+        let windowed = transactions.filter { $0.date >= (months.first ?? .distantPast) }
+        let expenses = windowed.filter { $0.kind == .expense }
+        return CurrencyReporting.dominantCurrency(
+            in: expenses.isEmpty ? windowed : expenses,
+            fallback: currency,
+            currency: { $0.currency },
+            amount: { $0.amount }
+        )
+    }
+
+    private var reportingTransactions: [FinanceTransaction] {
+        transactions.filter {
+            AppFormatters.resolvedCurrency($0.currency, fallback: currency) == reportingCurrency
+        }
+    }
+
+    private var reportingAccounts: [Account] {
+        accounts.filter {
+            AppFormatters.resolvedCurrency($0.currency, fallback: currency) == reportingCurrency
+        }
+    }
 
     // MARK: - Data
 
@@ -35,11 +65,12 @@ struct TrendsView: View {
 
     private var points: [MonthPoint] {
         var runningNetWorth: Double = {
-            accounts.reduce(0.0) { $0 + NSDecimalNumber(decimal: $1.openingBalance).doubleValue }
+            reportingAccounts.reduce(0.0) { $0 + NSDecimalNumber(decimal: $1.openingBalance).doubleValue }
         }()
 
+        let scoped = reportingTransactions
         return months.map { month in
-            let monthTxns = transactions.filter {
+            let monthTxns = scoped.filter {
                 calendar.isDate($0.date, equalTo: month, toGranularity: .month)
             }
             let income = monthTxns.filter { $0.kind == .income }
@@ -115,15 +146,15 @@ struct TrendsView: View {
                 }
 
                 HStack(spacing: 10) {
-                    MetricCapsule(title: NSLocalizedString("Total income", comment: ""), value: AppFormatters.money(Decimal(totalIncome)), tint: AppTheme.teal)
-                    MetricCapsule(title: NSLocalizedString("Total expense", comment: ""), value: AppFormatters.money(Decimal(totalExpense)), tint: AppTheme.coral)
+                    MetricCapsule(title: NSLocalizedString("Total income", comment: ""), value: AppFormatters.money(Decimal(totalIncome), currency: reportingCurrency), tint: AppTheme.teal)
+                    MetricCapsule(title: NSLocalizedString("Total expense", comment: ""), value: AppFormatters.money(Decimal(totalExpense), currency: reportingCurrency), tint: AppTheme.coral)
                 }
 
                 HStack(spacing: 10) {
-                    MetricCapsule(title: NSLocalizedString("Avg/month", comment: ""), value: AppFormatters.money(Decimal(avgMonthlyExpense)), tint: AppTheme.gold)
+                    MetricCapsule(title: NSLocalizedString("Avg/month", comment: ""), value: AppFormatters.money(Decimal(avgMonthlyExpense), currency: reportingCurrency), tint: AppTheme.gold)
                     MetricCapsule(
                         title: NSLocalizedString("Net savings", comment: ""),
-                        value: AppFormatters.money(Decimal(totalIncome - totalExpense)),
+                        value: AppFormatters.money(Decimal(totalIncome - totalExpense), currency: reportingCurrency),
                         tint: (totalIncome - totalExpense) >= 0 ? AppTheme.mint : AppTheme.rose
                     )
                 }
@@ -261,7 +292,7 @@ struct TrendsView: View {
                     Text(title)
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(AppTheme.muted)
-                    Text(AppFormatters.money(Decimal(amount)))
+                    Text(AppFormatters.money(Decimal(amount), currency: reportingCurrency))
                         .font(.system(.headline, design: .rounded).weight(.bold))
                         .foregroundStyle(AppTheme.ink)
                         .minimumScaleFactor(0.7)
@@ -303,7 +334,7 @@ struct TrendsView: View {
                                         .scaleEffect(x: 1, y: 0.7, anchor: .center)
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                Text(AppFormatters.money(Decimal(item.total)))
+                                Text(AppFormatters.money(Decimal(item.total), currency: reportingCurrency))
                                     .font(.system(.subheadline, design: .rounded).weight(.bold))
                                     .foregroundStyle(AppTheme.ink.opacity(0.78))
                                     .minimumScaleFactor(0.65)
@@ -332,7 +363,7 @@ struct TrendsView: View {
 
     private func categoryTotals() -> [CategoryTotal] {
         let start = months.first ?? .now
-        let periodTxns = transactions.filter {
+        let periodTxns = reportingTransactions.filter {
             $0.kind == .expense && $0.date >= start
         }
         let grouped = Dictionary(grouping: periodTxns) {

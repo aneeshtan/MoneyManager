@@ -341,6 +341,13 @@ private struct CategoryRow: View {
 
 private struct BudgetProgressBar: View {
     var progress: BudgetProgress
+    @Environment(\.appCurrency) private var appCurrency
+
+    /// A budget carries its own currency; fall back to the configured one rather than
+    /// to the formatter's USD default.
+    private var currency: String {
+        AppFormatters.resolvedCurrency(progress.budget.currency, fallback: appCurrency)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -356,9 +363,9 @@ private struct BudgetProgressBar: View {
             .frame(height: 6)
 
             HStack {
-                Text(String(format: NSLocalizedString("%@ of %@", comment: ""), AppFormatters.statMoney(progress.spent), AppFormatters.statMoney(progress.budget.amount)))
+                Text(String(format: NSLocalizedString("%@ of %@", comment: ""), AppFormatters.statMoney(progress.spent, currency: currency), AppFormatters.statMoney(progress.budget.amount, currency: currency)))
                 Spacer()
-                Text(progress.isOverspent ? String(format: NSLocalizedString("Over %@", comment: ""), AppFormatters.statMoney(abs(progress.remaining))) : String(format: NSLocalizedString("%@ left", comment: ""), AppFormatters.statMoney(progress.remaining)))
+                Text(progress.isOverspent ? String(format: NSLocalizedString("Over %@", comment: ""), AppFormatters.statMoney(abs(progress.remaining), currency: currency)) : String(format: NSLocalizedString("%@ left", comment: ""), AppFormatters.statMoney(progress.remaining, currency: currency)))
             }
             .font(.caption2.weight(.medium))
             .foregroundStyle(progress.isOverspent ? AppTheme.coral : AppTheme.muted)

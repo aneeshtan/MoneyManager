@@ -1165,6 +1165,8 @@ private struct BudgetEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
 
+    @Environment(\.appCurrency) private var appCurrency
+
     var budget: Budget?
     var categories: [FinanceCategory]
     var visibleMonth: Date
@@ -1172,7 +1174,7 @@ private struct BudgetEditorView: View {
     @State private var categoryName = ""
     @State private var subcategoryName = ""
     @State private var amountText = ""
-    @State private var currency = "USD"
+    @State private var currency = ""
 
     private var parentCategories: [FinanceCategory] {
         categories.filter { $0.parentName == nil && $0.kind == .expense && !$0.isArchived }.sorted { $0.sortOrder < $1.sortOrder }
@@ -1235,6 +1237,7 @@ private struct BudgetEditorView: View {
         guard let budget else {
             categoryName = parentCategories.first?.name ?? ""
             amountText = ""
+            currency = appCurrency
             return
         }
         categoryName = budget.categoryName
@@ -1249,7 +1252,7 @@ private struct BudgetEditorView: View {
             budget.categoryName = categoryName
             budget.subcategoryName = subcategoryName.isEmpty ? nil : subcategoryName
             budget.amount = amount
-            budget.currency = currency.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().isEmpty ? "USD" : currency.uppercased()
+            budget.currency = AppFormatters.resolvedCurrency(currency, fallback: appCurrency)
         } else {
             modelContext.insert(
                 Budget(
@@ -1257,7 +1260,7 @@ private struct BudgetEditorView: View {
                     subcategoryName: subcategoryName.isEmpty ? nil : subcategoryName,
                     monthStart: monthStart,
                     amount: amount,
-                    currency: currency.trimmingCharacters(in: .whitespacesAndNewlines).uppercased().isEmpty ? "USD" : currency.uppercased()
+                    currency: AppFormatters.resolvedCurrency(currency, fallback: appCurrency)
                 )
             )
         }

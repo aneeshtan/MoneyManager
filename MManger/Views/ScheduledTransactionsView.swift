@@ -280,7 +280,7 @@ private struct ScheduledTransactionEditorView: View {
 
     @State private var merchant = ""
     @State private var amountText = ""
-    @State private var currency = "USD"
+    @State private var currency = ""
     @State private var kind: TransactionKind = .expense
     @State private var accountName = ""
     @State private var categoryName = ""
@@ -425,7 +425,7 @@ private struct ScheduledTransactionEditorView: View {
             item.merchant = cleanMerchant
             item.normalizedMerchant = MerchantNormalizer.normalize(cleanMerchant)
             item.amount = amount
-            item.currency = cleanCurrency.isEmpty ? "USD" : cleanCurrency
+            item.currency = cleanCurrency.isEmpty ? appCurrency : cleanCurrency
             item.kind = kind
             item.accountName = accountName
             item.categoryName = categoryName.isEmpty ? nil : categoryName
@@ -439,7 +439,7 @@ private struct ScheduledTransactionEditorView: View {
                 ScheduledTransaction(
                     merchant: cleanMerchant,
                     amount: amount,
-                    currency: cleanCurrency.isEmpty ? "USD" : cleanCurrency,
+                    currency: cleanCurrency.isEmpty ? appCurrency : cleanCurrency,
                     kind: kind,
                     accountName: accountName,
                     categoryName: categoryName.isEmpty ? nil : categoryName,

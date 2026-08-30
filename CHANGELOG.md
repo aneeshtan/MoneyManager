@@ -17,6 +17,11 @@ All notable user-facing changes, written so entries can be copied into the App S
 - **Categorizes unknown businesses by type** — a local shop the app has never seen is now categorized from the business-type word in its name ("SARDE RESTAURANT LLC" → Food, "AQIQ GENTS SALON" → Shopping, "MEDICINA PHARMACY" → Health), covering around 85% of merchants that previously needed a manual pick.
 - **Shorter review list** — the "New merchants" card now groups branch variants of the same merchant into one decision, shows the busiest merchants first with a count of how much of the import they cover, and adds a "Set all remaining" action so the long tail of one-off shops can be handled in a single tap instead of one by one.
 
+### Fixes
+- **Amounts now use your currency everywhere** — the Trends screen showed every total with a `$` sign regardless of the currency you'd configured, and the budget progress bars did the same. Both now use your currency.
+- **Trends no longer mixes currencies** — totals, the net-worth line, and the category breakdown were adding amounts from different-currency accounts together as if they were the same unit. Trends now reports in your main currency and only counts accounts and transactions in it.
+- **New accounts and budgets start in your currency** — creating an account or a budget defaulted to USD instead of the currency you use.
+
 ### Privacy
 - **Hide amounts** — tap the eye icon on the Stats or Transactions screen to mask every amount in the app. Great for using the app in public. Your choice is remembered.
 - **App switcher protection** — the app's preview in the iOS app switcher is now blurred, so your finances are never visible when flipping between apps.

@@ -59,11 +59,12 @@ enum NotificationService {
     static func scheduleBudgetWarning(
         categoryName: String,
         spent: Decimal,
-        budget: Decimal
+        budget: Decimal,
+        currency: String
     ) {
         let remaining = budget - spent
         let title = "Budget warning: \(categoryName)"
-        let body = "You've spent \(AppFormatters.statMoney(spent)) of \(AppFormatters.statMoney(budget)). \(AppFormatters.statMoney(remaining)) remaining this month."
+        let body = "You've spent \(AppFormatters.statMoney(spent, currency: currency)) of \(AppFormatters.statMoney(budget, currency: currency)). \(AppFormatters.statMoney(remaining, currency: currency)) remaining this month."
 
         let content = UNMutableNotificationContent()
         content.title = title
@@ -131,7 +132,7 @@ enum NotificationService {
         }
     }
 
-    static func updateRecurringBillReminders(transactions: [FinanceTransaction]) {
+    static func updateRecurringBillReminders(transactions: [FinanceTransaction], currency: String) {
         let recurring = RecurringBillDetector.detect(from: transactions)
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             let identifiers = requests
@@ -147,7 +148,7 @@ enum NotificationService {
                    reminderDate >= now {
                     scheduleBillReminder(
                         title: "Upcoming bill",
-                        body: "\(bill.merchant) — \(AppFormatters.statMoney(bill.amount)) expected \(AppFormatters.dayString(from: bill.nextDate))",
+                        body: "\(bill.merchant) — \(AppFormatters.statMoney(bill.amount, currency: AppFormatters.resolvedCurrency(bill.currency, fallback: currency))) expected \(AppFormatters.dayString(from: bill.nextDate))",
                         scheduledDate: calendar.date(bySettingHour: 9, minute: 0, second: 0, of: reminderDate) ?? reminderDate,
                         identifier: "recurring-\(bill.id)"
                     )
@@ -162,14 +163,25 @@ struct RecurringBill: Identifiable {
     var merchant: String
     var normalizedMerchant: String
     var amount: Decimal
+    var currency: String
     var nextDate: Date
     var sampleCount: Int
 }
 
+private struct MerchantCurrencyKey: Hashable {
+    var merchant: String
+    var currency: String
+}
+
 enum RecurringBillDetector {
     static func detect(from transactions: [FinanceTransaction]) -> [RecurringBill] {
-        let grouped = Dictionary(grouping: transactions.filter { $0.kind == .expense && !$0.normalizedMerchant.isEmpty }) { $0.normalizedMerchant }
-        return grouped.compactMap { merchant, rows in
+        // Keyed by merchant *and* currency: the same merchant billed in two currencies
+        // is two bills, and averaging across them would invent an amount.
+        let grouped = Dictionary(grouping: transactions.filter { $0.kind == .expense && !$0.normalizedMerchant.isEmpty }) {
+            MerchantCurrencyKey(merchant: $0.normalizedMerchant, currency: $0.currency.uppercased())
+        }
+        return grouped.compactMap { key, rows in
+            let merchant = key.merchant
             let sorted = rows.sorted { $0.date < $1.date }
             guard sorted.count >= 2 else { return nil }
             let calendar = Calendar.current
@@ -184,6 +196,7 @@ enum RecurringBillDetector {
                 merchant: last.merchant.isEmpty ? merchant : last.merchant,
                 normalizedMerchant: merchant,
                 amount: average,
+                currency: last.currency,
                 nextDate: next,
                 sampleCount: sorted.count
             )

@@ -168,7 +168,7 @@ final class BankStatementPDFParserTests: XCTestCase {
 
     func testResolvedCurrencyFallsBackWhenBlank() {
         XCTAssertEqual(AppFormatters.resolvedCurrency("", fallback: "EUR"), "EUR")
-        XCTAssertEqual(AppFormatters.resolvedCurrency(" usd "), "USD")
+        XCTAssertEqual(AppFormatters.resolvedCurrency(" usd ", fallback: "EUR"), "USD")
     }
 
     func testImportSaveDraftUsesStableValueSnapshot() throws {

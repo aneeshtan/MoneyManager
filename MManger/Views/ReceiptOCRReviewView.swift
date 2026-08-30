@@ -3,6 +3,7 @@ import SwiftUI
 struct ReceiptOCRReviewView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) var dismiss
+    @Environment(\.appCurrency) private var appCurrency
     @State private var parsedReceipt: ParsedReceipt?
     @State private var image: UIImage
     @State private var isProcessing = false
@@ -19,7 +20,7 @@ struct ReceiptOCRReviewView: View {
         _image = State(initialValue: image)
         _merchantName = State(initialValue: "")
         _totalAmount = State(initialValue: "")
-        _currency = State(initialValue: "USD")
+        _currency = State(initialValue: "")
         _receiptDate = State(initialValue: nil)
         _lineItems = State(initialValue: [])
         self.onSave = onSave
@@ -107,6 +108,7 @@ struct ReceiptOCRReviewView: View {
                 }
             }
             .onAppear {
+                if currency.isEmpty { currency = appCurrency }
                 extractAndParse()
             }
         }
@@ -260,7 +262,7 @@ struct ReceiptOCRReviewView: View {
             do {
                 let ocrText = try ReceiptOCRService.extractText(from: image)
                 let parser = ReceiptParser()
-                let receipt = try parser.parse(ocrText, fallbackCurrency: "USD")
+                let receipt = try parser.parse(ocrText, fallbackCurrency: appCurrency)
 
                 await MainActor.run {
                     parsedReceipt = receipt
